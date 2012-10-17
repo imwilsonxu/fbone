@@ -1,0 +1,14 @@
+# http://docs.python.org/distutils/sourcedist.html#manifest-template
+# http://docs.python.org/distutils/sourcedist.html#specifying-the-files-to-distribute
+
+# Including
+recursive-include fbone/templates *
+recursive-include fbone/static *
+recursive-include fbone/views *
+recursive-include fbone/forms *
+recursive-include fbone/models *
+recursive-include fbone/translations *
+
+# Excluding
+recursive-exclude fbone *.pyc
+recursive-exclude tests *.pyc

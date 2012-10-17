@@ -1,0 +1,43 @@
+# Chinese translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+
+msgid "Log in"
+msgstr "登录"
+
+msgid "Log in to fbone"
+msgstr "登录到fbone"
+
+msgid "Sign up"
+msgstr "注册"
+
+msgid "Log out"
+msgstr "退出"
+
+msgid ""
+"\n"
+"    <p>Suggestions:</p>\n"
+"    <ul>\n"
+"       <li>Make sure all words are spelled correctly.</li>\n"
+"       <li>Try different keywords.</li>\n"
+"       <li>Try more general keywords.</li>\n"
+"    </ul>\n"
+msgstr ""
+"\n"
+"    <p>建议：</p>\n"
+"    <ul>\n"
+"        <li>请检查有无错别字</li>\n"
+"        <li>请换用不同的查询字词</li>\n"
+"        <li>请改试较常用的字词</li>\n"
+"    </ul>\n"
+
+msgid "Sorry, Nothing found for your search \"<strong>%(keywords)s</strong>\"."
+msgstr "对不起，找不到与您的搜索(<strong>%(keywords)s</strong>)相符的资料。"
+
+msgid "<strong>%(total)s</strong> found for your search \"<strong>%(keywords)s</strong>\"."
+msgstr "<strong>%(total)s</strong>个结果与您的搜索(<strong>%(keywords)s</strong>)相符。"
+
+msgid "Search results for \"%(keywords)s\""
+msgstr "搜索(%(keywords)s)结果"

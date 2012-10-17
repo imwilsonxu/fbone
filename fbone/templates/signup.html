@@ -1,0 +1,23 @@
+{% from "macros/_misc.html" import render_input, render_action %}
+
+{% set page_title = _('Sign up to fbone') %}
+
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class='span12'>
+    <form class='form-stacked' method="POST" action="{{ url_for('frontend.signup') }}">
+        {{ form.hidden_tag() }}
+        {{ form.next }}
+        <fieldset>
+            <legend>Already have account? <a href="{{ url_for('frontend.login') }}">Login</a> please.</legend>
+            {{ render_input(form.name, 'xlarge') }}
+            {{ render_input(form.email, 'xlarge') }}
+            {{ render_input(form.password, 'xlarge') }}
+            {{ render_input(form.password_again, 'xlarge') }}
+            {{ render_action(form.submit) }}
+        </fieldset>
+    </form>
+</div>
+{% endblock %}
+

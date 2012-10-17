@@ -1,0 +1,13 @@
+*.egg-info
+*.log
+*.pyc
+*.db
+*.swp
+*.swo
+*.zip
+*.cfg
+*.tox
+*~
+
+dist
+build

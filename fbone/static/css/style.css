@@ -1,0 +1,47 @@
+/* Login form. */
+.remember_me { margin-left: 5px; }
+
+/* The white background content wrapper */
+.content {
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+/* Page header tweaks */
+.page-header {
+    background-color: #f5f5f5;
+    padding: 20px 20px 10px;
+    margin: -20px -20px 20px;
+}
+
+.container {
+    width: 820px;
+}
+
+.content {
+    -webkit-box-shadow: rgba(0, 0, 0, 0.148438) 0px 1px 2px;
+    background-color: white;
+    border-bottom-left-radius: 6px 6px;
+    border-bottom-right-radius: 6px 6px;
+    border-top-left-radius: 0px 0px;
+    border-top-right-radius: 0px 0px;
+    margin: 0px -20px;
+    padding: 20px;
+}
+
+.content .span4 {
+    border-left: 1px solid #EEE;
+    margin-left: 0px;
+    padding-left: 19px;
+}
+
+.content .span10, .content .span4 {
+    min-height: 500px;
+}

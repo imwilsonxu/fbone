@@ -1,0 +1,19 @@
+{% from "macros/_misc.html" import render_input, render_action %}
+
+{% set page_title = _('Reauthenticate') %}
+
+{% extends "layout.html" %}
+
+{% block body %}
+<div class='span12'>
+    <form class='form-stacked' method="POST" action="{{ url_for('frontend.reauth') }}">
+        {{ form.hidden_tag() }}
+        {{ form.next }}
+        <fieldset>
+            <legend><b>{{ page_title }}</b></legend>
+            {{ render_input(form.password) }}
+            {{ render_action(form.submit) }}
+        </fieldset>
+    </form>
+</div>
+{% endblock %}
