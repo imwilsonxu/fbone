@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flaskext.wtf import (Form, HiddenField, BooleanField, TextField,
+from flask.ext.wtf import (Form, HiddenField, BooleanField, TextField,
                           PasswordField, SubmitField, TextField,
                           ValidationError, required, equal_to, email,
                           length)
