@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from flaskext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-from flaskext.mail import Mail
+from flask.ext.mail import Mail
 mail = Mail()
 
-from flaskext.cache import Cache
+from flask.ext.cache import Cache
 cache = Cache()
 
-from flaskext.login import LoginManager
+from flask.ext.login import LoginManager
 login_manager = LoginManager()

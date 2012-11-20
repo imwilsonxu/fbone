@@ -5,9 +5,9 @@ from datetime import datetime
 
 from flask import (Blueprint, render_template, current_app, request,
                    flash, url_for, redirect, session, g, abort)
-from flaskext.mail import Message
+from flask.ext.mail import Message
 from flaskext.babel import gettext as _
-from flaskext.login import (login_required, login_user, current_user,
+from flask.ext.login import (login_required, login_user, current_user,
                             logout_user, confirm_login, fresh_login_required,
                             login_fresh)
 

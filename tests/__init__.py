@@ -9,7 +9,7 @@
 
 import functools
 
-from flaskext.testing import TestCase as Base, Twill
+from flask.ext.testing import TestCase as Base, Twill
 
 from fbone import create_app
 from fbone.models import User

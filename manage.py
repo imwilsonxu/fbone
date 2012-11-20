@@ -2,7 +2,7 @@
 
 import os
 
-from flaskext.script import Manager, prompt, prompt_pass, prompt_bool
+from flask.ext.script import Manager, prompt, prompt_pass, prompt_bool
 
 from fbone import create_app
 from fbone.extensions import db

@@ -20,3 +20,32 @@ if BASE_DIR not in sys.path:
 
 from fbone import create_app
 application = create_app()
+
+"""
+Deploy Note (Ubuntu):
+
+# Server
+sudo mkdir -p /var/www/fbone
+sudo chmod -R o+w /var/www/fbone
+scp /path/to/this/file /var/www/fbone.wsgi
+sudo chmod o+w /var/www/fbone.wsgi
+
+sudo echo "<VirtualHost *:80>
+    WSGIDaemonProcess fbone user=wilson group=wilson threads=5
+    WSGIScriptAlias / /var/www/fbone.wsgi
+
+    <Directory /var/www/fbone>
+        #WSGIScriptReloading On
+        WSGIProcessGroup fbone
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
+</VirtualHost>" > /etc/apache2/sites-enabled/fbone
+
+sudo a2ensite fbone.vhost
+sudo service apache restart
+
+# Client
+fab deploy
+"""

@@ -2,7 +2,7 @@
 
 from werkzeug import (generate_password_hash, check_password_hash,
                       cached_property)
-from flaskext.login import UserMixin
+from flask.ext.login import UserMixin
 
 from fbone.extensions import db
 from fbone.models import DenormalizedText
