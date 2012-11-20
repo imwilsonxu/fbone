@@ -6,7 +6,8 @@ from setuptools import setup
 setup(
     name='fbone',
     version='0.1',
-    description='Flask Skeleton Project',
+    url='https://github.com/imwilsonxu/fbone'
+    description='Fbone is a Flask template/bootstrap/boilerplate application.',
     author='Wilson Xu',
     author_email='imwilsonxu@gmail.com',
     packages=['fbone'],
@@ -24,5 +25,14 @@ setup(
         'Flask-Cache',
         'Flask-Login',
         'nose',
+    ],
+    classifiers=[
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Software Development :: Libraries'
     ]
 )
