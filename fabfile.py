@@ -37,15 +37,5 @@ def deploy():
     # a reload of the application
     run('touch /var/www/fbone.wsgi')
 
-# Local Deploy
-def ld():
-    pack()
-    dist = local('python setup.py --fullname', capture=True).strip()
-    local('cp dist/%s.tar.gz /tmp/fbone.tar.gz' % dist)
-    local('mkdir /tmp/fbone')
-    with lcd('/tmp/fbone'):
-        local('tar xzf /tmp/fbone.tar.gz')
-    with lcd('/tmp/fbone/%s' % dist):
-        local('/var/www/fbone/env/bin/python setup.py install')
-    local('rm -rf /tmp/fbone /tmp/fbone.tar.gz')
-    local('touch /var/www/fbone.wsgi')
+def restart_apache():
+    sudo('service apache2 restart')
