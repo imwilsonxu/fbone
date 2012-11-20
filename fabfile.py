@@ -1,22 +1,27 @@
 # -*- coding: utf-8 -*-
 
+# http://docs.fabfile.org/en/1.5/tutorial.html
+
 from fabric.api import *
 
 # the user to use for the remote commands
-env.user = 'user_of_deploy_machine'
+env.user = 'wilson'
 # the servers where the commands are executed
-env.hosts = ['ip_of_deploy_machine']
+env.hosts = ['127.0.0.1']
 
 def pack():
     # create a new source distribution as tarball
+    local('rm -rf fbone-0.1/')
     local('python setup.py sdist --formats=gztar', capture=False)
 
 def deploy():
     pack()
     # figure out the release name and version
     dist = local('python setup.py --fullname', capture=True).strip()
+
     # upload the source tarball to the temporary folder on the server
     put('dist/%s.tar.gz' % dist, '/tmp/fbone.tar.gz')
+
     # create a place where we can unzip the tarball, then enter
     # that directory and unzip it
     run('mkdir /tmp/fbone')
@@ -31,3 +36,16 @@ def deploy():
     # and finally touch the .wsgi file so that mod_wsgi triggers
     # a reload of the application
     run('touch /var/www/fbone.wsgi')
+
+# Local Deploy
+def ld():
+    pack()
+    dist = local('python setup.py --fullname', capture=True).strip()
+    local('cp dist/%s.tar.gz /tmp/fbone.tar.gz' % dist)
+    local('mkdir /tmp/fbone')
+    with lcd('/tmp/fbone'):
+        local('tar xzf /tmp/fbone.tar.gz')
+    with lcd('/tmp/fbone/%s' % dist):
+        local('/var/www/fbone/env/bin/python setup.py install')
+    local('rm -rf /tmp/fbone /tmp/fbone.tar.gz')
+    local('touch /var/www/fbone.wsgi')
