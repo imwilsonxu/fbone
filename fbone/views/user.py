@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, render_template, current_app, g, redirect, url_for
-from flaskext.login import login_required, current_user
+from flask.ext.login import login_required, current_user
 
 from fbone.models import User
 from fbone.decorators import keep_login_url
