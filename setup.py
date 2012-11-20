@@ -7,7 +7,7 @@ setup(
     name='fbone',
     version='0.1',
     url='https://github.com/imwilsonxu/fbone'
-    description='Fbone is a Flask template/bootstrap/boilerplate application.',
+    description='Fbone (Flask bone) is a Flask (Python microframework) template/bootstrap/boilerplate application.',
     author='Wilson Xu',
     author_email='imwilsonxu@gmail.com',
     packages=['fbone'],

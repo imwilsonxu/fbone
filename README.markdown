@@ -1,6 +1,6 @@
 # INTRODUCTION
 
-Fbone is a [Flask](http://flask.pocoo.org) template/bootstrap/boilerplate application.
+Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) template/bootstrap/boilerplate application.
 
 # FEATURES
 
