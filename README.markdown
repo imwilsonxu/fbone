@@ -2,6 +2,8 @@
 
 Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) template/bootstrap/boilerplate application.
 
+![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
+
 # FEATURES
 
 - Register, login, logout, remember me and reset password.
