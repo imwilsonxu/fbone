@@ -7,6 +7,7 @@ from datetime import datetime
 
 
 VARCHAR_LEN_128 = 128
+VARCHAR_LEN_200 = 200
 
 
 def get_current_time():

@@ -39,3 +39,26 @@ def deploy():
 
 def restart_apache():
     sudo('service apache2 restart')
+
+def ldeploy():
+    pack()
+    # figure out the release name and version
+    dist = local('python setup.py --fullname', capture=True).strip()
+
+    # upload the source tarball to the temporary folder on the server
+    local('cp dist/%s.tar.gz /tmp/fbone.tar.gz' % dist)
+
+    # create a place where we can unzip the tarball, then enter
+    # that directory and unzip it
+    local('mkdir /tmp/fbone')
+    with lcd('/tmp/fbone'):
+        local('tar xzf /tmp/fbone.tar.gz')
+    with lcd('/tmp/fbone/%s' % dist):
+        # now setup the package with our virtual environment's
+        # python interpreter
+        local('/var/www/fbone/env/bin/python setup.py install')
+    # now that all is set up, delete the folder again
+    local('rm -rf /tmp/fbone /tmp/fbone.tar.gz')
+    # and finally touch the .wsgi file so that mod_wsgi triggers
+    # a reload of the application
+    local('touch /var/www/fbone.wsgi')

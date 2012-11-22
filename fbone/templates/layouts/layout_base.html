@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% block title %}{{ page_title|default(_('Fbone')) }}{% endblock %} - {{ _("Fbone") }}</title>
+    <meta name="description" content="Fbone (Flask bone) is a Flask (Python microframework) template/bootstrap/boilerplate application.">
+    <meta name="author" content="Wilson Xu">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="Shortcut Icon" href="{{ url_for('static', filename='favicon.png')}}" type="image/x-icon">
+
+    {% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
+    {% endblock %}
+
+    {% block css_style %}
+    {% endblock %}
+
+    {% block js_top %}
+    <script src="{{ url_for('static', filename='js/vendor/modernizr-2.6.2.min.js') }}"></script>
+    {% endblock %}
+</head>
+<body>
+    {% include "macros/_ask_user_to_update_ie.html" %}
+
+    {% block topbar %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a class='brand' href='{{ url_for('frontend.index') }}'>Flask Bone</a>
+                {% if current_user.is_authenticated() %}
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.name }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">{{ _("Inbox") }}</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{ url_for('user.profile') }}">{{ _("Settings") }}</a></li>
+                            <li><a href="{{ url_for('frontend.logout') }}">{{ _("Log out") }}</a></li>
+                        </ul>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="{{ url_for('frontend.signup') }}">{{ _("Sign up") }}</a></li>
+                        <li><a href="{{ url_for('frontend.login') }}">{{ _("Sign in") }}</a></li>
+                    </ul>
+                </div>
+                {% endif %}
+                <form class="navbar-search pull-right" action="{{ url_for('frontend.search') }}">
+                    <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='{{ _('Search') }}' />
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% from 'macros/_misc.html' import render_flash_message %}
+    {{ render_flash_message() }}
+
+    {% block container %}
+    {% endblock %}
+
+    <hr/>
+    {% include "macros/_footer.html" %}
+
+    {% block js_btm %}
+    <!--
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    -->
+    {% set jquery_path = url_for('static', filename='js/vendor/jquery-1.8.3.min.js') %}
+    <script>window.jQuery || document.write('<script src="{{ jquery_path }}"><\/script>')</script>
+    <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% endblock %}
+    
+    {% include "macros/_google_analytics.html" %}
+</body>
+</html>

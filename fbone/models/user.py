@@ -6,7 +6,7 @@ from flask.ext.login import UserMixin
 
 from fbone.extensions import db
 from fbone.models import DenormalizedText
-from fbone.utils import get_current_time, VARCHAR_LEN_128
+from fbone.utils import get_current_time, VARCHAR_LEN_128, VARCHAR_LEN_200
 
 
 class User(db.Model, UserMixin):
@@ -17,6 +17,9 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(VARCHAR_LEN_128), nullable=False, unique=True)
     email = db.Column(db.String(VARCHAR_LEN_128), nullable=False, unique=True)
     _password = db.Column('password', db.String(VARCHAR_LEN_128), nullable=False)
+    website = db.Column(db.String(VARCHAR_LEN_128))
+    location = db.Column(db.String(VARCHAR_LEN_128))
+    bio = db.Column(db.String(VARCHAR_LEN_200))
     activation_key = db.Column(db.String(VARCHAR_LEN_128))
     followers = db.Column(DenormalizedText)
     following = db.Column(DenormalizedText)

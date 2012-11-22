@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{{ page_title|default(_('Oops, error')) }}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

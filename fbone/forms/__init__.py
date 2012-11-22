@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
 
 from fbone.forms.frontend import (SignupForm, LoginForm, RecoverPasswordForm,
-                                  ChangePasswordForm, ReauthForm)
+                                  ReauthForm, ChangePasswordForm)
+from fbone.forms.user import ProfileForm, AccountForm

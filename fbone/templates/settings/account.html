@@ -1,0 +1,15 @@
+{% from "macros/_misc.html" import render_input, render_action %}
+{% extends 'layouts/layout_fluid_settings.html' %}
+{% block body %}
+<form class="form-signin" method="POST" action="{{ url_for('user.account') }}">
+    {{ form.hidden_tag() }}
+    {{ form.next }}
+    <fieldset>
+        <legend>{{ page_header }}</legend>
+        {{ render_input(form.password, '', _("Password")) }}
+        {{ render_input(form.new_password, '', _("New password")) }}
+        {{ render_input(form.password_again, '', _("Password again")) }}
+        {{ render_action(form.submit) }}
+    </fieldset>
+</form>
+{% endblock %}

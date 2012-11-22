@@ -14,7 +14,7 @@ from flask.ext.login import (login_required, login_user, current_user,
 from fbone.models import User
 from fbone.extensions import db, cache, mail, login_manager
 from fbone.forms import (SignupForm, LoginForm, RecoverPasswordForm,
-                         ChangePasswordForm, ReauthForm)
+                         ReauthForm, ChangePasswordForm)
 
 
 frontend = Blueprint('frontend', __name__)
@@ -25,29 +25,21 @@ def index():
     if current_user.is_authenticated():
         return redirect(url_for('user.index'))
 
-    login_form = signup_form = None
-    if not current_user.is_authenticated():
-        login_form= LoginForm(next=request.args.get('next'))
-        signup_form = SignupForm(nex=request.args.get('next'))
     page = int(request.args.get('page', 1))
     pagination = User.query.paginate(page=page, per_page=10)
-    return render_template('index.html', pagination=pagination, login_form=login_form,
-                           signup_form=signup_form, current_user=current_user)
+    return render_template('index.html', pagination=pagination, current_user=current_user)
 
 
 @frontend.route('/search')
 def search():
-    if not current_user.is_authenticated():
-        login_form= LoginForm(next=request.args.get('next'))
     keywords = request.args.get('keywords', '').strip()
     pagination = None
     if keywords:
         page = int(request.args.get('page', 1))
         pagination = User.search(keywords).paginate(page, 1)
     else:
-        flash('Please input keyword(s)', 'error')
-    return render_template('search.html', pagination=pagination,
-                           keywords=keywords, login_form=login_form)
+        flash(_('Please input keyword(s)'), 'error')
+    return render_template('search.html', pagination=pagination, keywords=keywords)
 
 
 @frontend.route('/login', methods=['GET', 'POST'])
@@ -62,7 +54,7 @@ def login():
         if user and authenticated:
             remember = request.form.get('remember') == 'y'
             if login_user(user, remember=remember):
-                flash("Logged in!", 'success')
+                flash(_("Logged in"), 'success')
             return redirect(form.next.data or url_for('user.index'))
         else:
             flash(_('Sorry, invalid login'), 'error')
@@ -92,13 +84,12 @@ def reauth():
 @login_required
 def logout():
     logout_user()
-    flash(_('You are now logged out'), 'success')
+    flash(_('Logged out'), 'success')
     return redirect(url_for('frontend.index'))
 
 
 @frontend.route('/signup', methods=['GET', 'POST'])
 def signup():
-    login_form= LoginForm(next=request.args.get('next'))
     form = SignupForm(next=request.args.get('next'))
 
     if form.validate_on_submit():
@@ -111,7 +102,7 @@ def signup():
         if login_user(user):
             return redirect(form.next.data or url_for('user.index'))
 
-    return render_template('signup.html', form=form, login_form=login_form)
+    return render_template('signup.html', form=form)
 
 
 @frontend.route('/change_password', methods=['GET', 'POST'])
@@ -172,22 +163,26 @@ def reset_password():
     return render_template('reset_password.html', form=form)
 
 
-
 @frontend.route('/about')
 def about():
-    return '<h1>About Page</h1>'
+    return render_template('footers/about.html', active="about")
 
 
 @frontend.route('/blog')
 def blog():
-    return '<h1>Blog Page</h1>'
+    return render_template('footers/blog.html', active="blog")
 
 
 @frontend.route('/help')
 def help():
-    return '<h1>Help Page</h1>'
+    return render_template('footers/help.html', active="help")
+
+
+@frontend.route('/privacy')
+def privacy():
+    return render_template('footers/privacy.html', active="privacy")
 
 
 @frontend.route('/terms')
 def terms():
-    return '<h1>Terms Page</h1>'
+    return render_template('footers/terms.html', active="terms")

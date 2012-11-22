@@ -1,34 +1,20 @@
 {% from "macros/_misc.html" import render_input, render_action %}
-
-{% set page_title = _('Fbone is a flask skeleton.') %}
-
-{% extends 'layout.html' %}
-
+{% set page_title = _('Home') %}
+{% extends 'layouts/layout_hero.html' %}
 {% block body %}
-<div class="span8">
-    <h2>Powered by <a href='http://flask.pocoo.org'>Flask</a> and its <a href='http://flask.pocoo.org/extensions/'>extensions</a>.</h2>
-    <ul>
-        <li>Flask-SQLAlchemy</li>
-        <li>Flask-Login</li>
-        <li>Flask-WTF</li>
-        <li>Flask-Script</li>
-        <li>Flask-Babel</li>
-        <li>Flask-Testing</li>
-        <li>Flask-Mail</li>
-    </ul>
+<div class="hero-unit">
+    <h1>Flask Bone</h1>
+    <p>Powered by <a href='http://flask.pocoo.org'>Flask</a> and its <a href='http://flask.pocoo.org/extensions/'>extensions</a>.</p>
+    <p><a href="{{ url_for('frontend.about')}}" class="btn btn-primary btn-large">{{ _("Learn more »")}}</a></p>
 </div>
-<div class="span6">
-    <form class='form-stacked' method="POST" action="{{ url_for('frontend.signup') }}">
-        {{ signup_form.hidden_tag() }}
-        {{ signup_form.next }}
-        <fieldset>
-            <legend><h5>Already have account? <a href="{{ url_for('frontend.login') }}">Login</a> please.</h5></legend>
-            {{ render_input(signup_form.name, 'large') }}
-            {{ render_input(signup_form.email, 'large') }}
-            {{ render_input(signup_form.password, 'large') }}
-            {{ render_input(signup_form.password_again, 'large') }}
-            {{ render_action(signup_form.submit) }}
-        </fieldset>
-    </form>
+<div class="row">
+    <div class="span6">
+        <h2>Front End</h2>
+        <p>Bootstrap</p>
+    </div>
+    <div class="span6">
+        <h2>Back End</h2>
+        <p>SQLite</p>
+    </div>
 </div>
 {% endblock %}

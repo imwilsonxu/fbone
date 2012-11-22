@@ -1,26 +1,20 @@
 {% from "macros/_misc.html" import render_input, render_action %}
-
-{% set page_title = _('Log in to fbone') %}
-
-{% extends "layout.html" %}
-
+{% set page_title = _('Sign in') %}
+{% extends "layouts/layout_signin.html" %}
 {% block body %}
-<div class='span12'>
-    <form class='form-stacked' method="POST" action="{{ url_for('frontend.login') }}">
-        {{ form.hidden_tag() }}
-        {{ form.next }}
-        <fieldset>
-            <legend>Not a member? <a href="{{ url_for('frontend.signup') }}">Sign up</a> please.</legend>
-            {{ render_input(form.login, 'xlarge') }}
-            {{ render_input(form.password, 'xlarge') }}
-            <div class='clearfix'>
-                <label></label>
-                <div class="input">
-                    {{ form.remember() }}<span class='remember_me'>{{ _('Remember me') }}</span>
-                </div>
-            </div>
-            {{ render_action(form.submit) }}
-        </fieldset>
-    </form>
-</div>
+<form class="form-signin" method="POST" action="{{ url_for('frontend.login') }}">
+    {{ form.hidden_tag() }}
+    {{ form.next }}
+    <fieldset>
+        {% set link = url_for('frontend.signup') %}
+        {% set tip = _('Not a member? <a href="%(link)s">Sign up</a> please.', link=link) %}
+        <legend>{{ tip }}</legend>
+        {{ render_input(form.login, '', _('Username')) }}
+        {{ render_input(form.password, '', _('Password')) }}
+        <label class="checkbox">
+            {{ form.remember() }}{{ _('Remember me') }}
+        </label>
+        {{ render_action(form.submit, 'btn btn-primary', True) }}
+    </fieldset>
+</form>
 {% endblock %}

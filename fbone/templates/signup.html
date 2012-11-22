@@ -1,23 +1,19 @@
 {% from "macros/_misc.html" import render_input, render_action %}
-
-{% set page_title = _('Sign up to fbone') %}
-
-{% extends 'layout.html' %}
-
+{% set page_title = _('Sign up') %}
+{% extends "layouts/layout_signin.html" %}
 {% block body %}
-<div class='span12'>
-    <form class='form-stacked' method="POST" action="{{ url_for('frontend.signup') }}">
-        {{ form.hidden_tag() }}
-        {{ form.next }}
-        <fieldset>
-            <legend>Already have account? <a href="{{ url_for('frontend.login') }}">Login</a> please.</legend>
-            {{ render_input(form.name, 'xlarge') }}
-            {{ render_input(form.email, 'xlarge') }}
-            {{ render_input(form.password, 'xlarge') }}
-            {{ render_input(form.password_again, 'xlarge') }}
-            {{ render_action(form.submit) }}
-        </fieldset>
-    </form>
-</div>
+<form class="form-signin" method="POST" action="{{ url_for('frontend.signup') }}">
+    {{ form.hidden_tag() }}
+    {{ form.next }}
+    <fieldset>
+        {% set link = url_for('frontend.login') %}
+        {% set tip = _('Already have account? <a href="%(link)s">Sign in</a> please.', link=link) %}
+        <legend>{{ tip }}</legend>
+        {{ render_input(form.name, '', _('Username')) }}
+        {{ render_input(form.email, '', _('Email')) }}
+        {{ render_input(form.password, '', _('Password')) }}
+        {{ render_input(form.password_again, '', _('Password again')) }}
+        {{ render_action(form.submit, 'btn btn-primary', True) }}
+    </fieldset>
+</form>
 {% endblock %}
-

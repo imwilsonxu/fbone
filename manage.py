@@ -29,7 +29,7 @@ def reset():
 
     db.drop_all()
     db.create_all()
-    user = User(name='tester', email='tester@hz.com', password='123456')
+    user = User(name='demo', email='tester@example.com', password='123456', website='', location='', bio='')
     db.session.add(user)
     db.session.commit()
 

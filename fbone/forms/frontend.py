@@ -14,7 +14,7 @@ class LoginForm(Form):
     remember = BooleanField(_('Remember me'))
     login = TextField(_('Username or email address'), [required()])
     password = PasswordField(_('Password'), [required(), length(min=6, max=16)])
-    submit = SubmitField(_('Login'))
+    submit = SubmitField(_('Sign in'))
 
 
 class SignupForm(Form):
@@ -22,8 +22,8 @@ class SignupForm(Form):
     name = TextField(_('Username'), [required()])
     password = PasswordField(_('Password'), [required(), length(min=6, max=16)])
     password_again = PasswordField(_('Password again'), [required(), length(min=6, max=16), equal_to('password')])
-    email = TextField(_('Email address'), [required(), email(message=_('A valid email address is required'))])
-    submit = SubmitField(_('Signup'))
+    email = TextField(_('Email address'), [required(), email(message=_('A valid email address is required.'))])
+    submit = SubmitField(_('Sign up'))
 
     def validate_name(self, field):
         if User.query.filter_by(name=field.data).first() is not None:

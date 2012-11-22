@@ -4,17 +4,56 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 
+msgid "Home"
+msgstr "首页"
+
 msgid "Log in"
 msgstr "登录"
 
-msgid "Log in to fbone"
-msgstr "登录到fbone"
+msgid "Sign in"
+msgstr "登录"
+
+msgid "Remember me"
+msgstr "记住我"
 
 msgid "Sign up"
 msgstr "注册"
 
 msgid "Log out"
 msgstr "退出"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Not a member? <a href="%(link)s">Sign up</a> please."
+msgstr "没有账号？请 <a href="%(link)s">注册</a>"
+
+msgid "Already have account? <a href="%(link)s">Sign in</a> please."
+msgstr "已有账号？请 <a href="%(link)s">登录</a>"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "New password"
+msgstr "新密码"
+
+msgid "Password again"
+msgstr "确认密码"
+
+msgid "Email"
+msgstr "邮箱地址"
+
+msgid "This field is required."
+msgstr "该项不能为空"
+
+msgid "A valid email address is required."
+msgstr "该邮箱格式不正确"
+
+msgid "Field must be between 6 and 16 characters long."
+msgstr "该项的长度只能介于6（包括）到16（包括）个字符之间"
 
 msgid ""
 "\n"
@@ -41,3 +80,75 @@ msgstr "<strong>%(total)s</strong>个结果与您的搜索(<strong>%(keywords)s<
 
 msgid "Search results for \"%(keywords)s\""
 msgstr "搜索(%(keywords)s)结果"
+
+# Footer
+
+msgid "About"
+msgstr "关于"
+
+msgid "Blog"
+msgstr "博客"
+
+msgid "Help"
+msgstr "帮助"
+
+msgid "Privacy"
+msgstr "隐私"
+
+msgid "Terms"
+msgstr "条款"
+
+# Profile Form
+
+msgid "Website"
+msgstr "网站"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Bio"
+msgstr "简介"
+
+# Flash messages
+
+msgid "Please input keyword(s)"
+msgstr "请输入搜索关键词"
+
+msgid "Logged in"
+msgstr "登录成功"
+
+msgid "Sorry, invalid login"
+msgstr "抱歉，无法登录，请检查用户名与密码"
+
+msgid "Reauthenticated."
+msgstr "验证成功"
+
+msgid "Password is wrong."
+msgstr "密码错误"
+
+msgid "Logged out"
+msgstr "退出成功"
+
+# Setting sidebar 
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Profile"
+msgstr "个人资料"
+
+msgid "Account"
+msgstr "账号"
+
+msgid "Notification"
+msgstr "通知"
+
+# Inbox
+
+msgid "Inbox"
+msgstr "私信"
+
+# Search
+
+msgid "Search"
+msgstr "搜索"

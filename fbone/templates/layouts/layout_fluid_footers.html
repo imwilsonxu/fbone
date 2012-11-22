@@ -1,0 +1,36 @@
+{% extends "layouts/layout_fluid.html" %}
+
+{% set page_header = _(active|capitalize) %}
+{% set page_title = page_header + " - " + _("Fbone") %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/docs.css') }}" >
+{% endblock %}
+
+{% block css_style %}
+<style type="text/css">
+    body { padding-top: 60px; padding-bottom: 40px; }
+    .sidebar-nav { padding: 9px 0; }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+<ul class="nav nav-list bs-docs-sidenav affix">
+    <li class="{% if active == "about" %}active{% endif %}">
+        <a href='{{ url_for('frontend.about') }}'><i class="icon-chevron-right"></i> {{ _('About') }}</a>
+    </li>
+    <li class="{% if active == "blog" %}active{% endif %}">
+        <a href='{{ url_for('frontend.blog') }}'><i class="icon-chevron-right"></i> {{ _('Blog') }}</a>
+    </li>
+    <li class="{% if active == "help" %}active{% endif %}">
+        <a href='{{ url_for('frontend.help') }}'><i class="icon-chevron-right"></i> {{ _('Help') }}</a>
+    </li>
+    <li class="{% if active == "privacy" %}active{% endif %}">
+        <a href='{{ url_for('frontend.privacy') }}'><i class="icon-chevron-right"></i> {{ _('Privacy') }}</a>
+    </li>
+    <li class="{% if active == "terms" %}active{% endif %}">
+        <a href='{{ url_for('frontend.terms') }}'><i class="icon-chevron-right"></i> {{ _('Terms') }}</a>
+    </li>
+</ul>
+{% endblock %}

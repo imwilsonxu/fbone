@@ -6,27 +6,29 @@
     {% endif %}
 {% endmacro %}
 
-{% macro render_input(field, cls='') %}
-<div class='clearfix {% if field.errors %}error{% endif %}'>
-    {{ field.label }}
-    <div class='input'>
-        {% if field.errors %}
-        {{ field(class_=cls~' error') }}
-        {% else %}
-        {{ field(class_=cls) }}
-        {% endif %}
-        <span class="help-inline">
-            {% for error in field.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </span>
-    </div>
+{% macro render_input(field, cls='', pholder='') %}
+<div class='control-group {% if field.errors %}error{% endif %}'>
+    {% if field.errors %}
+    {{ field(class_=cls~' error', placeholder=pholder) }}
+    {% else %}
+    {{ field(class_=cls, placeholder=pholder) }}
+    {% endif %}
+
+    <span class="help-inline">
+        {% for error in field.errors %}
+        <span>{{ _(error) }}</span>
+        {% endfor %}
+    </span>
 </div>
 {% endmacro %}
 
-{% macro render_action(field) %}
-    <div class='actions'>
-        {{ field(class_='btn primary') }}&nbsp;&nbsp;&nbsp;&nbsp;<a href='{{ url_for("frontend.index") }}'>{{ _('Cancel') }}</a>
+{% macro render_action(field, cls='btn btn-primary', has_cancel=False) %}
+    <hr />
+    <div class='control-group'>
+        {{ field(class_=cls) }}
+        {% if has_cancel %}
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href='{{ url_for("frontend.index") }}'>{{ _('Cancel') }}</a>
+        {% endif %}
     </div>
 {% endmacro %}
 
@@ -77,13 +79,15 @@
     {% block flash_message %}
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
-            <div id='flash_message_container'>
-                {% for category, msg in messages %}
-                    <div class="alert-message {{ category }}" data-alert>
-                      <a class="close" href="#">×</a>
-                      <p>{{ msg }}</p>
-                    </div>
-                {% endfor %}
+            <div class="container">
+                <div id='flash_message_container'>
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endif %}
         {% endwith %}
