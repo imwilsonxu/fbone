@@ -24,8 +24,8 @@ def run():
 
 
 @manager.command
-def reset():
-    """Reset database."""
+def initdb():
+    """Init/reset database."""
 
     db.drop_all()
     db.create_all()

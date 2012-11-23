@@ -7,7 +7,7 @@ from flaskext.babel import Babel
 
 from fbone import utils
 from fbone.models import User
-from fbone.config import DefaultConfig, APP_NAME
+from fbone.config import DefaultConfig, PROJECT
 from fbone.views import frontend, user, api
 from fbone.extensions import db, mail, cache, login_manager
 
@@ -26,7 +26,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
 
     if app_name is None:
-        app_name = APP_NAME
+        app_name = PROJECT
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
 
@@ -49,7 +49,7 @@ def configure_app(app, config):
     if config is not None:
         app.config.from_object(config)
     # Override setting by env var without touching codes.
-    app.config.from_envvar('FBONE_APP_CONFIG', silent=True)
+    app.config.from_envvar('%s_APP_CONFIG' % PROJECT.upper(), silent=True)
 
 
 def configure_extensions(app):
@@ -115,7 +115,7 @@ def configure_logging(app):
     mail_handler = SMTPHandler(app.config['MAIL_SERVER'],
                                app.config['MAIL_USERNAME'],
                                ADMINS,
-                               'O_ops... Fbone failed!',
+                               'O_ops... %s failed!' % PROJECT,
                                (app.config['MAIL_USERNAME'],
                                 app.config['MAIL_PASSWORD']))
     mail_handler.setLevel(logging.ERROR)

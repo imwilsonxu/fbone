@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-APP_NAME = 'fbone'
+PROJECT = "fbone"
 
 class BaseConfig(object):
 
@@ -17,13 +17,14 @@ class DefaultConfig(BaseConfig):
 
     SQLALCHEMY_ECHO = True
     # Sqlite
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/fbone.db'
-    # Mysql: 'mysql://dbusername:dbpassword@dbhost/dbname'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/%s.sqlite' % PROJECT
+    # Mysql:
+    #SQLALCHEMY_DATABASE_URI = 'mysql://dbusername:dbpassword@dbhost/dbname'
 
     # To create log folder.
-    # $ sudo mkdir -p /var/log/fbone
-    # $ sudo chown $USER /var/log/fbone
-    DEBUG_LOG = '/var/log/fbone/debug.log'
+    # $ sudo mkdir -p /var/log/<PROJECT>
+    # $ sudo chown $USER /var/log/<PROJECT>
+    DEBUG_LOG = '/var/log/%s/debug.log' % PROJECT
 
     ACCEPT_LANGUAGES = ['zh']
     BABEL_DEFAULT_LOCALE = 'en'

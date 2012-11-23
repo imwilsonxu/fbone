@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{% block title %}{{ page_title|default(_('Fbone')) }}{% endblock %} - {{ _("Fbone") }}</title>
+    <title>{% block title %}{{ page_title|default(_('Project')) }}{% endblock %} - {{ _("Project") }}</title>
     <meta name="description" content="Fbone (Flask bone) is a Flask (Python microframework) template/bootstrap/boilerplate application.">
     <meta name="author" content="Wilson Xu">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +40,7 @@
                     <span class="icon-bar"></span>
                 </a>
 
-                <a class='brand' href='{{ url_for('frontend.index') }}'>Flask Bone</a>
+                <a class='brand' href='{{ url_for('frontend.index') }}'>{{ _("Project") }}</a>
                 {% if current_user.is_authenticated() %}
                 <div class="nav-collapse collapse">
                     <ul class="nav">
@@ -77,8 +77,10 @@
     {% block container %}
     {% endblock %}
 
+    {% block footer %}
     <hr/>
     {% include "macros/_footer.html" %}
+    {% endblock %}
 
     {% block js_btm %}
     <!--
@@ -90,7 +92,9 @@
     <script src="{{ url_for('static', filename='js/vendor/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% endblock %}
-    
+
+    {% block ga %}
     {% include "macros/_google_analytics.html" %}
+    {% endblock %}
 </body>
 </html>

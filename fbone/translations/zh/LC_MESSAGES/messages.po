@@ -4,6 +4,9 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 
+msgid "Project"
+msgstr "Flask Bone"
+
 msgid "Home"
 msgstr "首页"
 

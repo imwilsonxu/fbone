@@ -31,7 +31,8 @@ Setup packages.
 
 Reset database (with sqlite, check out `fbone/config.py`).
 
-    python manage.py reset
+    python manage.py initdb
+    sudo chmod o+w /tmp/<project>.sqlite
 
 Run local server.
     

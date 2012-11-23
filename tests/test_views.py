@@ -40,57 +40,6 @@ class TestFrontend(TestCase):
         self._login()
         self._logout()
 
-    def test_reset_password(self):
-        self._test_get_request('/reset_password', 'reset_password.html')
-
-        data = {
-            'email': self.user.email
-        }
-
-        response = self.client.post('/reset_password', data=data)
-        self.assertRedirects(response, location='/')
-        user = User.query.get(self.user.id)
-        assert user.activation_key is not None
-        #print g.outbox[0].subject
-
-        old_password = self.user.password
-        new_password = 'abcabc'
-        data = {
-            'activation_key': user.activation_key,
-            'email': user.email,
-            'password': new_password,
-            'password_again': new_password
-        }
-        response = self.client.post('/change_password', data=data)
-        self.assertRedirects(response, location='/login')
-        user = User.query.get(self.user.id)
-        assert user.password != old_password
-
-        data = {
-            'activation_key ': user.activation_key,
-        }
-        response = self.client.post('/reset_password', data=data)
-
-        data = {
-            'email': 'noexisted@test.com'
-        }
-        response = self.client.post('/reset_password', data=data)
-        assert 'error' in response.data
-
-    def test_change_password(self):
-        self._login()
-        self._test_get_request('/change_password', 'change_password.html')
-
-        old_password = self.user.password
-        new_password = 'abcabc'
-        data = {
-            'password': new_password,
-            'password_again': new_password
-        }
-        response = self.client.post('/change_password', data=data)
-        self.assertRedirects(response, location='/login')
-        user = User.query.get(self.user.id)
-        assert user.password != old_password
 
 
 class TestSearch(TestCase):
