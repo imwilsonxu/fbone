@@ -21,7 +21,6 @@ setup(
         'Flask-Script',
         'Flask-Babel',
         'Flask-Testing',
-        'Flask-Uploads',
         'Flask-Mail',
         'Flask-Cache',
         'Flask-Login',

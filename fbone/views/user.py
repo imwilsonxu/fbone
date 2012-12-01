@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os
+
+from werkzeug import secure_filename
+
 from flask import Blueprint, render_template, current_app, g, redirect, url_for, request, flash
 from flask.ext.login import login_required, current_user
 from flask.ext.wtf import ValidationError
@@ -8,7 +12,8 @@ from flaskext.babel import gettext as _
 from fbone.extensions import db
 from fbone.models import User
 from fbone.decorators import keep_login_url
-from fbone.forms import ProfileForm, AccountForm
+from fbone.forms import ProfileForm, AccountForm, AvatarForm
+from fbone.utils import allowed_file
 
 
 user = Blueprint('user', __name__, url_prefix='/user')
@@ -33,25 +38,29 @@ def pub(name):
 @login_required
 def profile():
     user = User.query.filter_by(name=current_user.name).first_or_404()
-    form = ProfileForm(obj=user, next=request.args.get('next'))
+    form = ProfileForm(
+            name = current_user.name,
+            email = current_user.email,
+            real_name = current_user.user_detail.real_name,
+            role_id = current_user.role_id,
+            age = current_user.user_detail.age,
+            url = current_user.user_detail.url,
+            location = current_user.user_detail.location,
+            bio = current_user.user_detail.bio,
+            next = request.args.get('next'),
+            )
 
     if form.validate_on_submit():
         
         form.populate_obj(user)
+        form.populate_obj(user.user_detail)
 
         db.session.add(user)
         db.session.commit()
 
-        flash(_('Profile updated.'), 'success')
+        flash('Profile updated.', 'success')
     
     return render_template('settings/profile.html', user=user, active="profile", form=form)
-
-
-@user.route('/settings/notification')
-@login_required
-def notification():
-    user = User.query.filter_by(name=current_user.name).first_or_404()
-    return render_template('settings/notification.html', user=user, active="notification")
 
 
 @user.route('/settings/account', methods=['GET', 'POST'])
@@ -71,3 +80,29 @@ def account():
         flash(_(form.new_password.data), 'success')
     
     return render_template('settings/account.html', user=user, active="account", form=form)
+
+
+@user.route('/settings/avatar', methods=['GET', 'POST'])
+@login_required
+def avatar():
+    user = User.query.filter_by(name=current_user.name).first_or_404()
+    form = AvatarForm(
+            next = request.args.get('next'),
+            )
+
+    if form.validate_on_submit():
+        if form.avatar.data:
+            file = request.files[form.avatar.name]
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                fn, ext = os.path.splitext(filename)
+                avatar_filename = os.path.join(current_app.config['USER_IMG_UPLOAD_PATH'], user.name+ext)
+                file.save(avatar_filename)
+                user.avatar = os.path.join(user.name+ext)
+                
+                db.session.add(user)
+                db.session.commit()
+        
+                flash('Avatar updated.', 'success')
+    
+    return render_template('settings/avatar.html', user=user, active="avatar", form=form)

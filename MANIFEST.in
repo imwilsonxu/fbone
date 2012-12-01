@@ -2,11 +2,13 @@
 # http://docs.python.org/distutils/sourcedist.html#specifying-the-files-to-distribute
 
 # Including
+# Python source files, test/*.py will be automatically included.
+recursive-include fbone *
+# Templates
 recursive-include fbone/templates *
+# Static files
 recursive-include fbone/static *
-recursive-include fbone/views *
-recursive-include fbone/forms *
-recursive-include fbone/models *
+# Translations
 recursive-include fbone/translations *
 
 # Excluding

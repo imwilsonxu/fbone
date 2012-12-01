@@ -1,0 +1,221 @@
+ul.signnav > li {
+    margin-right: 15px;
+}
+
+.nobg {
+    background-color: white;
+}
+
+.form-signin {
+    max-width: 470px;
+    padding: 10px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.help-inline {
+    font-size: 12px;
+    color: #999;
+}
+
+body { 
+    padding-top: 60px; 
+}
+
+.progress-in-table {
+    margin-bottom: 0;
+}
+
+/* Sign up */
+.btn-signup {
+    color: white;
+    text-decoration: none;
+}
+
+/* github avatar */
+
+.vcard .avatared {
+    position: relative;
+}
+
+.vcard h1 {
+    font-size: 26px;
+    letter-spacing: -1px;
+    color: #495961;
+    margin-top: 6px;
+}
+
+.vcard h1 span {
+    line-height: 1;
+    display: inline-block;
+    width: 100%;
+    line-height: 26px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    padding-bottom: 4px;
+    margin-bottom: -12px;
+}
+
+.vcard h1 em {
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    font-family: "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px;
+    color: #666;
+    position: relative;
+    top: -2px;
+    margin-bottom: 12px;
+    vertical-align: top;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.vcard .details {
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    margin: 0 0 8px 0;
+    padding: 18px 0 15px 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.vcard dl:first-child {
+    margin-top: 0;
+}
+
+.vcard dl {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.vcard dl dt {
+    margin: 0;
+    float: left;
+    width: 22px;
+    color: #D0D0D0;
+}
+
+.vcard dl dd {
+    margin: 0 0 0 22px;
+    width: 195px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.profilecols ul.stats {
+    border-bottom: 1px solid #DDD;
+    margin: 0 0 17px 0;
+    padding: 6px 0 15px 0;
+}
+
+.profilecols ul.stats li {
+    display: inline-block;
+    list-style-type: none;
+    min-width: 70px;
+}
+
+.profilecols ul.stats li strong {
+    display: block;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: bold;
+    color: #222;
+}
+
+.profilecols ul.stats li span {
+    display: block;
+    margin-top: -2px;
+    font-size: 11px;
+    color: #999;
+}
+
+/* footer */
+
+.footer {
+    position: relative;
+    margin: 40px 0 0 0;
+    padding: 20px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #777;
+    text-shadow: 0 1px 0 white;
+    background-color: whiteSmoke;
+    border-top: 1px solid #E5E5E5;
+}
+
+.footer-links {
+    margin: 10px 0;
+}
+
+.footer-links li {
+    display: inline;
+    padding: 0 2px;
+}
+
+.footer-links li:first-child {
+    padding-left: 0;
+}
+
+/* bootstrap + tablesorter */
+
+table .header {
+    cursor: pointer;
+}
+
+table .header:after {
+    content: "";
+    float: right;
+    margin-top: 7px;
+    border-width: 0 4px 4px;
+    border-style: solid;
+    border-color: #000000 transparent;
+    visibility: hidden;
+}
+
+table .headerSortUp, table .headerSortDown {
+    background-color: #f7f7f9;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+
+table .header:hover:after {
+    visibility: visible;
+}
+
+table .headerSortDown:after, table .headerSortDown:hover:after {
+    visibility: visible;
+    filter: alpha(opacity=60);
+    -moz-opacity: 0.6;
+    opacity: 0.6;
+}
+
+table .headerSortUp:after {
+    border-bottom: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #000000;
+    visibility: visible;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    filter: alpha(opacity=60);
+    -moz-opacity: 0.6;
+    opacity: 0.6;
+}
+
+.table-borderless td,
+.table-borderless th{ 
+    border: 0 !important
+}
+

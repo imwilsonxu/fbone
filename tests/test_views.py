@@ -101,6 +101,22 @@ class TestUser(TestCase):
         self._login()
         self._test_get_request('/user/', 'user_index.html')
 
+    def test_settings_profile(self):
+        response = self.client.get('/user/settings/profile')
+        self.assertRedirects(response, location='/login?next=%s' %
+                             url_quote('/user/settings/profile', safe=''))
+
+        self._login()
+        self._test_get_request('/user/settings/profile', 'settings/profile.html')
+
+    def test_settings_account(self):
+        response = self.client.get('/user/settings/account')
+        self.assertRedirects(response, location='/login?next=%s' %
+                             url_quote('/user/settings/account', safe=''))
+
+        self._login()
+        self._test_get_request('/user/settings/account', 'settings/account.html')
+
     def test_follow_unfollow(self):
         user1 = User(name='tester1', email='tester1@test.com', password='123456')
         db.session.add(user1)

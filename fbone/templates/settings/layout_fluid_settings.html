@@ -1,0 +1,30 @@
+{% extends "layouts/layout_fluid.html" %}
+
+{% set page_header = _(active|capitalize) %}
+{% set page_title = page_header %}
+
+<!-- Set footer tabs -->
+{% set tabs = [
+    ("profile", url_for('user.profile')), 
+    ("account", url_for('user.account')),
+    ("avatar", url_for('user.avatar')),
+]%}
+
+{% block left %}
+    <div class="span2">
+        <ul class="nav nav-list bs-docs-sidenav">
+            {% for tab, link in tabs %}
+            <li class="{% if active == tab %}active{% endif %}">
+                <a href="{{ link }}"><i class="icon-chevron-right"></i>{{ tab|capitalize }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block right %}
+    <div class="span10">
+        {% block body %}
+        {% endblock %}
+    </div>
+{% endblock %}

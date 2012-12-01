@@ -1,20 +1,11 @@
-{% from "macros/_misc.html" import render_input, render_action %}
-{% set page_title = _('Sign in') %}
+{% from "macros/_misc.html" import render_form %}
+
+{% set page_title = 'Sign in' %}
+
 {% extends "layouts/layout_signin.html" %}
+
 {% block body %}
-<form class="form-signin" method="POST" action="{{ url_for('frontend.login') }}">
-    {{ form.hidden_tag() }}
-    {{ form.next }}
-    <fieldset>
-        {% set link = url_for('frontend.signup') %}
-        {% set tip = _('Not a member? <a href="%(link)s">Sign up</a> please.', link=link) %}
-        <legend>{{ tip }}</legend>
-        {{ render_input(form.login, '', _('Username')) }}
-        {{ render_input(form.password, '', _('Password')) }}
-        <label class="checkbox">
-            {{ form.remember() }}{{ _('Remember me') }}
-        </label>
-        {{ render_action(form.submit, 'btn btn-primary', True) }}
-    </fieldset>
-</form>
+<div class="form-signin">
+    {{ render_form(page_title, url_for('frontend.login'), form)}}
+</div>
 {% endblock %}

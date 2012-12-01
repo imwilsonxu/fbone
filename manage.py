@@ -6,7 +6,7 @@ from flask.ext.script import Manager, prompt, prompt_pass, prompt_bool
 
 from fbone import create_app
 from fbone.extensions import db
-from fbone.models import User
+from fbone.models import User, UserDetail, UserRole
 
 
 manager = Manager(create_app())
@@ -29,8 +29,22 @@ def initdb():
 
     db.drop_all()
     db.create_all()
-    user = User(name='demo', email='tester@example.com', password='123456', website='', location='', bio='')
-    db.session.add(user)
+    
+    # Init/reset data.
+    demo = User(
+            name = u'demo', 
+            email = u'demo@example.com', 
+            password = u'123456', 
+            role_id = 1,
+            user_detail = UserDetail(
+                real_name = u'Demo Guy',
+                age = 10,
+                url = u'http://demo.example.com', 
+                location = u'Hangzhou', 
+                bio = u'Demo Guy is ... hmm ... just a demo guy.'
+                ),
+            )
+    db.session.add(demo)
     db.session.commit()
 
 

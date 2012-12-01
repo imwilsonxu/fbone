@@ -1,17 +1,7 @@
-{% from "macros/_misc.html" import render_input, render_action %}
-{% extends 'layouts/layout_fluid_settings.html' %}
+{% from "macros/_misc.html" import render_form %}
+
+{% extends 'settings/layout_fluid_settings.html' %}
+
 {% block body %}
-<form class="form-signin" method="POST" action="{{ url_for('user.profile') }}">
-    {{ form.hidden_tag() }}
-    {{ form.next }}
-    <fieldset>
-        <legend>{{ page_header }}</legend>
-        {{ render_input(form.name, '', _('Username')) }}
-        {{ render_input(form.email, '', _('Email')) }}
-        {{ render_input(form.website, '', _('Website')) }}
-        {{ render_input(form.location, '', _('Location')) }}
-        {{ render_input(form.bio, '', _('Bio')) }}
-        {{ render_action(form.submit) }}
-    </fieldset>
-</form>
+{{ render_form(page_title, url_for('user.profile'), form) }}
 {% endblock %}

@@ -12,7 +12,7 @@ import functools
 from flask.ext.testing import TestCase as Base, Twill
 
 from fbone import create_app
-from fbone.models import User
+from fbone.models import User, UserDetail
 from fbone.config import TestConfig
 from fbone.extensions import db
 
@@ -39,7 +39,18 @@ class TestCase(Base):
         db.drop_all()
 
     def _make_user(self):
-        user = User(name='tester', email='tester@test.com', password='123456')
+        user = User(
+                name = 'tester', 
+                email = 'tester@test.com', 
+                password = '123456',
+                user_detail = UserDetail(
+                    real_name = u'Demo Guy',
+                    age = 10,
+                    url = u'http://demo.example.com', 
+                    location = u'Hangzhou', 
+                    bio = u'Demo Guy is ... hmm ... just a demo guy.'
+                    ),
+                )
         db.session.add(user)
         db.session.commit()
         assert user.id is not None

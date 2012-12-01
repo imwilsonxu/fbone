@@ -4,6 +4,7 @@ from flask.ext.wtf import (Form, HiddenField, BooleanField, TextField,
                           PasswordField, SubmitField, TextField,
                           ValidationError, required, equal_to, email,
                           length)
+from flask.ext.wtf.html5 import EmailField
 from flaskext.babel import gettext, lazy_gettext as _
 
 from fbone.models import User
@@ -11,9 +12,9 @@ from fbone.models import User
 
 class LoginForm(Form):
     next = HiddenField()
-    remember = BooleanField(_('Remember me'))
-    login = TextField(_('Username or email address'), [required()])
-    password = PasswordField(_('Password'), [required(), length(min=6, max=16)])
+    login = TextField('Email', [required()])
+    password = PasswordField('Password', [required(), length(min=6, max=16)])
+    remember = BooleanField('Remember me')
     submit = SubmitField(_('Sign in'))
 
 
@@ -22,7 +23,7 @@ class SignupForm(Form):
     name = TextField(_('Username'), [required()])
     password = PasswordField(_('Password'), [required(), length(min=6, max=16)])
     password_again = PasswordField(_('Password again'), [required(), length(min=6, max=16), equal_to('password')])
-    email = TextField(_('Email address'), [required(), email(message=_('A valid email address is required.'))])
+    email = EmailField(_('Email'), [required(), email()])
     submit = SubmitField(_('Sign up'))
 
     def validate_name(self, field):
@@ -35,7 +36,7 @@ class SignupForm(Form):
 
 
 class RecoverPasswordForm(Form):
-    email = TextField(_('Your email'), validators=[
+    email = EmailField(_('Your email'), validators=[
                       email(message=_('A valid email address is required'))])
     submit = SubmitField(_('Send instructions'))
 

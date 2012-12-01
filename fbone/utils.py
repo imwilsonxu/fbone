@@ -6,8 +6,7 @@
 from datetime import datetime
 
 
-VARCHAR_LEN_128 = 128
-VARCHAR_LEN_200 = 200
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
 def get_current_time():
@@ -48,3 +47,7 @@ def pretty_date(dt, default=None):
             return u'%d %s ago' % (period, plural)
 
     return default
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

@@ -6,18 +6,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{% block title %}{{ page_title|default(_('Project')) }}{% endblock %} - {{ _("Project") }}</title>
+    <title>{% block title %}{{ page_title|default(_('Project')) }}{% endblock %} - Project</title>
     <meta name="description" content="Fbone (Flask bone) is a Flask (Python microframework) template/bootstrap/boilerplate application.">
     <meta name="author" content="Wilson Xu">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="Shortcut Icon" href="{{ url_for('static', filename='favicon.png')}}" type="image/x-icon">
+    <link rel="Shortcut Icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
 
     {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     {% endblock %}
 
     {% block css_style %}
@@ -47,25 +48,25 @@
                         <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.name }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">{{ _("Inbox") }}</a></li>
+                            <li><a href="#">Inbox</a></li>
                             <li class="divider"></li>
-                            <li><a href="{{ url_for('user.profile') }}">{{ _("Settings") }}</a></li>
-                            <li><a href="{{ url_for('frontend.logout') }}">{{ _("Log out") }}</a></li>
+                            <li><a href="{{ url_for('user.profile') }}">Settings</a></li>
+                            <li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
                         </ul>
                         </li>
                     </ul>
                 </div>
+                <form class="navbar-search pull-right" action="{{ url_for('frontend.search') }}">
+                    <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='Search' />
+                </form>
                 {% else %}
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li><a href="{{ url_for('frontend.signup') }}">{{ _("Sign up") }}</a></li>
-                        <li><a href="{{ url_for('frontend.login') }}">{{ _("Sign in") }}</a></li>
+                <div class="nav-collapse collapse pull-right">
+                    <ul class="nav signnav">
+                        <li><span><a class="btn btn-success" href="{{ url_for('frontend.signup') }}"><strong>Sign up</strong></a></span></li>
+                        <li><span><a class="btn" href="{{ url_for('frontend.login') }}">Sign in</a></span></li>
                     </ul>
                 </div>
                 {% endif %}
-                <form class="navbar-search pull-right" action="{{ url_for('frontend.search') }}">
-                    <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='{{ _('Search') }}' />
-                </form>
             </div>
         </div>
     </div>
@@ -78,7 +79,6 @@
     {% endblock %}
 
     {% block footer %}
-    <hr/>
     {% include "macros/_footer.html" %}
     {% endblock %}
 

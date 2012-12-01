@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from werkzeug import (generate_password_hash, check_password_hash,
                       cached_property)
 from flask.ext.login import UserMixin
 
 from fbone.extensions import db
-from fbone.models import DenormalizedText
-from fbone.utils import get_current_time, VARCHAR_LEN_128, VARCHAR_LEN_200
+from fbone.models import DenormalizedText, UserRole
+from fbone.utils import get_current_time
 
 
 class User(db.Model, UserMixin):
@@ -14,19 +16,19 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(VARCHAR_LEN_128), nullable=False, unique=True)
-    email = db.Column(db.String(VARCHAR_LEN_128), nullable=False, unique=True)
-    _password = db.Column('password', db.String(VARCHAR_LEN_128), nullable=False)
-    website = db.Column(db.String(VARCHAR_LEN_128))
-    location = db.Column(db.String(VARCHAR_LEN_128))
-    bio = db.Column(db.String(VARCHAR_LEN_200))
-    activation_key = db.Column(db.String(VARCHAR_LEN_128))
+    name = db.Column(db.String(32), nullable=False, unique=True)
+    email = db.Column(db.String, nullable=False, unique=True)
+    role_id = db.Column(db.SmallInteger, nullable=False, default=1)
+    avatar = db.Column(db.String)
+    #avatar = db.Column(db.String)
+    _password = db.Column('password', db.String, nullable=False)
+    activation_key = db.Column(db.String)
     followers = db.Column(DenormalizedText)
     following = db.Column(DenormalizedText)
     created_time = db.Column(db.DateTime, default=get_current_time)
 
-    def __repr__(self):
-        return '<User %r>' % self.name
+    # Relationships
+    user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
     def _get_password(self):
         return self._password
@@ -43,7 +45,15 @@ class User(db.Model, UserMixin):
         if self.password is None:
             return False
         return check_password_hash(self.password, password)
+    
+    @property
+    def role(self):
+        return UserRole.filter_by(id=self.role_id).first()
 
+    @property
+    def avatar_path(self):
+        return os.path.join("img", "users", self.avatar)
+    
     @property
     def num_followers(self):
         if self.followers:

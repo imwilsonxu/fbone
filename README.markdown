@@ -4,54 +4,51 @@ Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) 
 
 ![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
 
-# FEATURES
+## FEATURES
 
-- Register, login, logout, remember me and reset password.
-- Use [twitter/bootstrap](https://github.com/twitter/bootstrap) and [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
+- A well designed structure for big project.
+- Use [jQuery](http://jquery.com/), [bootstrap](https://github.com/twitter/bootstrap) and [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
+- Implement tricky "Remember me" with [Flask-Login](https://github.com/maxcountryman/flask-login).
 - Handle forms with [WTForms](http://wtforms.simplecodes.com/).
 - Handle database with [SQLAlchemy](http://www.sqlalchemy.org).
 - Deploy on Apache + mod\_wsgi with [fabric](http://flask.pocoo.org/docs/deploying/mod_wsgi/).
 - i18n support with [Flask-Babel](http://packages.python.org/Flask-Babel/).
 - Unit testing with [Flask-Testing](http://packages.python.org/Flask-Testing/).
 
-# USAGE
+## USAGE
 
-## Ubuntu
+Assume you are in Ubuntu and the project name is "myapp".
 
-Download codes.
+    sudo git clone https://github.com/imwilsonxu/fbone.git /srv/www/myapp
+    sudo chmod -R o+w /srv/www/myapp
+    cd /srv/www/myapp
+    fab init:myapp
 
-    git clone https://github.com/imwilsonxu/fbone.git <your-project-name>
-    cd <your-project-name>
-    # Clean git history.
-    rm -rf .git
+Open `http://127.0.0.1`, done!
 
-Setup packages.
-
-    python setup.py install
-
-Reset database (with sqlite, check out `fbone/config.py`).
+Init/reset database (with sqlite, check out `fbone/config.py`).
 
     python manage.py initdb
     sudo chmod o+w /tmp/<project>.sqlite
 
-Run local server.
+Debug with local server.
     
-    python manage.py run
+    fab run
 
 Compile babel.
 
-    python setup.py compile_catalog --directory fbone/translations --locale zh -f
+    fab babel
 
-Deploy with fabric
-
-    fab deploy
-
-# STRUCTURE
+## STRUCTURE
 
     sudo apt-get install -y tree
     cd fbone
     tree
 
-# ACKNOWLEDGEMENTS
+## LICENSE
 
-Thanks to Flask and its [extensions](http://flask.pocoo.org/extensions/).
+[MIT LICENSE](http://www.tldrlegal.com/license/mit-license)
+
+## ACKNOWLEDGEMENTS
+
+Thanks to Flask, its [extensions](http://flask.pocoo.org/extensions/), and other goodies.

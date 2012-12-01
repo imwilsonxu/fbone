@@ -1,10 +1,18 @@
-<footer>
-    <p style='text-align: center;'>
-        © 2012 <a href='https://github.com/imwilsonxu/fbone') }}'>{{ _('Project') }}</a> &bull;
-        <a href='{{ url_for('frontend.about') }}'>{{ _('About') }}</a> &bull;
-        <a href='{{ url_for('frontend.blog') }}'>{{ _('Blog') }}</a> &bull;
-        <a href='{{ url_for('frontend.help') }}'>{{ _('Help') }}</a> &bull;
-        <a href='{{ url_for('frontend.privacy') }}'>{{ _('Privacy') }}</a> &bull;
-        <a href='{{ url_for('frontend.terms') }}' title='{{ _('Terms of Service') }}'>{{ _('Terms') }}</a>
-    </p>
+<footer class="footer">
+    <div class="container">
+        <ul class="footer-links">
+            <li>© 2012</li>
+            <li><a href='https://github.com/imwilsonxu/fbone'>Project</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.about') }}'>About</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.blog') }}'>Blog</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.help') }}'>Help</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.privacy') }}'>Privacy</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.terms') }}'>Terms</a></li>
+        </ul>
+    </div>
 </footer>
