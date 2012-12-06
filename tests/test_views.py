@@ -133,3 +133,17 @@ class TestUser(TestCase):
         user1.unfollow(user2)
         assert user1.num_following == 0
         assert user2.num_followers == 0
+
+
+class TestAdmin(TestCase):
+
+    def setUp(self):
+        super(TestAdmin, self).setUp()
+        self._make_user()
+
+    def test_show(self):
+        self._test_get_request('/admin/')
+        self._test_get_request('/admin/usermodel/')
+        self._test_get_request('/admin/userdetailmodel/')
+        self._test_get_request('/admin/rolemodel/')
+        self._test_get_request('/admin/useravatar/')

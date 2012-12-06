@@ -24,6 +24,7 @@ setup(
         'Flask-Mail',
         'Flask-Cache',
         'Flask-Login',
+        'Flask-Admin',
         'nose',
     ],
     classifiers=[

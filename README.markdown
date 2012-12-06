@@ -11,6 +11,7 @@ Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) 
 - Implement tricky "Remember me" with [Flask-Login](https://github.com/maxcountryman/flask-login).
 - Handle forms with [WTForms](http://wtforms.simplecodes.com/).
 - Handle database with [SQLAlchemy](http://www.sqlalchemy.org).
+- Use [Flask-Admin](https://flask-admin.readthedocs.org/en/latest/quickstart/) to build to admin interface.
 - Deploy on Apache + mod\_wsgi with [fabric](http://flask.pocoo.org/docs/deploying/mod_wsgi/).
 - i18n support with [Flask-Babel](http://packages.python.org/Flask-Babel/).
 - Unit testing with [Flask-Testing](http://packages.python.org/Flask-Testing/).

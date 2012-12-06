@@ -4,9 +4,12 @@ import os
 
 from flask import Flask, request, render_template
 from flaskext.babel import Babel
+from flask.ext.admin import Admin
+from flask.ext.admin.contrib.sqlamodel import ModelView
+from flask.ext.admin.contrib.fileadmin import FileAdmin
 
 from fbone import utils
-from fbone.models import User
+from fbone.models import User, UserDetail, Role
 from fbone.config import DefaultConfig, PROJECT
 from fbone.views import frontend, user, api
 from fbone.extensions import db, mail, cache, login_manager
@@ -53,27 +56,41 @@ def configure_app(app, config):
 
 
 def configure_extensions(app):
-    # sqlalchemy
+    # flask-sqlalchemy
     db.init_app(app)
-    # mail
+
+    # flask-mail
     mail.init_app(app)
-    # cache
+
+    # flask-cache
     cache.init_app(app)
 
-    # babel
+    # flask-babel
     babel = Babel(app)
     @babel.localeselector
     def get_locale():
         accept_languages = app.config.get('ACCEPT_LANGUAGES')
         return request.accept_languages.best_match(accept_languages)
 
-    # login.
+    # flask-login
     login_manager.login_view = 'frontend.login'
     login_manager.refresh_view = 'frontend.reauth'
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
     login_manager.setup_app(app)
+
+    # flask-admin
+    admin = Admin()
+    # Views
+    # Model admin
+    admin.add_view(ModelView(User, db.session, endpoint='usermodel', category='Model'))
+    admin.add_view(ModelView(UserDetail, db.session, endpoint='userdetailmodel', category='Model'))
+    admin.add_view(ModelView(Role, db.session, endpoint='rolemodel', category='Model'))
+    # File admin 
+    path = os.path.join(os.path.dirname(__file__), 'static/img/users')
+    admin.add_view(FileAdmin(path, '/static/img/users', endpoint='useravatar', name='User Avatars', category='Image'))
+    admin.init_app(app)
 
 
 def configure_blueprints(app, blueprints):

@@ -17,6 +17,7 @@ class DefaultConfig(BaseConfig):
 
     SQLALCHEMY_ECHO = True
     # Sqlite
+    # Use a tmp database, change to anywhere to suit yourself.
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/%s.sqlite' % PROJECT
     # Mysql:
     #SQLALCHEMY_DATABASE_URI = 'mysql://dbusername:dbpassword@dbhost/dbname'

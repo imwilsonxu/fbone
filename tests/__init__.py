@@ -74,8 +74,9 @@ class TestCase(Base):
         response = self.client.get('/logout')
         self.assertRedirects(response, location='/')
 
-    def _test_get_request(self, endpoint, template):
+    def _test_get_request(self, endpoint, template=None):
         response = self.client.get(endpoint)
         self.assert_200(response)
-        self.assertTemplateUsed(name=template)
+        if template:
+            self.assertTemplateUsed(name=template)
         return response

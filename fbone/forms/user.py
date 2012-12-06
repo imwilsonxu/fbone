@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.uploads import UploadSet, IMAGES
 from flask.ext.wtf import (Form, HiddenField, BooleanField, TextField,
                           PasswordField, SubmitField, TextAreaField,
                           ValidationError, required, equal_to, email,
@@ -10,10 +9,7 @@ from flask.ext.wtf.html5 import URLField, EmailField, TelField
 from flaskext.babel import gettext, lazy_gettext as _
 from flask.ext.login import current_user
 
-from fbone.models import User, UserRole
-
-
-images = UploadSet("images", IMAGES)
+from fbone.models import User, Role
 
 
 class ProfileForm(Form):
@@ -37,6 +33,7 @@ class ProfileForm(Form):
             )
     role_id = RadioField(
             label = "Role",
+            # TODO: don't hardcode roles.
             validators = [
                 validators.AnyOf(["1", "2"]),
                 ],
