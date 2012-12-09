@@ -39,14 +39,11 @@ def pub(name):
 def profile():
     user = User.query.filter_by(name=current_user.name).first_or_404()
     form = ProfileForm(
+            obj=user.user_detail,
             name = current_user.name,
             email = current_user.email,
-            real_name = current_user.user_detail.real_name,
+            status_id = current_user.status_id,
             role_id = current_user.role_id,
-            age = current_user.user_detail.age,
-            url = current_user.user_detail.url,
-            location = current_user.user_detail.location,
-            bio = current_user.user_detail.bio,
             next = request.args.get('next'),
             )
 

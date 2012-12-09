@@ -7,7 +7,8 @@ from uuid import uuid4
 from datetime import datetime
 
 from flask import (Blueprint, render_template, current_app, request,
-                   flash, url_for, redirect, session, g, abort)
+                   flash, url_for, redirect, session, g, abort, 
+                   render_template_string)
 from flask.ext.mail import Message
 from flaskext.babel import gettext as _
 from flask.ext.login import (login_required, login_user, current_user,
@@ -147,19 +148,26 @@ def reset_password():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user:
-            flash(_('Please see your email for instructions on '
-                  'how to access your account'), 'success')
+            flash('Please see your email for instructions on '
+                  'how to access your account', 'success')
 
             user.activation_key = str(uuid4())
             db.session.add(user)
             db.session.commit()
 
-            body = render_template('emails/reset_password.html', user=user)
-            message = Message(subject=_('Recover your password'), body=body,
-                              recipients=[user.email])
+            url = url_for('frontend.change_password', email=user.email, activation_key=user.activation_key, _external=True)
+            html = render_template('emails/reset_password.html', 
+                    project=current_app.config['PROJECT'],
+                    username=user.name,
+                    url=url
+                    )
+            message = Message(subject=_('Reset your password in '+current_app.config['PROJECT']), 
+                    html=html,
+                    recipients=[user.email]
+                    )
             mail.send(message)
 
-            return redirect(url_for('frontend.index'))
+            return render_template('reset_password.html', form=form)
         else:
             flash(_('Sorry, no user found for that email address'), 'error')
 

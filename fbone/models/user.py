@@ -2,12 +2,13 @@
 
 import os
 
+from sqlalchemy import Column
 from werkzeug import (generate_password_hash, check_password_hash,
                       cached_property)
 from flask.ext.login import UserMixin
 
 from fbone.extensions import db
-from fbone.models import DenormalizedText, Role
+from fbone.models import DenormalizedText
 from fbone.utils import get_current_time
 
 
@@ -15,22 +16,22 @@ class User(db.Model, UserMixin):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32), nullable=False, unique=True)
-    email = db.Column(db.String, nullable=False, unique=True)
-    activation_key = db.Column(db.String)
-    created_time = db.Column(db.DateTime, default=get_current_time)
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.String(32), nullable=False, unique=True)
+    email = Column(db.String, nullable=False, unique=True)
+    activation_key = Column(db.String)
+    created_time = Column(db.DateTime, default=get_current_time)
 
     # ================================================================
     # Avatar
-    avatar = db.Column(db.String)
+    avatar = Column(db.String)
     @property
     def avatar_path(self):
         return os.path.join("img", "users", self.avatar)
     
     # ================================================================
     # Password
-    _password = db.Column('password', db.String, nullable=False)
+    _password = Column('password', db.String, nullable=False)
     def _get_password(self):
         return self._password
     def _set_password(self, password):
@@ -44,18 +45,25 @@ class User(db.Model, UserMixin):
             return False
         return check_password_hash(self.password, password)
     
+    # ================================================================
     # One-to-many relationship between users and roles.
-    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
-    role = db.relationship('Role', uselist=False, backref="users")
+    role_id = Column(db.Integer, db.ForeignKey("roles.id"))
+    role = db.relationship('Role', backref="users")
+    
+    # ================================================================
+    # One-to-many relationship between users and user_statuses.
+    status_id = Column(db.Integer, db.ForeignKey("user_statuses.id"))
+    status = db.relationship('UserStatus', backref="users")
 
-    # One-to-many relationship between users and user_details.
-    user_detail_id = db.Column(db.Integer, db.ForeignKey("user_details.id"))
+    # ================================================================
+    # One-to-one (uselist=False) relationship between users and user_details.
+    user_detail_id = Column(db.Integer, db.ForeignKey("user_details.id"))
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     
     # ================================================================
     # Follow / Following
-    followers = db.Column(DenormalizedText)
-    following = db.Column(DenormalizedText)
+    followers = Column(DenormalizedText)
+    following = Column(DenormalizedText)
     
     @property
     def num_followers(self):

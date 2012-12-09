@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.wtf import (Form, HiddenField, BooleanField, TextField,
-                          PasswordField, SubmitField, TextAreaField,
-                          ValidationError, required, equal_to, email,
-                          length, validators, IntegerField, RadioField,
-                          FileField, file_allowed, file_required)
+from wtforms.fields import (HiddenField, BooleanField, TextField,
+        PasswordField, SubmitField, TextAreaField, IntegerField, RadioField,
+        FileField, DecimalField, DateField)
+from flask.ext.wtf import Form, ValidationError, validators
 from flask.ext.wtf.html5 import URLField, EmailField, TelField
 from flaskext.babel import gettext, lazy_gettext as _
 from flask.ext.login import current_user
 
 from fbone.models import User, Role
+from fbone.utils import (PASSWORD_LEN_MIN, PASSWORD_LEN_MAX, 
+        USERNAME_LEN_MIN, USERNAME_LEN_MAX, REALNAME_LEN_MIN, 
+        REALNAME_LEN_MAX, AGE_MIN, AGE_MAX, DEPOSIT_MIN, DEPOSIT_MAX)
 
 
 class ProfileForm(Form):
@@ -19,17 +21,20 @@ class ProfileForm(Form):
             validators = [
                 validators.Required(),
                 validators.Length(
-                    min = 4,
-                    max = 25,
+                    min = USERNAME_LEN_MIN,
+                    max = USERNAME_LEN_MAX,
                     ),
                 ],
-            description = u"Combination of letters/digits/underscore, at least 4 characters.",
+            description = u"Combination of letters/digits/underscore, at least %s characters." % USERNAME_LEN_MIN,
             )
     email = EmailField(
             label = _('Email'), 
             validators = [validators.Email(
                 message = u"Doesn't look like a valid email."
                 )],
+            )
+    created_time = DateField(
+            label = _('Created time'),
             )
     role_id = RadioField(
             label = "Role",
@@ -46,8 +51,8 @@ class ProfileForm(Form):
             label = _('Real name'),
             validators = [
                 validators.Length(
-                    min = 4,
-                    max = 25,
+                    min = REALNAME_LEN_MIN,
+                    max = REALNAME_LEN_MAX,
                     ),
                 ]
             )
@@ -55,8 +60,8 @@ class ProfileForm(Form):
             label = _('Age'), 
             validators = [
                 validators.NumberRange(
-                    min=1, 
-                    max=200,
+                    min = AGE_MIN, 
+                    max = AGE_MAX,
                     ),
                 ],
             )
@@ -67,6 +72,15 @@ class ProfileForm(Form):
             label = _('URL'), 
             validators = [
                 validators.URL(),
+                ],
+            )
+    deposit = DecimalField(
+            label = _('Deposit'), 
+            validators = [
+                validators.NumberRange(
+                    min = DEPOSIT_MIN, 
+                    max = DEPOSIT_MAX,
+                    ),
                 ],
             )
     location = TextField(
@@ -93,28 +107,28 @@ class AccountForm(Form):
     password = PasswordField(
             label = 'Password', 
             validators = [
-                required(),
+                validators.Required(),
                 ]
             )
     new_password = PasswordField(
             label = 'New password', 
             validators = [
-                required(), 
-                length(
-                    min=6, 
-                    max=16,
+                validators.Required(), 
+                validators.Length(
+                    min = PASSWORD_LEN_MIN, 
+                    max = PASSWORD_LEN_MAX,
                     )
-                ]
+                ],
             )
     password_again = PasswordField(
             label = 'Password again', 
             validators = [
-                required(), 
-                length(
-                    min=6, 
-                    max=16,
+                validators.Required(), 
+                validators.Length(
+                    min = PASSWORD_LEN_MIN, 
+                    max = PASSWORD_LEN_MAX,
                     ), 
-                equal_to('new_password'),
+                validators.EqualTo('new_password'),
                 ]
             )
     submit = SubmitField(_('Save'))

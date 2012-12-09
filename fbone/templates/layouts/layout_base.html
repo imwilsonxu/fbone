@@ -42,8 +42,11 @@
                 </a>
 
                 <a class='brand' href='{{ url_for('frontend.index') }}'>{{ _("Project") }}</a>
+                <form class="navbar-search pull-left" action="{{ url_for('frontend.search') }}">
+                    <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='Search' />
+                </form>
                 {% if current_user.is_authenticated() %}
-                <div class="nav-collapse collapse">
+                <div class="nav-collapse collapse pull-right">
                     <ul class="nav">
                         <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.name }} <b class="caret"></b></a>

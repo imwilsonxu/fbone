@@ -1,7 +1,20 @@
-{% from "macros/_misc.html" import render_form %}
+{% from "macros/_form.html" import render_form %}
 
 {% extends 'settings/layout_fluid_settings.html' %}
 
+{% block css_style %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker.css') }}" >
+{% endblock %}
+
 {% block body %}
 {{ render_form(page_title, url_for('user.profile'), form) }}
+{% endblock %}
+
+{% block js_btm %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/vendor/bootstrap-datepicker.js') }}"></script>
+<script type="text/javascript">
+    $('#created_time').datepicker({ format: 'yyyy-mm-dd' });
+</script>
 {% endblock %}

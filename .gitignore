@@ -8,6 +8,9 @@
 *.cfg
 *.tox
 *~
+*.mo
+production.py
 
 dist
 build
+logs

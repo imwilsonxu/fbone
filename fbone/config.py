@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-PROJECT = "fbone"
 
 class BaseConfig(object):
 
+    PROJECT = "fbone"
     DEBUG = False
     TESTING = False
 
@@ -15,24 +15,30 @@ class DefaultConfig(BaseConfig):
 
     DEBUG = True
 
+    # ===========================================
+    # Flask-Sqlalchemy
+    # 
+    # http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = True
-    # Sqlite
-    # Use a tmp database, change to anywhere to suit yourself.
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/%s.sqlite' % PROJECT
-    # Mysql:
-    #SQLALCHEMY_DATABASE_URI = 'mysql://dbusername:dbpassword@dbhost/dbname'
+    # Database connection URI, change to suit yourself.
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/%s.sqlite' % BaseConfig.PROJECT # sqlite for testing/debug.
+    #SQLALCHEMY_DATABASE_URI = 'mysql://username:password@server/db' # mysql
 
-    # To create log folder.
-    # $ sudo mkdir -p /var/log/<PROJECT>
-    # $ sudo chown $USER /var/log/<PROJECT>
-    DEBUG_LOG = '/var/log/%s/debug.log' % PROJECT
-
+    # ===========================================
+    # Flask-babel
+    # 
     ACCEPT_LANGUAGES = ['zh']
     BABEL_DEFAULT_LOCALE = 'en'
 
+    # ===========================================
+    # Flask-cache
+    # 
     CACHE_TYPE = 'simple'
     CACHE_DEFAULT_TIMEOUT = 60
 
+    # ===========================================
+    # Flask-mail
+    # 
     # Should be imported from env var.
     # https://bitbucket.org/danjac/flask-mail/issue/3/problem-with-gmails-smtp-server
     MAIL_DEBUG = DEBUG

@@ -8,6 +8,20 @@ from datetime import datetime
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
+USERNAME_LEN_MIN = 4
+USERNAME_LEN_MAX = 25
+
+REALNAME_LEN_MIN = 4
+REALNAME_LEN_MAX = 25
+
+PASSWORD_LEN_MIN = 6
+PASSWORD_LEN_MAX = 16
+
+AGE_MIN = 1
+AGE_MAX = 300
+
+DEPOSIT_MIN = 0.00
+DEPOSIT_MAX = 9999999999.99
 
 def get_current_time():
     return datetime.utcnow()

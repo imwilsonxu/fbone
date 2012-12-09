@@ -12,7 +12,7 @@ import functools
 from flask.ext.testing import TestCase as Base, Twill
 
 from fbone import create_app
-from fbone.models import User, UserDetail
+from fbone.models import User, UserDetail, Role, UserStatus
 from fbone.config import TestConfig
 from fbone.extensions import db
 
@@ -27,10 +27,61 @@ class TestCase(Base):
         self.twill = Twill(app, port=3000)
         return app
 
+    def init_data(self):
+
+        role_user = Role(name=u'user')
+        role_admin = Role(name=u'admin')
+        db.session.add(role_user)
+        db.session.add(role_admin)
+        db.session.commit()
+
+        inactivated = UserStatus(name=u'inactivated')
+        activated = UserStatus(name=u'activated')
+        frozen = UserStatus(name=u'frozen')
+        deleted = UserStatus(name=u'deleted')
+        db.session.add(inactivated)
+        db.session.add(activated)
+        db.session.add(frozen)
+        db.session.add(deleted)
+        db.session.commit()
+        
+        demo = User(
+                name = u'demo', 
+                email = u'demo@example.com', 
+                password = u'123456', 
+                role = role_user,
+                status = activated,
+                user_detail = UserDetail(
+                    real_name = u'Demo Guy',
+                    age = 10,
+                    url = u'http://demo.example.com', 
+                    location = u'Hangzhou', 
+                    bio = u'Demo Guy is ... hmm ... just a demo guy.',
+                    ),
+                )
+        admin = User(
+                name = u'admin', 
+                email = u'admin@example.com', 
+                password = u'123456', 
+                role = role_admin,
+                status = activated,
+                user_detail = UserDetail(
+                    real_name = u'admin Guy',
+                    age = 10,
+                    url = u'http://admin.example.com', 
+                    location = u'Hangzhou', 
+                    bio = u'admin Guy is ... hmm ... just a admin guy.',
+                    ),
+                )
+        db.session.add(demo)
+        db.session.add(admin)
+        db.session.commit()
+
     def setUp(self):
         """Reset all tables before testing."""
 
         db.create_all()
+        self.init_data()
 
     def tearDown(self):
         """Clean db session and drop all tables."""
@@ -38,29 +89,9 @@ class TestCase(Base):
         db.session.remove()
         db.drop_all()
 
-    def _make_user(self):
-        user = User(
-                name = 'tester', 
-                email = 'tester@test.com', 
-                password = '123456',
-                user_detail = UserDetail(
-                    real_name = u'Demo Guy',
-                    age = 10,
-                    url = u'http://demo.example.com', 
-                    location = u'Hangzhou', 
-                    bio = u'Demo Guy is ... hmm ... just a demo guy.'
-                    ),
-                )
-        db.session.add(user)
-        db.session.commit()
-        assert user.id is not None
-        self.user = user
-
     def _login(self, remember=False):
-        name = 'tester'
+        name = 'demo'
         user = User.query.filter_by(name=name).first()
-        if user is None:
-            user = self._make_user()
 
         data = {
             'login': name,
@@ -69,6 +100,7 @@ class TestCase(Base):
         }
         response = self.client.post('/login', data=data)
         self.assertRedirects(response, location='/user/')
+        return user
 
     def _logout(self):
         response = self.client.get('/logout')

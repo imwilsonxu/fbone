@@ -2,19 +2,28 @@
 
 Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) template/bootstrap/boilerplate application.
 
+You can use it for
+
+- learning Flask.
+- quicker developing your new project.
+
 ![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
 
 ## FEATURES
 
-- A well designed structure for big project.
-- Use [jQuery](http://jquery.com/), [bootstrap](https://github.com/twitter/bootstrap) and [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
-- Implement tricky "Remember me" with [Flask-Login](https://github.com/maxcountryman/flask-login).
-- Handle forms with [WTForms](http://wtforms.simplecodes.com/).
-- Handle database with [SQLAlchemy](http://www.sqlalchemy.org).
-- Use [Flask-Admin](https://flask-admin.readthedocs.org/en/latest/quickstart/) to build to admin interface.
-- Deploy on Apache + mod\_wsgi with [fabric](http://flask.pocoo.org/docs/deploying/mod_wsgi/).
-- i18n support with [Flask-Babel](http://packages.python.org/Flask-Babel/).
-- Unit testing with [Flask-Testing](http://packages.python.org/Flask-Testing/).
+- Well designed for **large project**.
+- **Support HTML5** with [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
+- Integrate with [jQuery](http://jquery.com/) and [bootstrap](https://github.com/twitter/bootstrap).
+- Implement **user session management (signin/signout/rememberme)** with [Flask-Login](https://github.com/maxcountryman/flask-login).
+- Implement **reset password via email** with [Flask-Mail](http://packages.python.org/Flask-Mail/).
+- Implement **admin interface** with [Flask-Admin](https://flask-admin.readthedocs.org/en/latest/quickstart/).
+- Implement **unit testing** with [Flask-Testing](http://packages.python.org/Flask-Testing/).
+- Implement **external script (initdb/testing/etc)** with [Flask-Script](http://flask-script.readthedocs.org/en/latest/).
+- Implement **Logger**.
+- Handle **i18n** with [Flask-Babel](http://packages.python.org/Flask-Babel/).
+- Handle **web forms** with [WTForms](http://wtforms.simplecodes.com/).
+- Handle **orm** with [SQLAlchemy](http://www.sqlalchemy.org).
+- Handle **deployment** with [mod\_wsgi](flask.pocoo.org/docs/deploying/mod_wsgi/) and [fabric](flask.pocoo.org/docs/patterns/fabric/).
 
 ## USAGE
 

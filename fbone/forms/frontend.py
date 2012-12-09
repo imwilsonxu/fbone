@@ -1,30 +1,70 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.wtf import (Form, HiddenField, BooleanField, TextField,
-                          PasswordField, SubmitField, TextField,
-                          ValidationError, required, equal_to, email,
-                          length)
+from wtforms.fields import (HiddenField, BooleanField, TextField,
+        PasswordField, SubmitField)
+from flask.ext.wtf import Form, ValidationError, validators
 from flask.ext.wtf.html5 import EmailField
 from flaskext.babel import gettext, lazy_gettext as _
 
 from fbone.models import User
+from fbone.utils import (PASSWORD_LEN_MIN, PASSWORD_LEN_MAX, 
+        USERNAME_LEN_MIN, USERNAME_LEN_MAX)
 
 
 class LoginForm(Form):
     next = HiddenField()
-    login = TextField('Email', [required()])
-    password = PasswordField('Password', [required(), length(min=6, max=16)])
+    login = TextField(
+            'Email', 
+            [validators.Required()],
+            description = u'Username or email',
+            )
+    password = PasswordField(
+            'Password', 
+            [
+                validators.Required(), 
+                validators.Length(min=PASSWORD_LEN_MIN, max=PASSWORD_LEN_MAX),
+            ],
+            )
     remember = BooleanField('Remember me')
-    submit = SubmitField(_('Sign in'))
+    submit = SubmitField('Sign in')
 
 
 class SignupForm(Form):
     next = HiddenField()
-    name = TextField(_('Username'), [required()])
-    password = PasswordField(_('Password'), [required(), length(min=6, max=16)])
-    password_again = PasswordField(_('Password again'), [required(), length(min=6, max=16), equal_to('password')])
-    email = EmailField(_('Email'), [required(), email()])
-    submit = SubmitField(_('Sign up'))
+    name = TextField(
+            'Username', 
+            [
+                validators.Required(),
+                validators.Length(
+                    min = USERNAME_LEN_MIN,
+                    max = USERNAME_LEN_MAX,
+                    ),
+            ],
+            )
+    password = PasswordField(
+            'Password', 
+            [
+                validators.Required(), 
+                validators.Length(
+                    min=PASSWORD_LEN_MIN, 
+                    max=PASSWORD_LEN_MAX
+                ),
+            ],
+            )
+    password_again = PasswordField(
+            'Password again', 
+            [
+                validators.Required(), 
+                validators.Length(min=PASSWORD_LEN_MIN, max=PASSWORD_LEN_MAX), 
+                validators.EqualTo('password')],
+            )
+    email = EmailField(
+            'Email', 
+            [
+                validators.Required(), 
+                validators.Email()],
+            )
+    submit = SubmitField('Sign up')
 
     def validate_name(self, field):
         if User.query.filter_by(name=field.data).first() is not None:
@@ -36,22 +76,37 @@ class SignupForm(Form):
 
 
 class RecoverPasswordForm(Form):
-    email = EmailField(_('Your email'), validators=[
-                      email(message=_('A valid email address is required'))])
-    submit = SubmitField(_('Send instructions'))
+    email = EmailField(
+            'Your email', 
+            [validators.Email(message='A valid email address is required')],
+            )
+    submit = SubmitField('Send instructions')
 
 
 class ChangePasswordForm(Form):
     activation_key = HiddenField()
-    password = PasswordField('Password', validators=[
-                             required(message=_('Password is required'))])
-    password_again = PasswordField(_('Password again'), validators=[
-                                   equal_to('password', message=\
-                                            _("Passwords don't match"))])
-    submit = SubmitField(_('Save'))
+    password = PasswordField(
+            'Password', 
+            [validators.Required(message='Password is required')],
+            )
+    password_again = PasswordField(
+            'Password again', 
+            [
+                validators.EqualTo('password', message="Passwords don't match")],
+            )
+    submit = SubmitField('Save')
 
 
 class ReauthForm(Form):
     next = HiddenField()
-    password = PasswordField(_('Password'), [required(), length(min=6, max=16)])
-    submit = SubmitField(_('Reauthenticate'))
+    password = PasswordField(
+            'Password', 
+            [
+                validators.Required(), 
+                validators.Length(
+                    min=PASSWORD_LEN_MIN, 
+                    max=PASSWORD_LEN_MAX,
+                ),
+            ],
+            )
+    submit = SubmitField('Reauthenticate')

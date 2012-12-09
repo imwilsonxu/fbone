@@ -5,16 +5,12 @@ from werkzeug.urls import url_quote
 from flask import g, request
 
 from fbone.models import User
-from fbone.extensions import db
+from fbone.extensions import db, mail
 
 from tests import TestCase
 
 
 class TestFrontend(TestCase):
-
-    def setUp(self):
-        super(TestFrontend, self).setUp()
-        self._make_user()
 
     def test_show(self):
         self._test_get_request('/', 'index.html')
@@ -24,7 +20,7 @@ class TestFrontend(TestCase):
 
         data = {
             'name':'new_user',
-            'email':'new_user@bg.com',
+            'email':'new_user@example.com',
             'password':'123456',
             'password_again':'123456'
         }
@@ -40,6 +36,25 @@ class TestFrontend(TestCase):
         self._login()
         self._logout()
 
+    def test_reset_password(self):
+        response = self.client.get('/reset_password')
+        self.assert_200(response)
+
+        data = {
+            'email':'demo@example.com',
+        }
+        user = User.query.filter_by(email=data.get('email')).first()
+        assert user is not None
+        assert user.activation_key is None
+
+        response = self.client.post('/reset_password', data=data)
+        self.assert_200(response)
+        user = User.query.filter_by(email=data.get('email')).first()
+        assert user.activation_key is not None
+
+    def test_footers(self):
+        for page in ['about', 'blog', 'help', 'privacy', 'terms']:
+            self._test_get_request('/%s' % page, 'footers/%s.html' % page)
 
 
 class TestSearch(TestCase):
@@ -48,7 +63,7 @@ class TestSearch(TestCase):
         super(TestSearch, self).setUp()
         for i in range(25):
             name = 'user%d' % i
-            email = '%s@test.com' % name
+            email = '%s@example.com' % name
             user = User(name=name, email=email, password='123456')
             db.session.add(user)
         db.session.commit()
@@ -74,7 +89,7 @@ class TestSearch(TestCase):
         self._search('abc', 0)
 
     def test_search_email(self):
-        self._search('2@test.com', 3)
+        self._search('2@example.com', 3)
 
     def test_search_email(self):
         self._search('@abc.com', 0)
@@ -82,15 +97,12 @@ class TestSearch(TestCase):
 
 class TestUser(TestCase):
 
-    def setUp(self):
-        super(TestUser, self).setUp()
-        self._make_user()
-
     def test_show(self):
-        self._test_get_request('/user/%s' % self.user.name, 'user_pub.html')
+        username = "demo"
+        self._test_get_request('/user/%s' % username, 'user_pub.html')
 
         self._login()
-        response = self.client.get('/user/%s' % self.user.name)
+        response = self.client.get('/user/%s' % username)
         self.assertRedirects(response, location='/user/')
 
     def test_home(self):
@@ -117,10 +129,18 @@ class TestUser(TestCase):
         self._login()
         self._test_get_request('/user/settings/account', 'settings/account.html')
 
+    def test_settings_avatar(self):
+        response = self.client.get('/user/settings/avatar')
+        self.assertRedirects(response, location='/login?next=%s' %
+                             url_quote('/user/settings/avatar', safe=''))
+
+        self._login()
+        self._test_get_request('/user/settings/avatar', 'settings/avatar.html')
+
     def test_follow_unfollow(self):
-        user1 = User(name='tester1', email='tester1@test.com', password='123456')
+        user1 = User(name='tester1', email='tester1@example.com', password='123456')
         db.session.add(user1)
-        user2 = User(name='tester2', email='tester2@test.com', password='223456')
+        user2 = User(name='tester2', email='tester2@example.com', password='223456')
         db.session.add(user2)
         db.session.commit()
 
@@ -134,12 +154,19 @@ class TestUser(TestCase):
         assert user1.num_following == 0
         assert user2.num_followers == 0
 
+    def test_send_email(self):
+        with mail.record_messages() as outbox:
+            mail.send_message(
+                    subject='testing',
+                    body='test',
+                    recipients='tester@example.com'
+                    )
+
+            assert len(outbox) == 1
+            assert outbox[0].subject == "testing"
+
 
 class TestAdmin(TestCase):
-
-    def setUp(self):
-        super(TestAdmin, self).setUp()
-        self._make_user()
 
     def test_show(self):
         self._test_get_request('/admin/')

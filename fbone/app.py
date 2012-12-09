@@ -10,7 +10,7 @@ from flask.ext.admin.contrib.fileadmin import FileAdmin
 
 from fbone import utils
 from fbone.models import User, UserDetail, Role
-from fbone.config import DefaultConfig, PROJECT
+from fbone.config import DefaultConfig
 from fbone.views import frontend, user, api
 from fbone.extensions import db, mail, cache, login_manager
 
@@ -29,7 +29,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
 
     if app_name is None:
-        app_name = PROJECT
+        app_name = DefaultConfig.PROJECT
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
 
@@ -52,7 +52,7 @@ def configure_app(app, config):
     if config is not None:
         app.config.from_object(config)
     # Override setting by env var without touching codes.
-    app.config.from_envvar('%s_APP_CONFIG' % PROJECT.upper(), silent=True)
+    app.config.from_envvar('%s_APP_CONFIG' % DefaultConfig.PROJECT.upper(), silent=True)
 
 
 def configure_extensions(app):
@@ -69,19 +69,26 @@ def configure_extensions(app):
     babel = Babel(app)
     @babel.localeselector
     def get_locale():
-        accept_languages = app.config.get('ACCEPT_LANGUAGES')
-        return request.accept_languages.best_match(accept_languages)
+        override = request.args.get('lang')
+        if override:
+            session['lang'] = override
+            return session.get('lang', 'en')
+        else:
+            accept_languages = app.config.get('ACCEPT_LANGUAGES')
+            return request.accept_languages.best_match(accept_languages)
 
     # flask-login
     login_manager.login_view = 'frontend.login'
     login_manager.refresh_view = 'frontend.reauth'
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return User.query.get(id)
     login_manager.setup_app(app)
 
     # flask-admin
     admin = Admin()
+    # Setup locale
+    admin.locale_selector(get_locale)
     # Views
     # Model admin
     admin.add_view(ModelView(User, db.session, endpoint='usermodel', category='Model'))
@@ -89,6 +96,11 @@ def configure_extensions(app):
     admin.add_view(ModelView(Role, db.session, endpoint='rolemodel', category='Model'))
     # File admin 
     path = os.path.join(os.path.dirname(__file__), 'static/img/users')
+    # Create directory if existed.
+    try:
+        os.mkdir(path)
+    except OSError:
+        pass
     admin.add_view(FileAdmin(path, '/static/img/users', endpoint='useravatar', name='User Avatars', category='Image'))
     admin.init_app(app)
 
@@ -110,29 +122,36 @@ def configure_logging(app):
     """Configure file(info) and email(error) logging."""
 
     if app.debug or app.testing:
-        # skip debug and test mode.
+        # Skip debug and test mode.
+        # You can check stdout logging. 
         return
 
     import logging
     from logging.handlers import RotatingFileHandler, SMTPHandler
 
     # Set info level on logger, which might be overwritten by handers.
+    # Suppress DEBUG messages.
     app.logger.setLevel(logging.INFO)
 
-    debug_log = os.path.join(app.root_path, app.config['DEBUG_LOG'])
-    file_handler = logging.handlers.RotatingFileHandler(debug_log, maxBytes=100000, backupCount=10)
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(logging.Formatter(
+    info_log = os.path.join(app.root_path, "..", "logs", "app-info.log")
+    info_file_handler = logging.handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
+    info_file_handler.setLevel(logging.INFO)
+    info_file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s '
         '[in %(pathname)s:%(lineno)d]')
     )
-    app.logger.addHandler(file_handler)
+    app.logger.addHandler(info_file_handler)
+
+    # Testing
+    #app.logger.info("testing info.")
+    #app.logger.warn("testing warn.")
+    #app.logger.error("testing error.")
 
     ADMINS = ['imwilsonxu@gmail.com']
     mail_handler = SMTPHandler(app.config['MAIL_SERVER'],
                                app.config['MAIL_USERNAME'],
                                ADMINS,
-                               'O_ops... %s failed!' % PROJECT,
+                               'O_ops... %s failed!' % app.config['PROJECT'],
                                (app.config['MAIL_USERNAME'],
                                 app.config['MAIL_PASSWORD']))
     mail_handler.setLevel(logging.ERROR)
