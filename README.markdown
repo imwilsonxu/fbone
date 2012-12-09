@@ -36,6 +36,12 @@ Assume you are in Ubuntu and the project name is "myapp".
 
 Open `http://127.0.0.1`, done!
 
+Debug in local machine.
+
+    fab debug
+
+Open `http://127.0.0.1:5000`, done!
+
 Init/reset database (with sqlite, check out `fbone/config.py`).
 
     python manage.py initdb

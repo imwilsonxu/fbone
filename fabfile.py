@@ -53,7 +53,6 @@ def babel():
     local("python setup.py compile_catalog --directory `find -name translations` --locale zh -f")
 
 def debug():
-    babel()
     initdb()
     run()
 
