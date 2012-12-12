@@ -6,35 +6,18 @@ from werkzeug import secure_filename
 
 from flask import Blueprint, render_template, current_app, g, redirect, url_for, request, flash
 from flask.ext.login import login_required, current_user
-from flask.ext.wtf import ValidationError
-from flaskext.babel import gettext as _
 
-from fbone.extensions import db
-from fbone.models import User
-from fbone.decorators import keep_login_url
-from fbone.forms import ProfileForm, AccountForm, AvatarForm
-from fbone.utils import allowed_file
+from ..extensions import db
+from ..user import User
+from ..decorators import keep_login_url
+from ..utils import allowed_file
+from .forms import ProfileForm, AccountForm, AvatarForm
 
 
-user = Blueprint('user', __name__, url_prefix='/user')
+settings = Blueprint('settings', __name__, url_prefix='/settings')
 
 
-@user.route('/')
-@login_required
-def index():
-    return render_template('user_index.html', current_user=current_user)
-
-
-@user.route('/<name>')
-def pub(name):
-    if current_user.is_authenticated() and current_user.name == name:
-        return redirect(url_for('user.index'))
-
-    user = User.query.filter_by(name=name).first_or_404()
-    return render_template('user_pub.html', user=user)
-
-
-@user.route('/settings/profile', methods=['GET', 'POST'])
+@settings.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     user = User.query.filter_by(name=current_user.name).first_or_404()
@@ -42,8 +25,8 @@ def profile():
             obj=user.user_detail,
             name = current_user.name,
             email = current_user.email,
-            status_id = current_user.status_id,
             role_id = current_user.role_id,
+            status_id = current_user.status_id,
             next = request.args.get('next'),
             )
 
@@ -60,7 +43,7 @@ def profile():
     return render_template('settings/profile.html', user=user, active="profile", form=form)
 
 
-@user.route('/settings/account', methods=['GET', 'POST'])
+@settings.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
     user = User.query.filter_by(name=current_user.name).first_or_404()
@@ -74,12 +57,12 @@ def account():
         db.session.add(user)
         db.session.commit()
 
-        flash(_(form.new_password.data), 'success')
+        flash('Password updated.', 'success')
     
     return render_template('settings/account.html', user=user, active="account", form=form)
 
 
-@user.route('/settings/avatar', methods=['GET', 'POST'])
+@settings.route('/avatar', methods=['GET', 'POST'])
 @login_required
 def avatar():
     user = User.query.filter_by(name=current_user.name).first_or_404()

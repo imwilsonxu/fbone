@@ -8,6 +8,8 @@ from datetime import datetime
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
+# Form validation
+
 USERNAME_LEN_MIN = 4
 USERNAME_LEN_MAX = 25
 

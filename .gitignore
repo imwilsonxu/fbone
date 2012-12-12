@@ -10,6 +10,7 @@
 *~
 *.mo
 production.py
+*.db
 
 dist
 build

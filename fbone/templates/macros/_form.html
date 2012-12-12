@@ -9,7 +9,7 @@
 
         {% if field.errors %}
             {% for error in field.errors %}
-            <span class="help-block error">{{ error }}</span>
+            <span class="help-block error">{{ error|e }}</span>
             {% endfor %}
         {% endif %}
     </div>

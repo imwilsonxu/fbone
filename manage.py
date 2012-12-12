@@ -6,7 +6,7 @@ from flask.ext.script import Manager, prompt, prompt_pass, prompt_bool
 
 from fbone import create_app
 from fbone.extensions import db
-from fbone.models import User, UserDetail, Role, UserStatus
+from fbone.user import User, UserDetail, UserRole, UserStatus
 
 
 manager = Manager(create_app())
@@ -32,8 +32,8 @@ def initdb():
     
     # Init/reset data.
 
-    role_user = Role(name=u'user')
-    role_admin = Role(name=u'admin')
+    role_user = UserRole(name=u'user')
+    role_admin = UserRole(name=u'admin')
     db.session.add(role_user)
     db.session.add(role_admin)
     db.session.commit()
@@ -58,6 +58,7 @@ def initdb():
                 real_name = u'Demo Guy',
                 age = 10,
                 url = u'http://demo.example.com', 
+                deposit = 100.00,
                 location = u'Hangzhou', 
                 bio = u'Demo Guy is ... hmm ... just a demo guy.',
                 ),
@@ -72,6 +73,7 @@ def initdb():
                 real_name = u'admin Guy',
                 age = 10,
                 url = u'http://admin.example.com', 
+                deposit = 100.00,
                 location = u'Hangzhou', 
                 bio = u'admin Guy is ... hmm ... just a admin guy.',
                 ),

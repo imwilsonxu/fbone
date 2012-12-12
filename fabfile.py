@@ -59,31 +59,25 @@ def debug():
 def init(project="myapp"):
     project_dir = os.getcwd()
     vhost_name = project + ".vhost"
-    
     with cd(project_dir):
-        local("sudo chmod -R o+w %s" % project_dir)
-
+        local("sudo chown $USER -R "+project_dir)
+        # logs folder
+        local("mkdir logs")
         # setup.py and config.py
-        local("perl -pi -e 's/\"fbone\"/\"%s\"/g' setup.py fbone/config.py" % project)
+        local("perl -pi -e 's/\"fbone\"/\"%s\"/g' setup.py fbone/configs/config.py" % project)
         # and *.py
         local("perl -pi -e 's/^from fbone/from %s/g' `find -iname '*.py'`" % project)
-
-        # configure wsgi
-        local("perl -pi -e 's/fbone/%s/g' app.wsgi MANIFEST.in" % project)
-
         # change fbone/ folder
         local("mv fbone %s" % project)
 
-        # logs folder
-        local("mkdir logs")
-        local("sudo chmod -R o+w logs")
-
+        # Deploy with mod_wsgi
+        # configure wsgi
+        local("perl -pi -e 's/fbone/%s/g' app.wsgi MANIFEST.in" % project)
         # configure vhost
         local("perl -pi -e 's!DAEMON_NAME!%s!g' app.vhost" % project)
         local("perl -pi -e 's!PATH_TO_WSGI!%s!g' app.vhost" % os.path.join(project_dir, "app.wsgi"))
         local("perl -pi -e 's!PATH_TO_PROJECT!%s!g' app.vhost" % project_dir)
         local("sudo cp app.vhost /etc/apache2/sites-available/%s" % vhost_name)
-        #local("sudo a2dissite %s" % vhost_name)
         local("sudo a2ensite %s" % vhost_name)
         local("sudo service apache2 reload")
 
@@ -93,6 +87,11 @@ def init(project="myapp"):
         execfile(activate_this, dict(__file__=activate_this))
         local("python setup.py install")
         local("python manage.py initdb")
-
-        # make db readable to apache
+        # make db readable
         local("sudo chmod o+w /tmp/%s.sqlite" % project)
+
+def deploy():
+    local("virtualenv env")
+    activate_this = os.path.join(project_dir, "env/bin/activate_this.py")
+    execfile(activate_this, dict(__file__=activate_this))
+    local("python setup.py install")

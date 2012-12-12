@@ -5,7 +5,7 @@ include LICENSE
 
 # Including
 # Python source files, test/*.py will be automatically included.
-recursive-include fbone *
+recursive-include fbone *.py
 # Templates
 recursive-include fbone/templates *
 # Static files

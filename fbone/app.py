@@ -8,11 +8,13 @@ from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqlamodel import ModelView
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 
-from fbone import utils
-from fbone.models import User, UserDetail, Role
-from fbone.config import DefaultConfig
-from fbone.views import frontend, user, api
-from fbone.extensions import db, mail, cache, login_manager
+from .utils import pretty_date
+from .configs import DevConfig
+from .user import User, UserDetail, UserRole, user
+from .settings import settings
+from .frontend import frontend
+from .api import api
+from .extensions import db, mail, cache, login_manager
 
 
 # For import *
@@ -21,6 +23,7 @@ __all__ = ['create_app']
 DEFAULT_BLUEPRINTS = (
     frontend,
     user,
+    settings,
     api,
 )
 
@@ -29,7 +32,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
 
     if app_name is None:
-        app_name = DefaultConfig.PROJECT
+        app_name = DevConfig.PROJECT
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
 
@@ -48,11 +51,11 @@ def create_app(config=None, app_name=None, blueprints=None):
 def configure_app(app, config):
     """Configure app from object, parameter and env."""
 
-    app.config.from_object(DefaultConfig)
+    app.config.from_object(DevConfig)
     if config is not None:
         app.config.from_object(config)
     # Override setting by env var without touching codes.
-    app.config.from_envvar('%s_APP_CONFIG' % DefaultConfig.PROJECT.upper(), silent=True)
+    app.config.from_envvar('%s_APP_CONFIG' % DevConfig.PROJECT.upper(), silent=True)
 
 
 def configure_extensions(app):
@@ -93,7 +96,7 @@ def configure_extensions(app):
     # Model admin
     admin.add_view(ModelView(User, db.session, endpoint='usermodel', category='Model'))
     admin.add_view(ModelView(UserDetail, db.session, endpoint='userdetailmodel', category='Model'))
-    admin.add_view(ModelView(Role, db.session, endpoint='rolemodel', category='Model'))
+    admin.add_view(ModelView(UserRole, db.session, endpoint='rolemodel', category='Model'))
     # File admin 
     path = os.path.join(os.path.dirname(__file__), 'static/img/users')
     # Create directory if existed.
@@ -115,7 +118,7 @@ def configure_blueprints(app, blueprints):
 def configure_template_filters(app):
     @app.template_filter()
     def pretty_date(value):
-        return utils.pretty_date(value)
+        return pretty_date(value)
 
 
 def configure_logging(app):

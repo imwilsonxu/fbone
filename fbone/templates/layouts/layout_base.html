@@ -53,15 +53,12 @@
                         <ul class="dropdown-menu">
                             <li><a href="#">Inbox</a></li>
                             <li class="divider"></li>
-                            <li><a href="{{ url_for('user.profile') }}">Settings</a></li>
+                            <li><a href="{{ url_for('settings.profile') }}">Settings</a></li>
                             <li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
                         </ul>
                         </li>
                     </ul>
                 </div>
-                <form class="navbar-search pull-right" action="{{ url_for('frontend.search') }}">
-                    <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='Search' />
-                </form>
                 {% else %}
                 <div class="nav-collapse collapse pull-right">
                     <ul class="nav signnav">

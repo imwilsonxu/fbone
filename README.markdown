@@ -27,10 +27,19 @@ You can use it for
 
 ## USAGE
 
+Pre-required:
+
+- Ubuntu (or other linux distro)
+- git
+- pip
+- fabric
+- sqlite
+- virtualenv
+- apache + mod\_wsgi
+
 Assume you are in Ubuntu and the project name is "myapp".
 
     sudo git clone https://github.com/imwilsonxu/fbone.git /srv/www/myapp
-    sudo chmod -R o+w /srv/www/myapp
     cd /srv/www/myapp
     fab init:myapp
 
@@ -38,7 +47,7 @@ Open `http://127.0.0.1`, done!
 
 Debug in local machine.
 
-    fab debug
+    fab run
 
 Open `http://127.0.0.1:5000`, done!
 
@@ -57,9 +66,61 @@ Compile babel.
 
 ## STRUCTURE
 
+Use `tree` to display project structure:
+    
     sudo apt-get install -y tree
     cd fbone
     tree
+
+Explain:
+
+    ├── app.vhost               (mod_wsgi vhost)
+    ├── app.wsgi                (mod_wsgi wsgi config)
+    ├── CHANGES
+    ├── fabfile.py              (fabric file)
+    ├── fbone                   (main app)
+    │   ├── api                 (api module)
+    │   ├── app.py              (create flask app)
+    │   ├── configs             (config module)
+    │   ├── decorators.py
+    │   ├── extensions.py       (init flask extensions)
+    │   ├── frontend            (frontend module)
+    │   ├── __init__.py
+    │   ├── settings            (settings module)
+    │   ├── static
+    │   │   ├── css
+    │   │   ├── favicon.png
+    │   │   ├── humans.txt
+    │   │   ├── img
+    │   │   ├── js
+    │   │   │   ├── main.js
+    │   │   │   ├── plugins.js
+    │   │   │   └── vendor
+    │   │   └── robots.txt
+    │   ├── templates
+    │   │   ├── errors
+    │   │   ├── frontend
+    │   │   ├── index.html
+    │   │   ├── layouts 
+    │   │   ├── macros
+    │   │   ├── settings
+    │   │   └── user
+    │   ├── translations (i18n)
+    │   ├── user                (user module)
+    │   │   ├── constants.py
+    │   │   ├── forms.py        (wtforms)
+    │   │   ├── __init__.py
+    │   │   ├── models.py
+    │   │   ├── views.py
+    │   ├── utils.py
+    ├── LICENSE
+    ├── manage.py               (manage via flask-script)
+    ├── MANIFEST.in
+    ├── README.markdown
+    ├── screenshots
+    ├── setup.py
+    └── tests                   (unit tests, run via `nosetest`)
+
 
 ## LICENSE
 

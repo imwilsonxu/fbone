@@ -2,14 +2,134 @@
 
 import os
 
-from sqlalchemy import Column
-from werkzeug import (generate_password_hash, check_password_hash,
-                      cached_property)
+from sqlalchemy import Column, types
+from werkzeug import generate_password_hash, check_password_hash, cached_property
 from flask.ext.login import UserMixin
 
-from fbone.extensions import db
-from fbone.models import DenormalizedText
-from fbone.utils import get_current_time
+from ..extensions import db
+from ..utils import get_current_time
+from .constants import USER, USER_ROLE, INACTIVE, USER_STATUS
+
+
+class DenormalizedText(types.MutableType, types.TypeDecorator):
+    """
+    Stores denormalized primary keys that can be
+    accessed as a set.
+
+    :param coerce: coercion function that ensures correct
+                   type is returned
+
+    :param separator: separator character
+    """
+
+    impl = types.Text
+
+    def __init__(self, coerce=int, separator=" ", **kwargs):
+
+        self.coerce = coerce
+        self.separator = separator
+
+        super(DenormalizedText, self).__init__(**kwargs)
+
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            items = [str(item).strip() for item in value]
+            value = self.separator.join(item for item in items if item)
+        return value
+
+    def process_result_value(self, value, dialect):
+         if not value:
+            return set()
+         return set(self.coerce(item) for item in value.split(self.separator))
+
+    def copy_value(self, value):
+        return set(value)
+
+
+class UserDetail(db.Model):
+
+    __tablename__ = 'user_details'
+
+    id = Column(db.Integer, primary_key=True)
+
+    real_name = Column(db.String)
+    age = Column(db.Integer)
+    phone = Column(db.String)
+    url = Column(db.String)
+    deposit = Column(db.Numeric)
+    location = Column(db.String)
+    bio = Column(db.String)
+
+    created_time = Column(db.DateTime, default=get_current_time)
+    
+    # ================================================================
+    # Required by flask-admin
+    
+    def __unicode__(self):
+        return self.real_name
+
+
+class UserStatus(db.Model):
+
+    __tablename__ = 'user_statuses'
+
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.String, unique=True)
+    
+    # ================================================================
+    # Required by flask-admin
+    
+    def __unicode__(self):
+        return self.name
+
+
+class UserRole(db.Model):
+
+    __tablename__ = 'roles'
+
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.String, unique=True)
+    
+    # ================================================================
+    # Required by flask-admin
+    
+    def __unicode__(self):
+        return self.name
+
+
+class DenormalizedText(types.MutableType, types.TypeDecorator):
+    """
+    Stores denormalized primary keys that can be
+    accessed as a set.
+
+    :param coerce: coercion function that ensures correct
+                   type is returned
+
+    :param separator: separator character
+    """
+
+    impl = types.Text
+
+    def __init__(self, coerce=int, separator=" ", **kwargs):
+
+        self.coerce = coerce
+        self.separator = separator
+
+        super(DenormalizedText, self).__init__(**kwargs)
+
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            items = [str(item).strip() for item in value]
+            value = self.separator.join(item for item in items if item)
+        return value
+
+    def process_result_value(self, value, dialect):
+         if not value:
+            return set()
+         return set(self.coerce(item) for item in value.split(self.separator))
+
+    def copy_value(self, value):
+        return set(value)
 
 
 class User(db.Model, UserMixin):
@@ -47,13 +167,19 @@ class User(db.Model, UserMixin):
     
     # ================================================================
     # One-to-many relationship between users and roles.
-    role_id = Column(db.Integer, db.ForeignKey("roles.id"))
-    role = db.relationship('Role', backref="users")
+    role_id = Column(db.SmallInteger, db.ForeignKey("roles.id"), default=USER)
+    role = db.relationship('UserRole', backref="users")
+    
+    def getRole(self):
+        return USER_ROLE[self.role_id]
     
     # ================================================================
     # One-to-many relationship between users and user_statuses.
-    status_id = Column(db.Integer, db.ForeignKey("user_statuses.id"))
+    status_id = Column(db.SmallInteger, db.ForeignKey("user_statuses.id"), default=INACTIVE)
     status = db.relationship('UserStatus', backref="users")
+
+    def getStatus(self):
+        return USER_STATUS[self.status_id]
 
     # ================================================================
     # One-to-one (uselist=False) relationship between users and user_details.

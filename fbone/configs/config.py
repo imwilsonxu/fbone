@@ -1,17 +1,23 @@
 # -*- coding: utf-8 -*-
 
+import os
 
 class BaseConfig(object):
+
+    # Get app root path
+    _basedir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
     PROJECT = "fbone"
     DEBUG = False
     TESTING = False
 
+    ADMINS = frozenset(['youremail@yourdomain.com'])
+
     # os.urandom(24)
     SECRET_KEY = 'secret key'
 
 
-class DefaultConfig(BaseConfig):
+class DevConfig(BaseConfig):
 
     DEBUG = True
 
@@ -21,7 +27,7 @@ class DefaultConfig(BaseConfig):
     # http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = True
     # Database connection URI, change to suit yourself.
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/%s.sqlite' % BaseConfig.PROJECT # sqlite for testing/debug.
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/' + BaseConfig.PROJECT + ".sqlite" # sqlite for testing/debug.
     #SQLALCHEMY_DATABASE_URI = 'mysql://username:password@server/db' # mysql
 
     # ===========================================

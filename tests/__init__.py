@@ -12,8 +12,8 @@ import functools
 from flask.ext.testing import TestCase as Base, Twill
 
 from fbone import create_app
-from fbone.models import User, UserDetail, Role, UserStatus
-from fbone.config import TestConfig
+from fbone.user import User, UserDetail, UserRole, UserStatus
+from fbone.configs import TestConfig
 from fbone.extensions import db
 
 
@@ -29,8 +29,8 @@ class TestCase(Base):
 
     def init_data(self):
 
-        role_user = Role(name=u'user')
-        role_admin = Role(name=u'admin')
+        role_user = UserRole(name=u'user')
+        role_admin = UserRole(name=u'admin')
         db.session.add(role_user)
         db.session.add(role_admin)
         db.session.commit()
@@ -55,6 +55,7 @@ class TestCase(Base):
                     real_name = u'Demo Guy',
                     age = 10,
                     url = u'http://demo.example.com', 
+                    deposit = 100.00,
                     location = u'Hangzhou', 
                     bio = u'Demo Guy is ... hmm ... just a demo guy.',
                     ),
@@ -69,6 +70,7 @@ class TestCase(Base):
                     real_name = u'admin Guy',
                     age = 10,
                     url = u'http://admin.example.com', 
+                    deposit = 100.00,
                     location = u'Hangzhou', 
                     bio = u'admin Guy is ... hmm ... just a admin guy.',
                     ),

@@ -3,8 +3,8 @@
 from flask import Blueprint, current_app, request, jsonify
 from flask.ext.login import login_user, current_user, logout_user
 
-from fbone.extensions import db
-from fbone.models import User
+from ..extensions import db
+from ..user import User
 
 
 api = Blueprint('api', __name__, url_prefix='/api')

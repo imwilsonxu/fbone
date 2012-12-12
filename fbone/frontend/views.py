@@ -1,23 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import inspect
-from pprint import pprint
-
 from uuid import uuid4
-from datetime import datetime
 
 from flask import (Blueprint, render_template, current_app, request,
-                   flash, url_for, redirect, session, g, abort, 
-                   render_template_string)
+                   flash, url_for, redirect, session, abort)
 from flask.ext.mail import Message
 from flaskext.babel import gettext as _
 from flask.ext.login import (login_required, login_user, current_user,
                             logout_user, confirm_login, fresh_login_required,
                             login_fresh)
 
-from fbone.models import User
-from fbone.extensions import db, cache, mail, login_manager
-from fbone.forms import (SignupForm, LoginForm, RecoverPasswordForm,
+from ..user import User
+from ..extensions import db, cache, mail, login_manager
+from .forms import (SignupForm, LoginForm, RecoverPasswordForm,
                          ReauthForm, ChangePasswordForm)
 
 
@@ -43,7 +38,7 @@ def search():
         pagination = User.search(keywords).paginate(page, 1)
     else:
         flash(_('Please input keyword(s)'), 'error')
-    return render_template('search.html', pagination=pagination, keywords=keywords)
+    return render_template('frontend/search.html', pagination=pagination, keywords=keywords)
 
 
 @frontend.route('/login', methods=['GET', 'POST'])
@@ -63,7 +58,7 @@ def login():
         else:
             flash(_('Sorry, invalid login'), 'error')
 
-    return render_template('login.html', form=form)
+    return render_template('frontend/login.html', form=form)
 
 
 @frontend.route('/reauth', methods=['GET', 'POST'])
@@ -81,7 +76,7 @@ def reauth():
             return redirect('/change_password')
 
         flash(_('Password is wrong.'), 'error')
-    return render_template('reauth.html', form=form)
+    return render_template('frontend/reauth.html', form=form)
 
 
 @frontend.route('/logout')
@@ -106,7 +101,7 @@ def signup():
         if login_user(user):
             return redirect(form.next.data or url_for('user.index'))
 
-    return render_template('signup.html', form=form)
+    return render_template('frontend/signup.html', form=form)
 
 
 @frontend.route('/change_password', methods=['GET', 'POST'])
@@ -137,7 +132,7 @@ def change_password():
               "success")
         return redirect(url_for("frontend.login"))
 
-    return render_template("change_password.html", form=form)
+    return render_template("frontend/change_password.html", form=form)
 
 
 @frontend.route('/reset_password', methods=['GET', 'POST'])
@@ -156,7 +151,7 @@ def reset_password():
             db.session.commit()
 
             url = url_for('frontend.change_password', email=user.email, activation_key=user.activation_key, _external=True)
-            html = render_template('emails/reset_password.html', 
+            html = render_template('macros/_reset_password.html', 
                     project=current_app.config['PROJECT'],
                     username=user.name,
                     url=url
@@ -167,33 +162,33 @@ def reset_password():
                     )
             mail.send(message)
 
-            return render_template('reset_password.html', form=form)
+            return render_template('frontend/reset_password.html', form=form)
         else:
             flash(_('Sorry, no user found for that email address'), 'error')
 
-    return render_template('reset_password.html', form=form)
+    return render_template('frontend/reset_password.html', form=form)
 
 
 @frontend.route('/about')
 def about():
-    return render_template('footers/about.html', active="about")
+    return render_template('frontend/footers/about.html', active="about")
 
 
 @frontend.route('/blog')
 def blog():
-    return render_template('footers/blog.html', active="blog")
+    return render_template('frontend/footers/blog.html', active="blog")
 
 
 @frontend.route('/help')
 def help():
-    return render_template('footers/help.html', active="help")
+    return render_template('frontend/footers/help.html', active="help")
 
 
 @frontend.route('/privacy')
 def privacy():
-    return render_template('footers/privacy.html', active="privacy")
+    return render_template('frontend/footers/privacy.html', active="privacy")
 
 
 @frontend.route('/terms')
 def terms():
-    return render_template('footers/terms.html', active="terms")
+    return render_template('frontend/footers/terms.html', active="terms")
