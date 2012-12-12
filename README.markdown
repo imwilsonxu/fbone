@@ -43,7 +43,7 @@ Assume you are in Ubuntu and the project name is "myapp".
     cd /srv/www/myapp
     fab init:myapp
 
-Open `http://127.0.0.1`, done!
+Restart apache and open `http://127.0.0.1`, done!
 
 Debug in local machine.
 
