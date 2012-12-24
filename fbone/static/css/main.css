@@ -1,9 +1,11 @@
-ul.signnav > li {
-    margin-right: 15px;
-}
-
 .nobg {
     background-color: white;
+}
+
+.form-actions {
+    padding: 0;
+    background-color: #fff;
+    border-top: none;
 }
 
 .form-signin {
@@ -21,8 +23,7 @@ ul.signnav > li {
 }
 
 .help-inline {
-    font-size: 12px;
-    color: #999;
+    font-size: 90%;
 }
 
 body { 

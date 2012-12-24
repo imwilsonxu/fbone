@@ -2,6 +2,12 @@
 
 Here you can see the full list of changes between each release.
 
+## Version 0.1.12.25 (Merry X'mas!)
+
+Re-organize blueprints,  models and Templates.
+Remove Flask-admin, implement a simple admin interface.
+Clean codes according to pep8.
+
 ## Version 0.1
 
 First public preview release.

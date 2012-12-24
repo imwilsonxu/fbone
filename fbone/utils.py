@@ -3,10 +3,12 @@
     Utils has nothing to do with models and views.
 """
 
+import string
+import random
 from datetime import datetime
 
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_AVATAR_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # Form validation
 
@@ -24,6 +26,7 @@ AGE_MAX = 300
 
 DEPOSIT_MIN = 0.00
 DEPOSIT_MAX = 9999999999.99
+
 
 def get_current_time():
     return datetime.utcnow()
@@ -66,4 +69,9 @@ def pretty_date(dt, default=None):
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_AVATAR_EXTENSIONS
+
+
+def id_generator(size=10, chars=string.ascii_letters + string.digits): 
+    #return base64.urlsafe_b64encode(os.urandom(size))
+    return ''.join(random.choice(chars) for x in range(size))

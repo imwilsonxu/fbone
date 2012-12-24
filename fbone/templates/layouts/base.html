@@ -42,18 +42,24 @@
                 </a>
 
                 <a class='brand' href='{{ url_for('frontend.index') }}'>{{ _("Project") }}</a>
+                {% if current_user.is_authenticated() %}
                 <form class="navbar-search pull-left" action="{{ url_for('frontend.search') }}">
                     <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='Search' />
                 </form>
-                {% if current_user.is_authenticated() %}
                 <div class="nav-collapse collapse pull-right">
                     <ul class="nav">
                         <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.name }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Inbox</a></li>
+                            {% if current_user.is_admin() %}
+                            <li><a href="{{ url_for('admin.index') }}">{{ current_user.name }}</a></li>
+                            {% else %}
+                            <li><a href="{{ url_for('user.index') }}">{{ current_user.name }}</a></li>
+                            {% endif %}
                             <li class="divider"></li>
                             <li><a href="{{ url_for('settings.profile') }}">Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{ url_for('frontend.help') }}">Help</a></li>
                             <li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
                         </ul>
                         </li>
@@ -61,9 +67,9 @@
                 </div>
                 {% else %}
                 <div class="nav-collapse collapse pull-right">
-                    <ul class="nav signnav">
+                    <ul class="nav">
                         <li><span><a class="btn btn-success" href="{{ url_for('frontend.signup') }}"><strong>Sign up</strong></a></span></li>
-                        <li><span><a class="btn" href="{{ url_for('frontend.login') }}">Sign in</a></span></li>
+                        <li><a href="{{ url_for('frontend.login') }}">Sign in</a></li>
                     </ul>
                 </div>
                 {% endif %}
@@ -76,6 +82,22 @@
     {{ render_flash_message() }}
 
     {% block container %}
+    <div class="container">
+
+        {% block top %}
+            <ul class="nav nav-pills">
+                {% for tab, link in tabs %}
+                <li class="{% if active == tab %}active{% endif %}">
+                    <a href="{{ link }}">{{ tab|capitalize }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endblock %}
+
+        {% block body %}
+        {% endblock %}
+
+    </div>
     {% endblock %}
 
     {% block footer %}

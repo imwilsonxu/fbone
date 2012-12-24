@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import os
-
 from sqlalchemy import Column, types
-from werkzeug import generate_password_hash, check_password_hash, cached_property
+from werkzeug import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
 
 from ..extensions import db
 from ..utils import get_current_time
-from .constants import USER, USER_ROLE, INACTIVE, USER_STATUS
+from .constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS
 
 
 class DenormalizedText(types.MutableType, types.TypeDecorator):
@@ -38,9 +36,9 @@ class DenormalizedText(types.MutableType, types.TypeDecorator):
         return value
 
     def process_result_value(self, value, dialect):
-         if not value:
+        if not value:
             return set()
-         return set(self.coerce(item) for item in value.split(self.separator))
+        return set(self.coerce(item) for item in value.split(self.separator))
 
     def copy_value(self, value):
         return set(value)
@@ -52,7 +50,6 @@ class UserDetail(db.Model):
 
     id = Column(db.Integer, primary_key=True)
 
-    real_name = Column(db.String)
     age = Column(db.Integer)
     phone = Column(db.String)
     url = Column(db.String)
@@ -61,40 +58,6 @@ class UserDetail(db.Model):
     bio = Column(db.String)
 
     created_time = Column(db.DateTime, default=get_current_time)
-    
-    # ================================================================
-    # Required by flask-admin
-    
-    def __unicode__(self):
-        return self.real_name
-
-
-class UserStatus(db.Model):
-
-    __tablename__ = 'user_statuses'
-
-    id = Column(db.Integer, primary_key=True)
-    name = Column(db.String, unique=True)
-    
-    # ================================================================
-    # Required by flask-admin
-    
-    def __unicode__(self):
-        return self.name
-
-
-class UserRole(db.Model):
-
-    __tablename__ = 'roles'
-
-    id = Column(db.Integer, primary_key=True)
-    name = Column(db.String, unique=True)
-    
-    # ================================================================
-    # Required by flask-admin
-    
-    def __unicode__(self):
-        return self.name
 
 
 class User(db.Model, UserMixin):
@@ -110,38 +73,39 @@ class User(db.Model, UserMixin):
     # ================================================================
     # Avatar
     avatar = Column(db.String)
-    @property
-    def avatar_path(self):
-        return os.path.join("img", "users", self.avatar)
-    
+
     # ================================================================
     # Password
     _password = Column('password', db.String, nullable=False)
+
     def _get_password(self):
         return self._password
+
     def _set_password(self, password):
         self._password = generate_password_hash(password)
     # Hide password encryption by exposing password field only.
     password = db.synonym('_password',
                           descriptor=property(_get_password,
                                               _set_password))
+
     def check_password(self, password):
         if self.password is None:
             return False
         return check_password_hash(self.password, password)
-    
+
     # ================================================================
     # One-to-many relationship between users and roles.
-    role_id = Column(db.SmallInteger, db.ForeignKey("roles.id"), default=USER)
-    role = db.relationship('UserRole', backref="users")
-    
+    role_id = Column(db.SmallInteger, default=USER)
+
     def getRole(self):
         return USER_ROLE[self.role_id]
-    
+
+    def is_admin(self):
+        return self.role_id == ADMIN
+
     # ================================================================
     # One-to-many relationship between users and user_statuses.
-    status_id = Column(db.SmallInteger, db.ForeignKey("user_statuses.id"), default=INACTIVE)
-    status = db.relationship('UserStatus', backref="users")
+    status_id = Column(db.SmallInteger, default=INACTIVE)
 
     def getStatus(self):
         return USER_STATUS[self.status_id]
@@ -150,12 +114,12 @@ class User(db.Model, UserMixin):
     # One-to-one (uselist=False) relationship between users and user_details.
     user_detail_id = Column(db.Integer, db.ForeignKey("user_details.id"))
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
-    
+
     # ================================================================
     # Follow / Following
     followers = Column(DenormalizedText)
     following = Column(DenormalizedText)
-    
+
     @property
     def num_followers(self):
         if self.followers:
@@ -185,11 +149,10 @@ class User(db.Model, UserMixin):
 
     # ================================================================
     # Class methods
-    
+
     @classmethod
     def authenticate(cls, login, password):
-        user = cls.query.filter(db.or_(User.name==login,
-                                  User.email==login)).first()
+        user = cls.query.filter(db.or_(User.name == login, User.email == login)).first()
 
         if user:
             authenticated = user.check_password(password)
@@ -209,9 +172,3 @@ class User(db.Model, UserMixin):
             ))
         q = reduce(db.and_, criteria)
         return cls.query.filter(q)
-    
-    # ================================================================
-    # Required by flask-admin
-    
-    def __unicode__(self):
-        return self.name

@@ -1,0 +1,9 @@
+{% extends "layouts/base.html" %}
+
+{% set page_header = _(active|capitalize) %}
+{% set page_title = page_header %}
+
+{% set tabs = [
+    ("profile", url_for('settings.profile')), 
+    ("password", url_for('settings.password')),
+]%}

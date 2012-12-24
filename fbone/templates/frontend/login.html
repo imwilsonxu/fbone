@@ -1,11 +1,12 @@
 {% from "macros/_form.html" import render_form %}
 
-{% set page_title = 'Sign in' %}
+{% set page_title = "Sign in" %}
 
-{% extends "layouts/layout_signin.html" %}
+{% extends "layouts/base.html" %}
 
-{% block body %}
-<div class="form-signin">
-    {{ render_form(page_title, url_for('frontend.login'), form)}}
+{% block container %}
+<div class="container">
+    <h2>Sign in <small>Don't have an account? <a href="{{ url_for('frontend.signup') }}">Sign up</a>, please.</small></h2>
+    {{ render_form(url_for('frontend.login'), form)}}
 </div>
 {% endblock %}

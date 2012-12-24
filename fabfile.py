@@ -13,54 +13,40 @@ from fabric.api import *
 # the servers where the commands are executed
 env.hosts = ['127.0.0.1']
 
-#def pack():
-    #local('rm -rf %s-%s/' % (project, version))
-    #local('python setup.py sdist --formats=gztar', capture=False)
-
-# Deploy method form Flask docs. 
-# If you don't wanna mess up source codes with deployed codes, pls use this method.
-#def deploy():
-    #pack()
-    ## figure out the release name and version
-    #dist = local('python setup.py --fullname', capture=True).strip()
-
-    ## upload the source tarball to the temporary folder on the server
-    #put('dist/%s.tar.gz' % dist, '/tmp/%s.tar.gz' % project)
-
-    ## create a place where we can unzip the tarball, then enter
-    ## that directory and unzip it
-    #run('mkdir /tmp/%s' % project)
-    #with cd('/tmp/%s' % project):
-        #run('tar xzf /tmp/%s.tar.gz' % project)
-    #with cd('/tmp/%s/%s' % (project, dist)):
-        ## now setup the package with our virtual environment's
-        ## python interpreter
-        #run('/var/www/%s/env/bin/python setup.py install' % project)
-    ## now that all is set up, delete the folder again
-    #run('rm -rf /tmp/%s /tmp/%s.tar.gz' % (project, project))
-    ## and finally touch the .wsgi file so that mod_wsgi triggers
-    ## a reload of the application
-    #run('touch /var/www/%s.wsgi' % project)
 
 def run():
     local("python manage.py run")
-    
+
+
+# alias of run()
+def r():
+    run()
+
+
 def initdb():
-    local("sudo rm -f /tmp/fbone.sqlite")
+    local("rm -f /tmp/fbone.sqlite")
     local("python manage.py initdb")
+
 
 def babel():
     local("python setup.py compile_catalog --directory `find -name translations` --locale zh -f")
+
 
 def debug():
     initdb()
     run()
 
+
+# alias of debug()
+def d():
+    debug()
+
+
 def init(project="myapp"):
     project_dir = os.getcwd()
     vhost_name = project + ".vhost"
     with cd(project_dir):
-        local("sudo chown $USER -R "+project_dir)
+        local("sudo chown $USER -R " + project_dir)
         # logs folder
         local("mkdir logs")
         # setup.py and config.py
@@ -85,10 +71,18 @@ def init(project="myapp"):
         local("virtualenv env")
         activate_this = os.path.join(project_dir, "env/bin/activate_this.py")
         execfile(activate_this, dict(__file__=activate_this))
+
+        # Save downloading time, test only.
+        #local("cp -r ~/.virtualenvs/fbone/lib/python2.7/site-packages/ /srv/www/myapp/env/lib/python2.7/")
+
+        # You should move uploads folder to somewhere else
+        local("mkdir /tmp/uploads")
+
         local("python setup.py install")
         local("python manage.py initdb")
         # make db readable
         local("sudo chmod o+w /tmp/%s.sqlite" % project)
+
 
 def deploy():
     local("virtualenv env")

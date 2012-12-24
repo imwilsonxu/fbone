@@ -1,7 +1,0 @@
-{% from "macros/_form.html" import render_form %}
-
-{% extends 'settings/layout_fluid_settings.html' %}
-
-{% block body %}
-{{ render_form(page_title, url_for('settings.account'), form) }}
-{% endblock %}

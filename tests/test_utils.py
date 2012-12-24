@@ -2,7 +2,7 @@
 
 from datetime import datetime, timedelta
 
-from fbone.utils import pretty_date, get_current_time
+from fbone.utils import pretty_date
 
 from tests import TestCase
 

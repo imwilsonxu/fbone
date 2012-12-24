@@ -15,3 +15,5 @@ production.py
 dist
 build
 logs
+
+uploads

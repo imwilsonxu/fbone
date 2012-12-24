@@ -4,36 +4,31 @@
         <label for="{{ field.id }}" class="checkbox inline">
             {{ field }}{{ field.label.text }}
         </label>
-
         <span class="help-inline">{{ field.description }}</span>
-
-        {% if field.errors %}
-            {% for error in field.errors %}
+        {% if field.errors -%}
+            {% for error in field.errors -%}
             <span class="help-block error">{{ error|e }}</span>
-            {% endfor %}
-        {% endif %}
+            {%- endfor %}
+        {%- endif %}
     </div>
 </div>
 {% endmacro%}
 
 {% macro render_radio(field) %}
 <div class="control-group{% if field.errors %} error{% endif %}">
-    {{ field.label(class_="control-label" ) }}
-    
+    {{ field.label(class_="control-label") }}
     <div class="controls">
-        {% for subfield in field %}
+        {% for subfield in field -%}
         <label for="{{ subfield.id }}" class="radio inline">
             {{ subfield }} {{ subfield.label.text }}
         </label>
-        {% endfor %}
-
+        {%- endfor %}
         <span class="help-inline">{{ field.description }}</span>
-
-        {% if field.errors %}
-            {% for error in field.errors %}
+        {% if field.errors -%}
+            {% for error in field.errors -%}
             <span class="help-block error">{{ error }}</span>
-            {% endfor %}
-        {% endif %}
+            {%- endfor %}
+        {%- endif %}
     </div>
 </div>
 {% endmacro %}
@@ -44,17 +39,14 @@
         for="{{ field.id }}">
         {{ field.label }}
     </label>
-
     <div class="controls">
         {{ field() }}
-
         <span class="help-inline">{{ field.description }}</span>
-
-        {% if field.errors %}
-            {% for error in field.errors %}
+        {% if field.errors -%}
+            {% for error in field.errors -%}
             <span class="help-block error">{{ error }}</span>
-            {% endfor %}
-        {% endif %}
+            {%- endfor %}
+        {%- endif %}
     </div>
 </div>
 {% endmacro %}
@@ -65,17 +57,14 @@
         for="{{ field.id }}">
         {{ field.label }}
     </label>
-
     <div class="controls">
         {{ field(class="span6", rows="5") }}
-
         <span class="help-inline">{{ field.description }}</span>
-
-        {% if field.errors %}
-            {% for error in field.errors %}
+        {% if field.errors -%}
+            {% for error in field.errors -%}
             <span class="help-block error">{{ error }}</span>
-            {% endfor %}
-        {% endif %}
+            {%- endfor %}
+        {%- endif %}
     </div>
 </div>
 {% endmacro %}
@@ -86,17 +75,14 @@
         for="{{ field.id }}">
         {{ field.label }}
     </label>
-
     <div class="controls">
         {{ field }}
-
         <span class="help-inline">{{ field.description }}</span>
-
-        {% if field.errors %}
-            {% for error in field.errors %}
+        {% if field.errors -%}
+            {% for error in field.errors -%}
             <span class="help-block error">{{ error }}</span>
-            {% endfor %}
-        {% endif %}
+            {%- endfor %}
+        {%- endif %}
     </div>
 </div>
 {% endmacro %}
@@ -109,29 +95,34 @@
 </div>
 {% endmacro %}
 
-{% macro render_form(header, url, form) %}
-<form class="form-horizontal" method="POST" action="{{ url }}">
+{% macro render_form(url, form, legend=None) %}
+<form class="" method="POST" action="{{ url }}" {% for field in form -%}
+    {% if field.type == "FileField" -%}
+        enctype="multipart/form-data"
+    {%- endif %}
+{%- endfor %} >
     {{ form.hidden_tag() }}
     <fieldset>
-        <legend>{{ header }}</legend>
-        {% for field in form %}
-            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" %}
-                {% if field.type == "RadioField" %}
+        {% if legend -%}
+        <legend>{{ legend|safe }}</legend>
+        {%- endif %}
+        {% for field in form -%}
+            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" -%}
+                {% if field.type == "RadioField" -%}
                     {{ render_radio(field) }}
-                {% elif field.type == "BooleanField" %}
+                {%- elif field.type == "BooleanField" -%}
                     {{ render_checkbox(field) }}
-                {% elif field.type == "SubmitField" %}
+                {%- elif field.type == "SubmitField" -%}
                     {{ render_action(field) }}
-                {% elif field.type == "TextAreaField" %}
+                {%- elif field.type == "TextAreaField" %}
                     {{ render_textarea(field) }}
-                {% elif field.type == "DateField" %}
+                {%- elif field.type == "DateField" -%}
                     {{ render_datepicker(field) }}
-                {% else %}
+                {%- else -%}
                     {{ render_input(field) }}
-                {% endif %}
-            {% endif %}
-        {% endfor %}
+                {%- endif %}
+            {%- endif %}
+        {%- endfor %}
     </fieldset>
 </form>
 {% endmacro %}
-

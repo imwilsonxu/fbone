@@ -16,9 +16,9 @@ You can use it for
 - Integrate with [jQuery](http://jquery.com/) and [bootstrap](https://github.com/twitter/bootstrap).
 - Implement **user session management (signin/signout/rememberme)** with [Flask-Login](https://github.com/maxcountryman/flask-login).
 - Implement **reset password via email** with [Flask-Mail](http://packages.python.org/Flask-Mail/).
-- Implement **admin interface** with [Flask-Admin](https://flask-admin.readthedocs.org/en/latest/quickstart/).
 - Implement **unit testing** with [Flask-Testing](http://packages.python.org/Flask-Testing/).
 - Implement **external script (initdb/testing/etc)** with [Flask-Script](http://flask-script.readthedocs.org/en/latest/).
+- Implement **admin interface**.
 - Implement **Logger**.
 - Handle **i18n** with [Flask-Babel](http://packages.python.org/Flask-Babel/).
 - Handle **web forms** with [WTForms](http://wtforms.simplecodes.com/).

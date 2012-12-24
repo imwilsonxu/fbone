@@ -1,0 +1,10 @@
+{% from "macros/_form.html" import render_form %}
+
+{% extends "layouts/base.html" %}
+
+{% block body %}
+<div class="container">
+    <h2>Edit User</h2>
+    {{ render_form(url_for('admin.user', user_id=user.id), form) }}
+</div>
+{% endblock %}

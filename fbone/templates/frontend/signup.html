@@ -2,10 +2,11 @@
 
 {% set page_title = 'Sign up' %}
 
-{% extends "layouts/layout_signin.html" %}
+{% extends "layouts/base.html" %}
 
-{% block body %}
-<div class="form-signin">
-    {{ render_form(page_title, url_for('frontend.signup'), form)}}
+{% block container %}
+<div class="container">
+    <h2>Sign up <small>Already have an account? <a href="{{ url_for('frontend.login') }}">Sign in</a>, please.</small></h2>
+    {{ render_form(url_for('frontend.signup'), form)}}
 </div>
 {% endblock %}

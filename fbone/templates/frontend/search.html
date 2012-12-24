@@ -1,5 +1,6 @@
 {% from 'macros/_misc.html' import render_pagination, render_user_table %}
-{% extends 'layouts/layout_hero.html' %}
+
+{% extends 'layouts/base.html' %}
 
 {% if keywords %}
     {% set page_title = _('Search results for "%(keywords)s"', keywords=keywords) %}

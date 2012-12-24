@@ -1,4 +1,7 @@
 {% set page_title = current_user.name %}
-{% extends "layouts/layout_hero.html" %}
+
+{% extends "layouts/base.html" %}
+
 {% block body %}
+<img src="{{ url_for('user.avatar', avatar_filename=current_user.avatar) }}" alt="" />
 {% endblock %}

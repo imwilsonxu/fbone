@@ -2,8 +2,6 @@
 
 from werkzeug.urls import url_quote
 
-from flask import g, request
-
 from fbone.user import User, ADMIN, USER_ROLE, NEW, USER_STATUS
 from fbone.extensions import db, mail
 
@@ -19,10 +17,11 @@ class TestFrontend(TestCase):
         self._test_get_request('/signup', 'frontend/signup.html')
 
         data = {
-            'name':'new_user',
-            'email':'new_user@example.com',
-            'password':'123456',
-            'password_again':'123456'
+            'name': 'new_user',
+            'email': 'new_user@example.com',
+            'password': '123456',
+            'password_again': '123456',
+            'agree': True,
         }
         response = self.client.post('/signup', data=data)
         assert "help-block error" not in response.data
@@ -34,7 +33,7 @@ class TestFrontend(TestCase):
         self._test_get_request('/login', 'frontend/login.html')
 
     def test_logout(self):
-        self._login()
+        self.login('demo', '123456')
         self._logout()
 
     def test_reset_password(self):
@@ -42,7 +41,7 @@ class TestFrontend(TestCase):
         self.assert_200(response)
 
         data = {
-            'email':'demo@example.com',
+            'email': 'demo@example.com',
         }
         user = User.query.filter_by(email=data.get('email')).first()
         assert user is not None
@@ -77,6 +76,7 @@ class TestSearch(TestCase):
         """
 
         response = self._test_get_request('/search?keywords=%s' % keywords, 'frontend/search.html')
+        self.assert200(response)
         self.assertTemplateUsed(name='frontend/search.html')
         pagination = self.get_context_variable('pagination')
         assert pagination.total == total
@@ -93,9 +93,6 @@ class TestSearch(TestCase):
     def test_search_email(self):
         self._search('2@example.com', 3)
 
-    def test_search_email(self):
-        self._search('@abc.com', 0)
-
 
 class TestUser(TestCase):
 
@@ -103,7 +100,7 @@ class TestUser(TestCase):
         username = "demo"
         self._test_get_request('/user/%s' % username, 'user/show.html')
 
-        self._login()
+        self.login('demo', '123456')
         response = self.client.get('/user/%s' % username)
         self.assertRedirects(response, location='/user/')
 
@@ -112,7 +109,7 @@ class TestUser(TestCase):
         self.assertRedirects(response, location='/login?next=%s' %
                              url_quote('/user/', safe=''))
 
-        self._login()
+        self.login('demo', '123456')
         self._test_get_request('/user/', 'user/index.html')
 
     def test_follow_unfollow(self):
@@ -134,11 +131,9 @@ class TestUser(TestCase):
 
     def test_send_email(self):
         with mail.record_messages() as outbox:
-            mail.send_message(
-                    subject='testing',
+            mail.send_message(subject='testing',
                     body='test',
-                    recipients='tester@example.com'
-                    )
+                    recipients='tester@example.com')
 
             assert len(outbox) == 1
             assert outbox[0].subject == "testing"
@@ -152,7 +147,7 @@ class TestSettings(TestCase):
         response = self.client.get(endpoint)
         self.assertRedirects(response, location='/login?next=%s' % url_quote(endpoint, safe=''))
 
-        user = self._login()
+        self.login('demo', '123456')
         response = self.client.get('/settings/profile')
         self.assert200(response)
         self.assertTemplateUsed("settings/profile.html")
@@ -160,65 +155,69 @@ class TestSettings(TestCase):
         data = {
             'name': 'demo1',
             'email': 'demo1@example.com',
-            'role_id': ADMIN,
-            'status_id': NEW,
-            'real_name': user.user_detail.real_name,
-            'age': user.user_detail.age,
-            'url': user.user_detail.url,
-            'location': user.user_detail.location,
-            'bio': user.user_detail.bio,
         }
         response = self.client.post(endpoint, data=data)
         print response.data
         assert "help-block error" not in response.data
         self.assert200(response)
         self.assertTemplateUsed("settings/profile.html")
-        
+
         new_user = User.query.filter_by(name=data.get('name')).first()
         assert new_user is not None
         assert new_user.email == data.get('email')
-        assert new_user.getRole() == USER_ROLE.get(ADMIN)
-        assert new_user.getStatus() == USER_STATUS.get(NEW)
 
-    def test_account(self):
-        endpoint = '/settings/account'
+    def test_password(self):
+        endpoint = '/settings/password'
 
         response = self.client.get(endpoint)
         self.assertRedirects(response, location='/login?next=%s' % url_quote(endpoint, safe=''))
 
-        user = self._login()
-        response = self.client.get('/settings/account')
+        self.login('demo', '123456')
+        response = self.client.get('/settings/password')
         self.assert200(response)
-        self.assertTemplateUsed("settings/account.html")
+        self.assertTemplateUsed("settings/password.html")
 
         data = {
-            'password':'123456',
-            'new_password':'654321',
-            'password_again':'654321',
+            'password': '123456',
+            'new_password': '654321',
+            'password_again': '654321',
         }
         response = self.client.post(endpoint, data=data)
         assert "help-block error" not in response.data
         self.assert200(response)
-        self.assertTemplateUsed("settings/account.html")
-        
-        updated_user = User.query.filter_by(name=user.name).first()
+        self.assertTemplateUsed("settings/password.html")
+
+        updated_user = User.query.filter_by(name='demo').first()
         assert updated_user is not None
         assert updated_user.check_password('654321')
 
-    def test_avatar(self):
-        response = self.client.get('/settings/avatar')
-        self.assertRedirects(response, location='/login?next=%s' %
-                             url_quote('/settings/avatar', safe=''))
 
-        self._login()
-        self._test_get_request('/settings/avatar', 'settings/avatar.html')
+class TestError(TestCase):
+
+    def test_404(self):
+        response = self.client.get('/404/')
+        self.assert404(response)
+        self.assertTemplateUsed('errors/page_not_found.html')
+
+    #def test_403(self):
+        #response = self.client.get('/403/')
+        #self.assert403(response)
+        #self.assertTemplateUsed('errors/forbidden_page.html')
+
+    #def test_500(self):
+        #response = self.client.get('/500/')
+        #self.assert500(response)
+        #self.assertTemplateUsed('errors/server_error.html')
 
 
 class TestAdmin(TestCase):
 
-    def test_show(self):
-        self._test_get_request('/admin/')
-        self._test_get_request('/admin/usermodel/')
-        self._test_get_request('/admin/userdetailmodel/')
-        self._test_get_request('/admin/rolemodel/')
-        self._test_get_request('/admin/useravatar/')
+    def test_index(self):
+        self.client.get('/admin/', follow_redirects=True)
+        self.assertTemplateUsed('frontend/login.html')
+
+        response = self.login('admin', '123456')
+        self.assert200(response)
+
+        response = self.client.get('/admin/')
+        self.assertTemplateUsed('admin/index.html')

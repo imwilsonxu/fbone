@@ -4,16 +4,13 @@ import os
 
 from flask import Flask, request, render_template
 from flaskext.babel import Babel
-from flask.ext.admin import Admin
-from flask.ext.admin.contrib.sqlamodel import ModelView
-from flask.ext.admin.contrib.fileadmin import FileAdmin
 
-from .utils import pretty_date
 from .configs import DevConfig
-from .user import User, UserDetail, UserRole, user
+from .user import User, user
 from .settings import settings
 from .frontend import frontend
 from .api import api
+from .admin import admin
 from .extensions import db, mail, cache, login_manager
 
 
@@ -25,6 +22,7 @@ DEFAULT_BLUEPRINTS = (
     user,
     settings,
     api,
+    admin,
 )
 
 
@@ -70,42 +68,20 @@ def configure_extensions(app):
 
     # flask-babel
     babel = Babel(app)
+
     @babel.localeselector
     def get_locale():
-        override = request.args.get('lang')
-        if override:
-            session['lang'] = override
-            return session.get('lang', 'en')
-        else:
-            accept_languages = app.config.get('ACCEPT_LANGUAGES')
-            return request.accept_languages.best_match(accept_languages)
+        accept_languages = app.config.get('ACCEPT_LANGUAGES')
+        return request.accept_languages.best_match(accept_languages)
 
     # flask-login
     login_manager.login_view = 'frontend.login'
     login_manager.refresh_view = 'frontend.reauth'
+
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(id)
     login_manager.setup_app(app)
-
-    # flask-admin
-    admin = Admin()
-    # Setup locale
-    admin.locale_selector(get_locale)
-    # Views
-    # Model admin
-    admin.add_view(ModelView(User, db.session, endpoint='usermodel', category='Model'))
-    admin.add_view(ModelView(UserDetail, db.session, endpoint='userdetailmodel', category='Model'))
-    admin.add_view(ModelView(UserRole, db.session, endpoint='rolemodel', category='Model'))
-    # File admin 
-    path = os.path.join(os.path.dirname(__file__), 'static/img/users')
-    # Create directory if existed.
-    try:
-        os.mkdir(path)
-    except OSError:
-        pass
-    admin.add_view(FileAdmin(path, '/static/img/users', endpoint='useravatar', name='User Avatars', category='Image'))
-    admin.init_app(app)
 
 
 def configure_blueprints(app, blueprints):
@@ -116,9 +92,14 @@ def configure_blueprints(app, blueprints):
 
 
 def configure_template_filters(app):
+
     @app.template_filter()
     def pretty_date(value):
         return pretty_date(value)
+
+    @app.template_filter()
+    def format_date(value, format='%Y-%m-%d'):
+        return value.strftime(format)
 
 
 def configure_logging(app):
@@ -130,7 +111,7 @@ def configure_logging(app):
         return
 
     import logging
-    from logging.handlers import RotatingFileHandler, SMTPHandler
+    from logging.handlers import SMTPHandler
 
     # Set info level on logger, which might be overwritten by handers.
     # Suppress DEBUG messages.
@@ -180,10 +161,6 @@ def configure_error_handlers(app):
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template("errors/page_not_found.html"), 404
-
-    @app.errorhandler(405)
-    def method_not_allowed_page(error):
-        return render_template("errors/method_not_allowed.html"), 405
 
     @app.errorhandler(500)
     def server_error_page(error):
