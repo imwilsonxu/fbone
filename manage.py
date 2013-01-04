@@ -9,10 +9,8 @@ from fbone.extensions import db
 from fbone.user import User, UserDetail, ADMIN, USER, ACTIVE
 
 
-manager = Manager(create_app())
-
-from fbone import create_app
 app = create_app()
+manager = Manager(app)
 project_root_path = os.path.join(os.path.dirname(app.root_path))
 
 
