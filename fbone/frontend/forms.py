@@ -30,7 +30,7 @@ class SignupForm(Form):
     name = TextField(u'Choose your username', [Required(), Length(USERNAME_LEN_MIN, USERNAME_LEN_MAX)],
             description=u"Don't worry. you can change it later.")
     agree = BooleanField(u'Agree to the ' + 
-        Markup('<a target="blank" href="/terms">Terms of </a>'), [Required()])
+        Markup('<a target="blank" href="/terms">Terms of Service</a>'), [Required()])
     submit = SubmitField('Sign up')
 
     def validate_name(self, field):
