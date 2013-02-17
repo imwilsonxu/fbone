@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column, types
+try:
+    from sqlalchemy.ext.mutable import Mutable
+except ImportError:
+    from sqlalchemy.types import MutableType as Mutable
 from werkzeug import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
 
@@ -9,7 +13,7 @@ from ..utils import get_current_time
 from .constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS
 
 
-class DenormalizedText(types.MutableType, types.TypeDecorator):
+class DenormalizedText(Mutable, types.TypeDecorator):
     """
     Stores denormalized primary keys that can be
     accessed as a set.
