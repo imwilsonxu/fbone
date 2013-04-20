@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column, types
-try:
-    from sqlalchemy.ext.mutable import Mutable
-except ImportError:
-    from sqlalchemy.types import MutableType as Mutable
+from sqlalchemy.ext.mutable import Mutable
 from werkzeug import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
 
 from ..extensions import db
-from ..utils import get_current_time
+from ..utils import get_current_time, SEX_TYPE
 from .constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS
 
 
@@ -60,6 +57,14 @@ class UserDetail(db.Model):
     deposit = Column(db.Numeric)
     location = Column(db.String)
     bio = Column(db.String)
+
+    # ================================================================
+    # Sex
+    sex_code = db.Column(db.Integer)
+
+    @property
+    def sex(self):
+        return SEX_TYPE.get(self.sex_code)
 
     created_time = Column(db.DateTime, default=get_current_time)
 
@@ -176,3 +181,10 @@ class User(db.Model, UserMixin):
             ))
         q = reduce(db.and_, criteria)
         return cls.query.filter(q)
+
+    @classmethod
+    def get_by_id(cls, user_id):
+        return cls.query.filter_by(id=user_id).first_or_404()
+
+    def check_name(self, name):
+        return User.query.filter(db.and_(User.name == name, User.email != self.id)).count() == 0

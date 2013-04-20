@@ -1,37 +1,19 @@
-.nobg {
-    background-color: white;
-}
-
 .form-actions {
     padding: 0;
     background-color: #fff;
     border-top: none;
 }
 
-.form-signin {
-    max-width: 470px;
-    padding: 10px;
-    margin: 0 auto;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-    box-shadow: 0 1px 2px rgba(0,0,0,.05);
-}
-
 .help-inline {
     font-size: 90%;
 }
 
-body { 
-    padding-top: 60px; 
-}
-
 .progress-in-table {
     margin-bottom: 0;
+}
+
+.navbar .container {
+    width: 940px;
 }
 
 /* Sign up */
@@ -40,124 +22,48 @@ body {
     text-decoration: none;
 }
 
-/* github avatar */
+/* 
+ * Sticky footer 
+ * http://twitter.github.io/bootstrap/examples/sticky-footer.html
+ * */
 
-.vcard .avatared {
-    position: relative;
+html,
+body { 
+    height: 100%;
 }
 
-.vcard h1 {
-    font-size: 26px;
-    letter-spacing: -1px;
-    color: #495961;
-    margin-top: 6px;
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -60px;
 }
 
-.vcard h1 span {
-    line-height: 1;
-    display: inline-block;
-    width: 100%;
-    line-height: 26px;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    padding-bottom: 4px;
-    margin-bottom: -12px;
+#push,
+#footer {
+    height: 60px;
+    z-index: 10;
+}
+#footer {
+    background-color: #f5f5f5;
 }
 
-.vcard h1 em {
-    display: inline-block;
-    width: 100%;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    font-family: "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 24px;
-    color: #666;
-    position: relative;
-    top: -2px;
-    margin-bottom: 12px;
-    vertical-align: top;
-    letter-spacing: 0;
-    -webkit-font-smoothing: antialiased;
-}
-
-.vcard .details {
-    border-top: 1px solid #DDD;
-    border-bottom: 1px solid #DDD;
-    margin: 0 0 8px 0;
-    padding: 18px 0 15px 0;
-    -webkit-font-smoothing: antialiased;
-}
-
-.vcard dl:first-child {
-    margin-top: 0;
-}
-
-.vcard dl {
-    margin: 5px 0 0 0;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-}
-
-.vcard dl dt {
-    margin: 0;
-    float: left;
-    width: 22px;
-    color: #D0D0D0;
-}
-
-.vcard dl dd {
-    margin: 0 0 0 22px;
-    width: 195px;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-}
-
-.profilecols ul.stats {
-    border-bottom: 1px solid #DDD;
-    margin: 0 0 17px 0;
-    padding: 6px 0 15px 0;
-}
-
-.profilecols ul.stats li {
-    display: inline-block;
-    list-style-type: none;
-    min-width: 70px;
-}
-
-.profilecols ul.stats li strong {
-    display: block;
-    font-size: 28px;
-    line-height: 1;
-    font-weight: bold;
-    color: #222;
-}
-
-.profilecols ul.stats li span {
-    display: block;
-    margin-top: -2px;
-    font-size: 11px;
-    color: #999;
-}
-
-/* footer */
-
-.footer {
-    position: relative;
-    margin: 40px 0 0 0;
-    padding: 20px 0;
-    font-size: 12px;
-    line-height: 1.5;
-    color: #777;
-    text-shadow: 0 1px 0 white;
-    background-color: whiteSmoke;
-    border-top: 1px solid #E5E5E5;
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
 .footer-links {
-    margin: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    line-height: 59px;
+    text-shadow: 0 1px 0 white;
+    background-color: whiteSmoke;
+    border-top: 1px solid #E5E5E5;
 }
 
 .footer-links li {
@@ -168,6 +74,8 @@ body {
 .footer-links li:first-child {
     padding-left: 0;
 }
+
+/* End of sticky footer */
 
 /* bootstrap + tablesorter */
 

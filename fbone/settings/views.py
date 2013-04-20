@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import os
+import hashlib
+
+from datetime import datetime
 
 from flask import Blueprint, render_template, current_app, request, flash
 from flask.ext.login import login_required, current_user
 
 from ..extensions import db
 from ..user import User
-from ..utils import allowed_file, id_generator, ALLOWED_AVATAR_EXTENSIONS
+from ..utils import allowed_file, make_dir
 from .forms import ProfileForm, PasswordForm
 
 
@@ -25,27 +28,26 @@ def profile():
     if form.validate_on_submit():
 
         if form.avatar_file.data:
-            file = request.files[form.avatar_file.name]
-            if file and allowed_file(file.filename):
+            upload_file = request.files[form.avatar_file.name]
+            if upload_file and allowed_file(upload_file.filename):
                 # Don't trust any input, we use a random string as filename.
                 # or use secure_filename:
                 # http://flask.pocoo.org/docs/patterns/fileuploads/
-                user_avatar_folder = os.path.join(
-                        current_app.config['USER_AVATAR_UPLOAD_FOLDER'],
-                        str(user.id))
-                if not os.path.exists(user_avatar_folder):
-                    os.mkdir(user_avatar_folder)
-                random_id = id_generator()
-                file.save(os.path.join(user_avatar_folder, random_id))
-                if user.avatar:
-                    os.remove(os.path.join(
-                        current_app.config['USER_AVATAR_UPLOAD_FOLDER'],
-                        user.avatar))
-                user.avatar = os.path.join(str(user.id), random_id)
-            else:
-                form.avatar_file.errors.append(
-                        u"Only accept files with following extensions: %s" %
-                        '/'.join(ALLOWED_AVATAR_EXTENSIONS))
+
+                user_upload_dir = os.path.join(current_app.config['USER_AVATAR_UPLOAD_FOLDER'], "user_%s" % user.id)
+                current_app.logger.debug(user_upload_dir)
+
+                make_dir(user_upload_dir)
+                root, ext = os.path.splitext(upload_file.filename)
+                today = datetime.now().strftime('_%Y-%m-%d')
+                # Hash file content as filename.
+                hash_filename = hashlib.sha1(upload_file.read()).hexdigest() + "_" + today + ext
+                user.avatar = hash_filename
+
+                avatar_ab_path = os.path.join(user_upload_dir, user.avatar)
+                # Reset file curso since we used read()
+                upload_file.seek(0)
+                upload_file.save(avatar_ab_path)
 
         form.populate_obj(user)
         form.populate_obj(user.user_detail)

@@ -7,7 +7,7 @@ class BaseConfig(object):
 
     # Get app root path
     # ../../configs/config.py
-    _basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    _basedir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
     PROJECT = "fbone"
     DEBUG = False
@@ -59,9 +59,9 @@ class DevConfig(BaseConfig):
 
     # You should overwrite in production.py
     # Limited the maximum allowed payload to 16 megabytes.
+    # http://flask.pocoo.org/docs/patterns/fileuploads/#improving-uploads
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
-    USER_AVATAR_UPLOAD_FOLDER = "/tmp/uploads"
-    #USER_AVATAR_UPLOAD_FOLDER = os.path.join(BaseConfig._basedir, 'uploads')
+    USER_AVATAR_UPLOAD_FOLDER = os.path.join(BaseConfig._basedir, 'uploads')
 
 
 class TestConfig(BaseConfig):

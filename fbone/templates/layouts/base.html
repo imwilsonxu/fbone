@@ -17,7 +17,6 @@
     {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     {% endblock %}
 
@@ -25,91 +24,112 @@
     {% endblock %}
 
     {% block js_top %}
-    <script src="{{ url_for('static', filename='js/vendor/modernizr-2.6.2.min.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
     {% endblock %}
 </head>
 <body>
     {% include "macros/_ask_user_to_update_ie.html" %}
 
-    {% block topbar %}
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
+    <div id='wrap'>
+        {% block topbar %}
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class='brand' href='{{ url_for('frontend.index') }}'><img src="{{ url_for('static', filename='img/logo.png') }}" /></a>
 
-                <a class='brand' href='{{ url_for('frontend.index') }}'>{{ _("Project") }}</a>
-                {% if current_user.is_authenticated() %}
-                <form class="navbar-search pull-left" action="{{ url_for('frontend.search') }}">
-                    <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='Search' />
-                </form>
-                <div class="nav-collapse collapse pull-right">
-                    <ul class="nav">
-                        <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.name }} <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
+                    {% if current_user.is_authenticated() %}
+                    <form class="navbar-search pull-left" action="{{ url_for('frontend.search') }}">
+                        <input type='text' class="search-query" name='keywords' value='{{ keywords|default('') }}' placeholder='Search' />
+                    </form>
+                    <div class="nav-collapse collapse pull-right">
+                        <ul class="nav">
                             {% if current_user.is_admin() %}
                             <li><a href="{{ url_for('admin.index') }}">{{ current_user.name }}</a></li>
                             {% else %}
                             <li><a href="{{ url_for('user.index') }}">{{ current_user.name }}</a></li>
                             {% endif %}
-                            <li class="divider"></li>
                             <li><a href="{{ url_for('settings.profile') }}">Settings</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{{ url_for('frontend.help') }}">Help</a></li>
                             <li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
                         </ul>
-                        </li>
-                    </ul>
+                    </div>
+                    {% else %}
+                    <div class="nav-collapse collapse pull-right">
+                        <ul class="nav">
+                            <li><span><a class="btn btn-success" href="{{ url_for('frontend.signup') }}"><strong>Sign up</strong></a></span></li>
+                            <li><a href="{{ url_for('frontend.login') }}">Sign in</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
                 </div>
-                {% else %}
-                <div class="nav-collapse collapse pull-right">
-                    <ul class="nav">
-                        <li><span><a class="btn btn-success" href="{{ url_for('frontend.signup') }}"><strong>Sign up</strong></a></span></li>
-                        <li><a href="{{ url_for('frontend.login') }}">Sign in</a></li>
+            </div>
+        </div>
+        {% endblock %}
+
+        {% block flash_message %}
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                <div class="container">
+                    <div id='flash_message_container'>
+                        {% for category, msg in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endwith %}
+        {% endblock %}
+
+        {% block container %}
+        <div class="container">
+
+            {% block top %}
+                {% if tabs %}
+                <div>
+                    <ul class="nav nav-tabs">
+                        {% for tab, link in tabs %}
+                        <li class="{% if active == tab %}active{% endif %}">
+                            <a href="{{ link }}">{{ tab|capitalize }}</a>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 {% endif %}
-            </div>
+            {% endblock %}
+
+            {% block body %}
+            {% endblock %}
+
         </div>
-    </div>
-    {% endblock %}
-
-    {% from 'macros/_misc.html' import render_flash_message %}
-    {{ render_flash_message() }}
-
-    {% block container %}
-    <div class="container">
-
-        {% block top %}
-            <ul class="nav nav-pills">
-                {% for tab, link in tabs %}
-                <li class="{% if active == tab %}active{% endif %}">
-                    <a href="{{ link }}">{{ tab|capitalize }}</a>
-                </li>
-                {% endfor %}
-            </ul>
         {% endblock %}
-
-        {% block body %}
-        {% endblock %}
-
+        <div id="push"></div>
     </div>
-    {% endblock %}
 
-    {% block footer %}
-    {% include "macros/_footer.html" %}
-    {% endblock %}
+    <footer id="footer">
+        <ul class="footer-links">
+            <li>© 2013</li>
+            <li><a href='https://github.com/imwilsonxu/fbone'>Project</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.about') }}'>About</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.blog') }}'>Blog</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.help') }}'>Help</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.privacy') }}'>Privacy</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href='{{ url_for('frontend.terms') }}'>Terms</a></li>
+        </ul>
+    </footer>
 
     {% block js_btm %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <!--
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    -->
     {% set jquery_path = url_for('static', filename='js/vendor/jquery-1.8.3.min.js') %}
     <script>window.jQuery || document.write('<script src="{{ jquery_path }}"><\/script>')</script>
+    -->
     <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

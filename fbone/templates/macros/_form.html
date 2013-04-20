@@ -95,34 +95,40 @@
 </div>
 {% endmacro %}
 
-{% macro render_form(url, form, legend=None) %}
-<form class="" method="POST" action="{{ url }}" {% for field in form -%}
-    {% if field.type == "FileField" -%}
-        enctype="multipart/form-data"
-    {%- endif %}
-{%- endfor %} >
+{% macro render_form(url, form, horizontal=False, legend=None, confirm_msg=None) %}
+<form class="{% if horizontal %}form-horizontal{% endif %}" method="POST" action="{{ url }}"
+    {% if confirm_msg %}onsubmit='return confirm("{{ confirm_msg }}");' {% endif %} 
+    {% if form.multipart %}enctype="multipart/form-data"{% endif %} >
     {{ form.hidden_tag() }}
     <fieldset>
-        {% if legend -%}
+        {% if legend %}
         <legend>{{ legend|safe }}</legend>
-        {%- endif %}
-        {% for field in form -%}
-            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" -%}
-                {% if field.type == "RadioField" -%}
+        {% endif %}
+        {% set focus = True %}
+        {% for field in form %}
+            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" %}
+                {% if field.type == "RadioField" %}
                     {{ render_radio(field) }}
-                {%- elif field.type == "BooleanField" -%}
+                {% elif field.type == "BooleanField" %}
                     {{ render_checkbox(field) }}
-                {%- elif field.type == "SubmitField" -%}
+                {% elif field.type == "SubmitField" %}
                     {{ render_action(field) }}
-                {%- elif field.type == "TextAreaField" %}
+                {% elif field.type == "TextAreaField" %}
                     {{ render_textarea(field) }}
-                {%- elif field.type == "DateField" -%}
+                {% elif field.type == "DateField" %}
                     {{ render_datepicker(field) }}
-                {%- else -%}
+                {% elif field.type == "TextField" %}
+                    {% if focus %}
+                        {{ render_input(field) }}
+                        {% set focus = False %}
+                    {% else %}
+                        {{ render_input(field) }}
+                    {% endif %}
+                {% else %}
                     {{ render_input(field) }}
-                {%- endif %}
-            {%- endif %}
-        {%- endfor %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
     </fieldset>
 </form>
 {% endmacro %}

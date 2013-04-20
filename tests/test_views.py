@@ -2,7 +2,7 @@
 
 from werkzeug.urls import url_quote
 
-from fbone.user import User, ADMIN, USER_ROLE, NEW, USER_STATUS
+from fbone.user import User
 from fbone.extensions import db, mail
 
 from tests import TestCase
@@ -58,51 +58,7 @@ class TestFrontend(TestCase):
             self._test_get_request('/%s' % page, 'frontend/footers/%s.html' % page)
 
 
-class TestSearch(TestCase):
-
-    def setUp(self):
-        super(TestSearch, self).setUp()
-        for i in range(25):
-            name = 'user%d' % i
-            email = '%s@example.com' % name
-            user = User(name=name, email=email, password='123456')
-            db.session.add(user)
-        db.session.commit()
-
-    def _search(self, keywords, total):
-        """
-        Since get_context_variable is only inited in setUp(), we have to split
-        them into different test_*().
-        """
-
-        response = self._test_get_request('/search?keywords=%s' % keywords, 'frontend/search.html')
-        self.assert200(response)
-        self.assertTemplateUsed(name='frontend/search.html')
-        pagination = self.get_context_variable('pagination')
-        assert pagination.total == total
-
-    def test_search_name1(self):
-        self._search('user', 25)
-
-    def test_search_name2(self):
-        self._search('user11', 1)
-
-    def test_search_name3(self):
-        self._search('abc', 0)
-
-    def test_search_email(self):
-        self._search('2@example.com', 3)
-
-
 class TestUser(TestCase):
-
-    def test_show(self):
-        username = "demo"
-        self._test_get_request('/user/%s' % username, 'user/show.html')
-
-        self.login('demo', '123456')
-        response = self.client.get('/user/%s' % username)
-        self.assertRedirects(response, location='/user/')
 
     def test_home(self):
         response = self.client.get('/user/')
@@ -153,18 +109,13 @@ class TestSettings(TestCase):
         self.assertTemplateUsed("settings/profile.html")
 
         data = {
-            'name': 'demo1',
-            'email': 'demo1@example.com',
+            'name': 'admin',
         }
         response = self.client.post(endpoint, data=data)
         print response.data
-        assert "help-block error" not in response.data
+        assert "Please pick another name" in response.data
         self.assert200(response)
         self.assertTemplateUsed("settings/profile.html")
-
-        new_user = User.query.filter_by(name=data.get('name')).first()
-        assert new_user is not None
-        assert new_user.email == data.get('email')
 
     def test_password(self):
         endpoint = '/settings/password'
@@ -198,16 +149,6 @@ class TestError(TestCase):
         response = self.client.get('/404/')
         self.assert404(response)
         self.assertTemplateUsed('errors/page_not_found.html')
-
-    #def test_403(self):
-        #response = self.client.get('/403/')
-        #self.assert403(response)
-        #self.assertTemplateUsed('errors/forbidden_page.html')
-
-    #def test_500(self):
-        #response = self.client.get('/500/')
-        #self.assert500(response)
-        #self.assertTemplateUsed('errors/server_error.html')
 
 
 class TestAdmin(TestCase):

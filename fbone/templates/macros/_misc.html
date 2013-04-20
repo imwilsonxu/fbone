@@ -11,7 +11,7 @@
         {% for user in users %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td><a href="{{ url_for('user.pub', name=user.name) }}">{{ user.name }}</a></td>
+            <td><a href="{{ url_for('user.profile', name=user.name) }}">{{ user.name }}</a></td>
             <td>{{ user.email }}</td>
         </tr>
         {% endfor %}
@@ -39,23 +39,4 @@
             </ul>
         </div>
     {% endif %}
-{% endmacro %}
-
-{% macro render_flash_message() %}
-    {% block flash_message %}
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-            <div class="container">
-                <div id='flash_message_container'>
-                    {% for category, msg in messages %}
-                        <div class="alert alert-{{ category }}">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            {{ msg }}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-        {% endwith %}
-    {% endblock %}
 {% endmacro %}
