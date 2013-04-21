@@ -11,7 +11,7 @@ from .settings import settings
 from .frontend import frontend
 from .api import api
 from .admin import admin
-from .extensions import db, mail, cache, login_manager
+from .extensions import db, mail, cache, login_manager, oid
 
 
 # For import *
@@ -83,6 +83,9 @@ def configure_extensions(app):
         return User.query.get(id)
     login_manager.setup_app(app)
 
+    # flask-openid
+    oid.init_app(app)
+
 
 def configure_blueprints(app, blueprints):
     """Configure blueprints in views."""
@@ -107,7 +110,7 @@ def configure_logging(app):
 
     if app.debug or app.testing:
         # Skip debug and test mode.
-        # You can check stdout logging. 
+        # You can check stdout logging.
         return
 
     import logging

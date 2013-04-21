@@ -1,0 +1,10 @@
+{% from "macros/_form.html" import render_form %}
+
+{% set page_title = "Create Profile" %}
+
+{% extends "layouts/base.html" %}
+
+{% block body %}
+<h2>Create Profile <small>Already have an account? <a href="{{ url_for('frontend.login') }}">Sign in</a>, please.</small></h2>
+{{ render_form(url_for('frontend.create_profile'), form) }}
+{% endblock %}

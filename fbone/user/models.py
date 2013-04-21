@@ -76,6 +76,7 @@ class User(db.Model, UserMixin):
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String(32), nullable=False, unique=True)
     email = Column(db.String, nullable=False, unique=True)
+    openid = Column(db.String, unique=True)
     activation_key = Column(db.String)
     created_time = Column(db.DateTime, default=get_current_time)
 

@@ -63,6 +63,12 @@ class DevConfig(BaseConfig):
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     USER_AVATAR_UPLOAD_FOLDER = os.path.join(BaseConfig._basedir, 'uploads')
 
+    # ===========================================
+    # Flask-openid
+    #
+    # http://pythonhosted.org/Flask-OpenID/
+    OPENID_FS_STORE_PATH = os.path.join(BaseConfig._basedir, 'openid')
+
 
 class TestConfig(BaseConfig):
     TESTING = True
