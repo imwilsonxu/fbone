@@ -32,7 +32,7 @@ class DefaultConfig(BaseConfig):
     # http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = True
     # Database connection URI, change to suit yourself.
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + BaseConfig._BASEDIR + '/db.sqlite'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/' + BaseConfig.PROJECT + '.sqlite'
     #SQLALCHEMY_DATABASE_URI = 'mysql://username:password@server/db' # mysql
 
     # ===========================================
