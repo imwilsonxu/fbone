@@ -37,32 +37,36 @@ Pre-required:
 - virtualenv
 - apache + mod\_wsgi
 
-Assume you are in Ubuntu and the project name is "myapp".
+Clone.
 
-    sudo git clone https://github.com/imwilsonxu/fbone.git /srv/www/myapp
-    cd /srv/www/myapp
-    fab init:myapp
+    git clone https://github.com/imwilsonxu/fbone.git fbone
 
-Restart apache and open `http://127.0.0.1`, done!
+Debug.
 
-Debug in local machine.
-
-    fab run
+    fab d
 
 Open `http://127.0.0.1:5000`, done!
 
-Init/reset database (with sqlite, check out `fbone/config.py`).
+## Deploy with WSGI
 
-    python manage.py initdb
-    sudo chmod o+w /tmp/<project>.sqlite
+virtualenv.
 
-Debug with local server.
-    
-    fab run
+    virtualenv env
+    . env/bin/activate
+    python setup.py install
 
-Compile babel.
+vhost.
 
-    fab babel
+    WSGIDaemonProcess fbone user=wilson group=wilson threads=5
+    WSGIScriptAlias /fbone /var/www/fbone/app.wsgi
+
+    <Directory /var/www/fbone/>
+        WSGIScriptReloading On
+        WSGIProcessGroup fbone
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
 
 ## STRUCTURE
 
@@ -74,14 +78,13 @@ Use `tree` to display project structure:
 
 Explain:
 
-    ├── app.vhost               (mod_wsgi vhost)
     ├── app.wsgi                (mod_wsgi wsgi config)
     ├── CHANGES
     ├── fabfile.py              (fabric file)
     ├── fbone                   (main app)
     │   ├── api                 (api module)
     │   ├── app.py              (create flask app)
-    │   ├── configs             (config module)
+    │   ├── config.py           (config module)
     │   ├── decorators.py
     │   ├── extensions.py       (init flask extensions)
     │   ├── frontend            (frontend module)
@@ -93,9 +96,6 @@ Explain:
     │   │   ├── humans.txt
     │   │   ├── img
     │   │   ├── js
-    │   │   │   ├── main.js
-    │   │   │   ├── plugins.js
-    │   │   │   └── vendor
     │   │   └── robots.txt
     │   ├── templates
     │   │   ├── errors
@@ -105,7 +105,7 @@ Explain:
     │   │   ├── macros
     │   │   ├── settings
     │   │   └── user
-    │   ├── translations (i18n)
+    │   ├── translations        (i18n)
     │   ├── user                (user module)
     │   │   ├── constants.py
     │   │   ├── forms.py        (wtforms)
@@ -120,7 +120,6 @@ Explain:
     ├── screenshots
     ├── setup.py
     └── tests                   (unit tests, run via `nosetest`)
-
 
 ## LICENSE
 

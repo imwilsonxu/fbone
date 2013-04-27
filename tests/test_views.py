@@ -108,15 +108,6 @@ class TestSettings(TestCase):
         self.assert200(response)
         self.assertTemplateUsed("settings/profile.html")
 
-        data = {
-            'name': 'admin',
-        }
-        response = self.client.post(endpoint, data=data)
-        print response.data
-        assert "Please pick another name" in response.data
-        self.assert200(response)
-        self.assertTemplateUsed("settings/profile.html")
-
     def test_password(self):
         endpoint = '/settings/password'
 

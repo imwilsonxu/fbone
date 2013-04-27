@@ -5,7 +5,7 @@ import os
 from flask import Flask, request, render_template
 from flaskext.babel import Babel
 
-from .configs import DevConfig
+from .config import DefaultConfig
 from .user import User, user
 from .settings import settings
 from .frontend import frontend
@@ -30,11 +30,11 @@ def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
 
     if app_name is None:
-        app_name = DevConfig.PROJECT
+        app_name = DefaultConfig.PROJECT
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
 
-    app = Flask(app_name)
+    app = Flask(app_name, instance_relative_config=True)
     configure_app(app, config)
     configure_hook(app)
     configure_blueprints(app, blueprints)
@@ -46,14 +46,20 @@ def create_app(config=None, app_name=None, blueprints=None):
     return app
 
 
-def configure_app(app, config):
-    """Configure app from object, parameter and env."""
+def configure_app(app, config=None):
+    """Different ways of configurations."""
 
-    app.config.from_object(DevConfig)
-    if config is not None:
+    # http://flask.pocoo.org/docs/api/#configuration
+    app.config.from_object(DefaultConfig)
+
+    # http://flask.pocoo.org/docs/config/#instance-folders
+    app.config.from_pyfile('production.cfg', silent=True)
+
+    if config:
         app.config.from_object(config)
-    # Override setting by env var without touching codes.
-    app.config.from_envvar('%s_APP_CONFIG' % DevConfig.PROJECT.upper(), silent=True)
+
+    # Use instance folder instead of env variables to make deployment easier.
+    #app.config.from_envvar('%s_APP_CONFIG' % DefaultConfig.PROJECT.upper(), silent=True)
 
 
 def configure_extensions(app):
@@ -109,8 +115,7 @@ def configure_logging(app):
     """Configure file(info) and email(error) logging."""
 
     if app.debug or app.testing:
-        # Skip debug and test mode.
-        # You can check stdout logging.
+        # Skip debug and test mode. Just check standard output.
         return
 
     import logging
@@ -120,7 +125,7 @@ def configure_logging(app):
     # Suppress DEBUG messages.
     app.logger.setLevel(logging.INFO)
 
-    info_log = os.path.join(app.root_path, "..", "logs", "app-info.log")
+    info_log = app.config['LOG_FILE']
     info_file_handler = logging.handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
     info_file_handler.setLevel(logging.INFO)
     info_file_handler.setFormatter(logging.Formatter(

@@ -5,21 +5,24 @@ import os
 
 class BaseConfig(object):
 
-    # Get app root path
-    # ../../configs/config.py
-    _basedir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
     PROJECT = "fbone"
+
+    # Get app root path
+    # ../../config.py
+    _BASEDIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
     DEBUG = False
     TESTING = False
 
     ADMINS = frozenset(['youremail@yourdomain.com'])
 
-    # os.urandom(24)
+    # http://flask.pocoo.org/docs/quickstart/#sessions
     SECRET_KEY = 'secret key'
 
+    LOG_FILE = os.path.join(_BASEDIR, 'instance', 'logs', 'access.log')
 
-class DevConfig(BaseConfig):
+
+class DefaultConfig(BaseConfig):
 
     DEBUG = True
 
@@ -29,7 +32,7 @@ class DevConfig(BaseConfig):
     # http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = True
     # Database connection URI, change to suit yourself.
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/' + BaseConfig.PROJECT + ".sqlite"  # sqlite for testing/debug.
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + BaseConfig._BASEDIR + '/db.sqlite'
     #SQLALCHEMY_DATABASE_URI = 'mysql://username:password@server/db' # mysql
 
     # ===========================================
@@ -61,13 +64,13 @@ class DevConfig(BaseConfig):
     # Limited the maximum allowed payload to 16 megabytes.
     # http://flask.pocoo.org/docs/patterns/fileuploads/#improving-uploads
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
-    USER_AVATAR_UPLOAD_FOLDER = os.path.join(BaseConfig._basedir, 'uploads')
+    USER_AVATAR_UPLOAD_FOLDER = os.path.join(BaseConfig._BASEDIR, 'instance', 'uploads')
 
     # ===========================================
     # Flask-openid
     #
     # http://pythonhosted.org/Flask-OpenID/
-    OPENID_FS_STORE_PATH = os.path.join(BaseConfig._basedir, 'openid')
+    OPENID_FS_STORE_PATH = os.path.join(BaseConfig._BASEDIR, 'instance', 'openid')
 
 
 class TestConfig(BaseConfig):

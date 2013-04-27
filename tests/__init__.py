@@ -11,8 +11,9 @@ from flask.ext.testing import TestCase as Base, Twill
 
 from fbone import create_app
 from fbone.user import User, UserDetail, ADMIN, USER, ACTIVE
-from fbone.configs import TestConfig
+from fbone.config import TestConfig
 from fbone.extensions import db
+from fbone.utils import MALE
 
 
 class TestCase(Base):
@@ -27,32 +28,32 @@ class TestCase(Base):
 
     def init_data(self):
 
-        demo = User(name=u'demo', 
-                email=u'demo@example.com', 
-                password=u'123456', 
-                role_id=USER,
-                status_id=ACTIVE,
+        demo = User(
+                name=u'demo',
+                email=u'demo@example.com',
+                password=u'123456',
+                role_code=USER,
+                status_code=ACTIVE,
                 user_detail=UserDetail(
+                    sex_code=MALE,
                     age=10,
-                    url=u'http://demo.example.com', 
+                    url=u'http://demo.example.com',
                     deposit=100.00,
-                    location=u'Hangzhou', 
-                    bio=u'Demo Guy is ... hmm ... just a demo guy.',
-                    ),
-                )
-        admin = User(name=u'admin', 
-                email=u'admin@example.com', 
-                password=u'123456', 
-                role_id=ADMIN,
-                status_id=ACTIVE,
+                    location=u'Hangzhou',
+                    bio=u'admin Guy is ... hmm ... just a demo guy.'))
+        admin = User(
+                name=u'admin',
+                email=u'admin@example.com',
+                password=u'123456',
+                role_code=ADMIN,
+                status_code=ACTIVE,
                 user_detail=UserDetail(
+                    sex_code=MALE,
                     age=10,
-                    url=u'http://admin.example.com', 
+                    url=u'http://admin.example.com',
                     deposit=100.00,
-                    location=u'Hangzhou', 
-                    bio=u'admin Guy is ... hmm ... just a admin guy.',
-                    ),
-                )
+                    location=u'Hangzhou',
+                    bio=u'admin Guy is ... hmm ... just a admin guy.'))
         db.session.add(demo)
         db.session.add(admin)
         db.session.commit()
@@ -66,7 +67,6 @@ class TestCase(Base):
     def tearDown(self):
         """Clean db session and drop all tables."""
 
-        db.session.remove()
         db.drop_all()
 
     def login(self, username, password):

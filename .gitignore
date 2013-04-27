@@ -9,12 +9,17 @@
 *.tox
 *~
 *.mo
-production.py
+
 *.db
+*.sqlite
 
 dist
 build
-logs
 
+instance
+production.py
+logs
 uploads
 openid
+
+env

@@ -16,8 +16,8 @@
         {% for user in users %}
         <tr>
             <td>{{ user.name }}</td>
-            <td>{{ user.getStatus() }}</td>
-            <td>{{ user.getRole() }}</td>
+            <td>{{ user.status }}</td>
+            <td>{{ user.role }}</td>
             <td>{{ user.created_time|format_date }}</td>
             <td><a href="{{ url_for('admin.user', user_id=user.id) }}">Edit</a></td>
         </tr>

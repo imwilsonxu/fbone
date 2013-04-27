@@ -58,8 +58,6 @@ class UserDetail(db.Model):
     location = Column(db.String)
     bio = Column(db.String)
 
-    # ================================================================
-    # Sex
     sex_code = db.Column(db.Integer)
 
     @property
@@ -80,12 +78,8 @@ class User(db.Model, UserMixin):
     activation_key = Column(db.String)
     created_time = Column(db.DateTime, default=get_current_time)
 
-    # ================================================================
-    # Avatar
     avatar = Column(db.String)
 
-    # ================================================================
-    # Password
     _password = Column('password', db.String, nullable=False)
 
     def _get_password(self):
@@ -105,20 +99,22 @@ class User(db.Model, UserMixin):
 
     # ================================================================
     # One-to-many relationship between users and roles.
-    role_id = Column(db.SmallInteger, default=USER)
+    role_code = Column(db.SmallInteger, default=USER)
 
-    def getRole(self):
-        return USER_ROLE[self.role_id]
+    @property
+    def role(self):
+        return USER_ROLE[self.role_code]
 
     def is_admin(self):
-        return self.role_id == ADMIN
+        return self.role_code == ADMIN
 
     # ================================================================
     # One-to-many relationship between users and user_statuses.
-    status_id = Column(db.SmallInteger, default=INACTIVE)
+    status_code = Column(db.SmallInteger, default=INACTIVE)
 
-    def getStatus(self):
-        return USER_STATUS[self.status_id]
+    @property
+    def status(self):
+        return USER_STATUS[self.status_code]
 
     # ================================================================
     # One-to-one (uselist=False) relationship between users and user_details.

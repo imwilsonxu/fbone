@@ -9,17 +9,14 @@ from flask.ext.wtf.html5 import URLField, EmailField, TelField
 from flask.ext.login import current_user
 
 from ..user import User
-from ..utils import (PASSWORD_LEN_MIN, PASSWORD_LEN_MAX,
-        USERNAME_LEN_MIN, USERNAME_LEN_MAX,
-        AGE_MIN, AGE_MAX, DEPOSIT_MIN, DEPOSIT_MAX)
+from ..utils import PASSWORD_LEN_MIN, PASSWORD_LEN_MAX, AGE_MIN, AGE_MAX, DEPOSIT_MIN, DEPOSIT_MAX
 from ..utils import allowed_file, ALLOWED_AVATAR_EXTENSIONS
 from ..utils import SEX_TYPE
 
 
 class ProfileForm(Form):
+    multipart = True
     next = HiddenField()
-    name = TextField(u'Username', [Required(), Length(USERNAME_LEN_MIN, USERNAME_LEN_MAX)],
-            description=u'Combination of letters/digits/underscore, at least %s characters.' % USERNAME_LEN_MIN)
     email = EmailField(u'Email', [Required(), Email()])
     # Don't use the same name as model because we are going to use populate_obj().
     avatar_file = FileField(u"Avatar", [Optional()])
@@ -38,7 +35,7 @@ class ProfileForm(Form):
             raise ValidationError("Please pick another name.")
 
     def validate_avatar_file(form, field):
-        if field.data and not allowed_file(field.data):
+        if field.data and not allowed_file(field.data.filename):
             raise ValidationError("Please upload files with extensions: %s" % "/".join(ALLOWED_AVATAR_EXTENSIONS))
 
 

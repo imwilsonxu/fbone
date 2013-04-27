@@ -14,35 +14,46 @@ from fabric.api import *
 env.hosts = ['127.0.0.1']
 
 
-def run():
-    local("python manage.py run")
+def reset():
+    """
+    Reset local debug env.
+    """
 
-
-# alias of run()
-def r():
-    run()
-
-
-def initdb():
-    local("rm -f /tmp/fbone.sqlite")
+    local("rm -rf /tmp/fbone.sqlite instance/logs instance/uploads instance/openid")
+    local("mkdir instance/logs instance/uploads instance/openid")
     local("python manage.py initdb")
 
 
 def babel():
+    """
+    Babel compile.
+    """
+
     local("python setup.py compile_catalog --directory `find -name translations` --locale zh -f")
 
 
-def debug():
-    initdb()
+def run():
+    local("python manage.py run")
+
+
+def r():
     run()
 
 
-# alias of debug()
 def d():
-    debug()
+    """
+    Debug.
+    """
+
+    reset()
+    run()
 
 
-def init(project="myapp"):
+def wsgi(project="myapp"):
+    """
+    Deploy in local machine as wsgi.
+    """
+
     project_dir = os.getcwd()
     vhost_name = project + ".vhost"
     with cd(project_dir):
@@ -50,9 +61,9 @@ def init(project="myapp"):
         # logs folder
         local("mkdir logs")
         # setup.py and config.py
-        local("perl -pi -e 's/\"fbone\"/\"%s\"/g' setup.py fbone/configs/config.py" % project)
+        local("perl -pi -e 's/\"fbone\"/\"%s\"/g' setup.py fbone/config.py" % project)
         # and *.py
-        local("perl -pi -e 's/^from fbone/from %s/g' `find -iname '*.py'`" % project)
+        local("perl -pi -e 's/^from fbone/from %s/g' `grep -Ilr '^from fbone' --include=*.py`" % project)
         # change fbone/ folder
         local("mv fbone %s" % project)
 
@@ -75,17 +86,9 @@ def init(project="myapp"):
         # Save downloading time, test only.
         #local("cp -r ~/.virtualenvs/fbone/lib/python2.7/site-packages/ /srv/www/myapp/env/lib/python2.7/")
 
-        # You should move uploads folder to somewhere else
-        local("mkdir /tmp/uploads")
-
+        local("mkdir instance instance/logs instance/uploads instance/openid")
         local("python setup.py install")
         local("python manage.py initdb")
+
         # make db readable
         local("sudo chmod o+w /tmp/%s.sqlite" % project)
-
-
-def deploy():
-    local("virtualenv env")
-    activate_this = os.path.join(project_dir, "env/bin/activate_this.py")
-    execfile(activate_this, dict(__file__=activate_this))
-    local("python setup.py install")
