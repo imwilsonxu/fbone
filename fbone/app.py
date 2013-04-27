@@ -12,6 +12,7 @@ from .frontend import frontend
 from .api import api
 from .admin import admin
 from .extensions import db, mail, cache, login_manager, oid
+from .utils import INSTANCE_FOLDER_PATH
 
 
 # For import *
@@ -34,7 +35,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
 
-    app = Flask(app_name, instance_relative_config=True)
+    app = Flask(app_name, instance_path=INSTANCE_FOLDER_PATH, instance_relative_config=True)
     configure_app(app, config)
     configure_hook(app)
     configure_blueprints(app, blueprints)
@@ -125,7 +126,7 @@ def configure_logging(app):
     # Suppress DEBUG messages.
     app.logger.setLevel(logging.INFO)
 
-    info_log = app.config['LOG_FILE']
+    info_log = os.path.join(app.config['LOG_FOLDER'], 'info.log')
     info_file_handler = logging.handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
     info_file_handler.setLevel(logging.INFO)
     info_file_handler.setFormatter(logging.Formatter(

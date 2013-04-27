@@ -36,7 +36,7 @@ def profile():
                 # or use secure_filename:
                 # http://flask.pocoo.org/docs/patterns/fileuploads/
 
-                user_upload_dir = os.path.join(current_app.config['USER_AVATAR_UPLOAD_FOLDER'], "user_%s" % user.id)
+                user_upload_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], "user_%s" % user.id)
                 current_app.logger.debug(user_upload_dir)
 
                 make_dir(user_upload_dir)

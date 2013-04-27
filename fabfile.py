@@ -17,25 +17,21 @@ def reset():
     Reset local debug env.
     """
 
-    local("rm -rf /tmp/fbone.sqlite instance/logs instance/uploads instance/openid")
-    local("mkdir instance/logs instance/uploads instance/openid")
+    local("rm -rf /tmp/instance")
+    local("mkdir /tmp/instance")
     local("python manage.py initdb")
 
 
-def babel():
+def setup():
     """
-    Babel compile.
+    Setup virtual env.
     """
 
-    local("python setup.py compile_catalog --directory `find -name translations` --locale zh -f")
-
-
-def run():
-    local("python manage.py run")
-
-
-def r():
-    run()
+    local("virtualenv env")
+    activate_this = "env/bin/activate_this.py"
+    execfile(activate_this, dict(__file__=activate_this))
+    local("python setup.py install")
+    reset()
 
 
 def d():
@@ -44,4 +40,12 @@ def d():
     """
 
     reset()
-    run()
+    local("python manage.py run")
+
+
+def babel():
+    """
+    Babel compile.
+    """
+
+    local("python setup.py compile_catalog --directory `find -name translations` --locale zh -f")

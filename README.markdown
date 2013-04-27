@@ -5,31 +5,40 @@ Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) 
 You can use it for
 
 - learning Flask.
-- quicker developing your new project.
+- developing your new project faster.
 
 ![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
 
 ## FEATURES
 
-- Well designed for **large project**.
-- **Support HTML5** with [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
-- Integrate with [jQuery](http://jquery.com/) and [bootstrap](https://github.com/twitter/bootstrap).
+### Frontend Framework
+
+- [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
+- [jQuery](http://jquery.com/). 
+- [bootstrap](https://github.com/twitter/bootstrap).
+
+### Flask Extensions
+
+- Handle **orm** with [SQLAlchemy](http://www.sqlalchemy.org).
+- Handle **web forms** with [WTForms](http://wtforms.simplecodes.com/).
 - Implement **user session management (signin/signout/rememberme)** with [Flask-Login](https://github.com/maxcountryman/flask-login).
 - Implement **reset password via email** with [Flask-Mail](http://packages.python.org/Flask-Mail/).
 - Implement **unit testing** with [Flask-Testing](http://packages.python.org/Flask-Testing/).
 - Implement **external script (initdb/testing/etc)** with [Flask-Script](http://flask-script.readthedocs.org/en/latest/).
-- Implement **admin interface**.
-- Implement **Logger**.
 - Handle **i18n** with [Flask-Babel](http://packages.python.org/Flask-Babel/).
-- Handle **web forms** with [WTForms](http://wtforms.simplecodes.com/).
-- Handle **orm** with [SQLAlchemy](http://www.sqlalchemy.org).
-- Handle **deployment** with [mod\_wsgi](flask.pocoo.org/docs/deploying/mod_wsgi/) and [fabric](flask.pocoo.org/docs/patterns/fabric/).
+
+### Others
+
+- Well designed structure for **large project**.
+- Quickly Deploy via [mod\_wsgi](flask.pocoo.org/docs/deploying/mod_wsgi/) and [fabric](flask.pocoo.org/docs/patterns/fabric/).
+- Admin interface.
+- Home-make logger.
 
 ## USAGE
 
 Pre-required:
 
-- Ubuntu (or other linux distro)
+- Ubuntu (should be fine in other linux distro)
 - git
 - pip
 - fabric
@@ -41,6 +50,10 @@ Clone.
 
     git clone https://github.com/imwilsonxu/fbone.git fbone
 
+virtualenv.
+
+    fab setup
+
 Debug.
 
     fab d
@@ -49,11 +62,11 @@ Open `http://127.0.0.1:5000`, done!
 
 ## Deploy with WSGI
 
-virtualenv.
+Clone.
 
-    virtualenv env
-    . env/bin/activate
-    python setup.py install
+    cd /var/www
+    git clone https://github.com/imwilsonxu/fbone.git fbone
+    sudo chown `whoami` -R fbone
 
 vhost.
 
@@ -68,19 +81,11 @@ vhost.
         Allow from all
     </Directory>
 
-database.
+virtualenv.
 
-    python manage.py initdb
+    fab setup
 
 ## STRUCTURE
-
-Use `tree` to display project structure:
-    
-    sudo apt-get install -y tree
-    cd fbone
-    tree
-
-Explain:
 
     ├── app.wsgi                (mod_wsgi wsgi config)
     ├── CHANGES
@@ -131,4 +136,4 @@ Explain:
 
 ## ACKNOWLEDGEMENTS
 
-Thanks to Flask, its [extensions](http://flask.pocoo.org/extensions/), and other goodies.
+Thanks to Python, Flask, its [extensions](http://flask.pocoo.org/extensions/), and other goodies.

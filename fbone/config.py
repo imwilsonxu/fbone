@@ -2,14 +2,16 @@
 
 import os
 
+from utils import make_dir, INSTANCE_FOLDER_PATH
+
 
 class BaseConfig(object):
 
     PROJECT = "fbone"
 
-    # Get app root path
+    # Get app root path, also can use flask.root_path.
     # ../../config.py
-    _BASEDIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
     DEBUG = False
     TESTING = False
@@ -19,58 +21,50 @@ class BaseConfig(object):
     # http://flask.pocoo.org/docs/quickstart/#sessions
     SECRET_KEY = 'secret key'
 
-    LOG_FILE = os.path.join(_BASEDIR, 'instance', 'logs', 'access.log')
+    LOG_FOLDER = os.path.join(INSTANCE_FOLDER_PATH, 'logs')
+    make_dir(LOG_FOLDER)
+
+    # Fild upload, should override in production.
+    # Limited the maximum allowed payload to 16 megabytes.
+    # http://flask.pocoo.org/docs/patterns/fileuploads/#improving-uploads
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = os.path.join(INSTANCE_FOLDER_PATH, 'uploads')
+    make_dir(UPLOAD_FOLDER)
 
 
 class DefaultConfig(BaseConfig):
 
     DEBUG = True
 
-    # ===========================================
-    # Flask-Sqlalchemy
-    #
-    # http://packages.python.org/Flask-SQLAlchemy/config.html
+    # Flask-Sqlalchemy: http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = True
-    # Database connection URI, change to suit yourself.
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/' + BaseConfig.PROJECT + '.sqlite'
-    #SQLALCHEMY_DATABASE_URI = 'mysql://username:password@server/db' # mysql
+    # SQLITE for prototyping.
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + INSTANCE_FOLDER_PATH + '/db.sqlite'
+    # MYSQL for production.
+    #SQLALCHEMY_DATABASE_URI = 'mysql://username:password@server/db?charset=utf8'
 
-    # ===========================================
-    # Flask-babel
-    #
+    # Flask-babel: http://pythonhosted.org/Flask-Babel/
     ACCEPT_LANGUAGES = ['zh']
     BABEL_DEFAULT_LOCALE = 'en'
 
-    # ===========================================
-    # Flask-cache
-    #
+    # Flask-cache: http://pythonhosted.org/Flask-Cache/
     CACHE_TYPE = 'simple'
     CACHE_DEFAULT_TIMEOUT = 60
 
-    # ===========================================
-    # Flask-mail
-    #
-    # Should be imported from env var.
+    # Flask-mail: http://pythonhosted.org/flask-mail/
     # https://bitbucket.org/danjac/flask-mail/issue/3/problem-with-gmails-smtp-server
     MAIL_DEBUG = DEBUG
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
+    # Should put MAIL_USERNAME and MAIL_PASSWORD in production under instance folder.
     MAIL_USERNAME = 'gmail_username'
     MAIL_PASSWORD = 'gmail_password'
     DEFAULT_MAIL_SENDER = '%s@gmail.com' % MAIL_USERNAME
 
-    # You should overwrite in production.py
-    # Limited the maximum allowed payload to 16 megabytes.
-    # http://flask.pocoo.org/docs/patterns/fileuploads/#improving-uploads
-    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
-    USER_AVATAR_UPLOAD_FOLDER = os.path.join(BaseConfig._BASEDIR, 'instance', 'uploads')
-
-    # ===========================================
-    # Flask-openid
-    #
-    # http://pythonhosted.org/Flask-OpenID/
-    OPENID_FS_STORE_PATH = os.path.join(BaseConfig._BASEDIR, 'instance', 'openid')
+    # Flask-openid: http://pythonhosted.org/Flask-OpenID/
+    OPENID_FS_STORE_PATH = os.path.join(INSTANCE_FOLDER_PATH, 'openid')
+    make_dir(OPENID_FS_STORE_PATH)
 
 
 class TestConfig(BaseConfig):
