@@ -68,6 +68,10 @@ vhost.
         Allow from all
     </Directory>
 
+database.
+
+    python manage.py initdb
+
 ## STRUCTURE
 
 Use `tree` to display project structure:
