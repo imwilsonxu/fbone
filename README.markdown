@@ -1,11 +1,11 @@
 # INTRODUCTION
 
-Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) template/bootstrap/boilerplate application.
+Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) template/bootstrap/boilerplate application, with best practices.
 
 You can use it for
 
 - learning Flask.
-- developing your new project faster.
+- kicking off your new project faster.
 
 ![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
 
@@ -32,7 +32,7 @@ You can use it for
 - Well designed structure for **large project**.
 - Quickly Deploy via [mod\_wsgi](flask.pocoo.org/docs/deploying/mod_wsgi/) and [fabric](flask.pocoo.org/docs/patterns/fabric/).
 - Admin interface.
-- Home-make logger.
+- Home-bake logger.
 
 ## USAGE
 
@@ -84,6 +84,11 @@ vhost.
 virtualenv.
 
     fab setup
+
+**IMPORTANT**:
+
+- Change `INSTANCE_FOLDER_PATH` in `fbone/utils.py` to suit yourself.
+- Put `production.cfg` under `INSTANCE_FOLDER_PATH`.
 
 ## STRUCTURE
 

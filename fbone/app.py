@@ -140,10 +140,9 @@ def configure_logging(app):
     #app.logger.warn("testing warn.")
     #app.logger.error("testing error.")
 
-    ADMINS = ['imwilsonxu@gmail.com']
     mail_handler = SMTPHandler(app.config['MAIL_SERVER'],
                                app.config['MAIL_USERNAME'],
-                               ADMINS,
+                               app.config['ADMINS'],
                                'O_ops... %s failed!' % app.config['PROJECT'],
                                (app.config['MAIL_USERNAME'],
                                 app.config['MAIL_PASSWORD']))

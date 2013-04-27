@@ -16,7 +16,7 @@ class BaseConfig(object):
     DEBUG = False
     TESTING = False
 
-    ADMINS = frozenset(['youremail@yourdomain.com'])
+    ADMINS = ['youremail@yourdomain.com']
 
     # http://flask.pocoo.org/docs/quickstart/#sessions
     SECRET_KEY = 'secret key'

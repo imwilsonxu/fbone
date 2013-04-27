@@ -214,26 +214,6 @@ def reset_password():
     return render_template('frontend/reset_password.html', form=form)
 
 
-@frontend.route('/about')
-def about():
-    return render_template('frontend/footers/about.html', active="about")
-
-
-@frontend.route('/blog')
-def blog():
-    return render_template('frontend/footers/blog.html', active="blog")
-
-
 @frontend.route('/help')
 def help():
     return render_template('frontend/footers/help.html', active="help")
-
-
-@frontend.route('/privacy')
-def privacy():
-    return render_template('frontend/footers/privacy.html', active="privacy")
-
-
-@frontend.route('/terms')
-def terms():
-    return render_template('frontend/footers/terms.html', active="terms")

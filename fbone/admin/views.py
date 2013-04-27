@@ -29,7 +29,7 @@ def users():
     return render_template('admin/users.html', users=users, active='users')
 
 
-@admin.route('/user/<user_id>', methods=['GET', 'POST'])
+@admin.route('/user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def user(user_id):

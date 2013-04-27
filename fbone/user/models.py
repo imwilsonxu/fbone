@@ -6,7 +6,7 @@ from werkzeug import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
 
 from ..extensions import db
-from ..utils import get_current_time, SEX_TYPE
+from ..utils import get_current_time, SEX_TYPE, STRING_LEN
 from .constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS
 
 
@@ -52,11 +52,11 @@ class UserDetail(db.Model):
     id = Column(db.Integer, primary_key=True)
 
     age = Column(db.Integer)
-    phone = Column(db.String)
-    url = Column(db.String)
+    phone = Column(db.String(STRING_LEN))
+    url = Column(db.String(STRING_LEN))
     deposit = Column(db.Numeric)
-    location = Column(db.String)
-    bio = Column(db.String)
+    location = Column(db.String(STRING_LEN))
+    bio = Column(db.String(STRING_LEN))
 
     sex_code = db.Column(db.Integer)
 
@@ -72,15 +72,15 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = Column(db.Integer, primary_key=True)
-    name = Column(db.String(32), nullable=False, unique=True)
-    email = Column(db.String, nullable=False, unique=True)
-    openid = Column(db.String, unique=True)
-    activation_key = Column(db.String)
+    name = Column(db.String(STRING_LEN), nullable=False, unique=True)
+    email = Column(db.String(STRING_LEN), nullable=False, unique=True)
+    openid = Column(db.String(STRING_LEN), unique=True)
+    activation_key = Column(db.String(STRING_LEN))
     created_time = Column(db.DateTime, default=get_current_time)
 
-    avatar = Column(db.String)
+    avatar = Column(db.String(STRING_LEN))
 
-    _password = Column('password', db.String, nullable=False)
+    _password = Column('password', db.String(STRING_LEN), nullable=False)
 
     def _get_password(self):
         return self._password

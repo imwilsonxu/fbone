@@ -54,8 +54,7 @@ class TestFrontend(TestCase):
         assert user.activation_key is not None
 
     def test_footers(self):
-        for page in ['about', 'blog', 'help', 'privacy', 'terms']:
-            self._test_get_request('/%s' % page, 'frontend/footers/%s.html' % page)
+        self._test_get_request('/help', 'frontend/footers/help.html')
 
 
 class TestUser(TestCase):
