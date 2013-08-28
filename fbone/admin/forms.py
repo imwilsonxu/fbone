@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.wtf import Form
-from flask.ext.wtf import HiddenField, SubmitField, RadioField, DateField
-from flask.ext.wtf import AnyOf
+from wtforms import HiddenField, SubmitField, RadioField, DateField
+from wtforms.validators import AnyOf
 
 from ..user import USER_ROLE, USER_STATUS
 

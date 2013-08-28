@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.wtf import Form, ValidationError
-from flask.ext.wtf import (HiddenField, TextField, AnyOf, Optional,
+from flask.ext.wtf import Form
+from wtforms import (ValidationError, HiddenField, TextField,
         PasswordField, SubmitField, TextAreaField, IntegerField, RadioField,
         FileField, DecimalField)
-from flask.ext.wtf import Required, Length, EqualTo, Email, NumberRange, URL
+from wtforms.validators import (AnyOf, Optional, Required, Length, EqualTo,
+        Email, NumberRange, URL)
 from flask.ext.wtf.html5 import URLField, EmailField, TelField
 from flask.ext.login import current_user
+from wtforms import ValidationError, HiddenField
 
 from ..user import User
 from ..utils import PASSWORD_LEN_MIN, PASSWORD_LEN_MAX, AGE_MIN, AGE_MAX, DEPOSIT_MIN, DEPOSIT_MAX
