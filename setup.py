@@ -28,6 +28,7 @@ setup(
         'nose',
         'mysql-python',
     ],
+    test_suite='tests',
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
