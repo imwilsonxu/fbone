@@ -2,10 +2,10 @@
 
 from flask import Markup
 
-from flask.ext.wtf import Form, ValidationError
-from flask.ext.wtf import (HiddenField, BooleanField, TextField,
+from flask.ext.wtf import Form
+from wtforms import (ValidationError, HiddenField, BooleanField, TextField,
         PasswordField, SubmitField)
-from flask.ext.wtf import Required, Length, EqualTo, Email
+from wtforms.validators import Required, Length, EqualTo, Email
 from flask.ext.wtf.html5 import EmailField
 
 from ..user import User
