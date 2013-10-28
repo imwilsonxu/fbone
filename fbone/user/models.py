@@ -98,8 +98,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password, password)
 
     # ================================================================
-    # One-to-many relationship between users and roles.
-    role_code = Column(db.SmallInteger, default=USER)
+    role_code = Column(db.SmallInteger, default=USER, nullable=False)
 
     @property
     def role(self):

@@ -88,7 +88,7 @@ class TestUser(TestCase):
         with mail.record_messages() as outbox:
             mail.send_message(subject='testing',
                     body='test',
-                    recipients='tester@example.com')
+                    recipients=['tester@example.com'])
 
             assert len(outbox) == 1
             assert outbox[0].subject == "testing"

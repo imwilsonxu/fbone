@@ -9,7 +9,7 @@ from flask.ext.login import current_user
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.role_code != 0:
+        if not current_user.is_admin():
             abort(403)
         return f(*args, **kwargs)
     return decorated_function

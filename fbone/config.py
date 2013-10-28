@@ -55,12 +55,13 @@ class DefaultConfig(BaseConfig):
     # https://bitbucket.org/danjac/flask-mail/issue/3/problem-with-gmails-smtp-server
     MAIL_DEBUG = DEBUG
     MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     # Should put MAIL_USERNAME and MAIL_PASSWORD in production under instance folder.
-    MAIL_USERNAME = 'gmail_username'
-    MAIL_PASSWORD = 'gmail_password'
-    DEFAULT_MAIL_SENDER = '%s@gmail.com' % MAIL_USERNAME
+    MAIL_USERNAME = 'yourmail@gmail.com'
+    MAIL_PASSWORD = 'yourpass'
+    MAIL_DEFAULT_SENDER = MAIL_USERNAME
 
     # Flask-openid: http://pythonhosted.org/Flask-OpenID/
     OPENID_FS_STORE_PATH = os.path.join(INSTANCE_FOLDER_PATH, 'openid')
