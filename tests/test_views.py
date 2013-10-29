@@ -53,10 +53,6 @@ class TestFrontend(TestCase):
 class TestUser(TestCase):
 
     def test_home(self):
-        response = self.client.get('/user/')
-        self.assertRedirects(response, location='/login?next=%s' %
-                             url_quote('/user/', safe=''))
-
         self.login('demo', '123456')
         self._test_get_request('/user/', 'user/index.html')
 
@@ -90,22 +86,12 @@ class TestUser(TestCase):
 class TestSettings(TestCase):
 
     def test_profile(self):
-        endpoint = '/settings/profile'
-
-        response = self.client.get(endpoint)
-        self.assertRedirects(response, location='/login?next=%s' % url_quote(endpoint, safe=''))
-
         self.login('demo', '123456')
         response = self.client.get('/settings/profile')
         self.assert200(response)
         self.assertTemplateUsed("settings/profile.html")
 
     def test_password(self):
-        endpoint = '/settings/password'
-
-        response = self.client.get(endpoint)
-        self.assertRedirects(response, location='/login?next=%s' % url_quote(endpoint, safe=''))
-
         self.login('demo', '123456')
         response = self.client.get('/settings/password')
         self.assert200(response)
@@ -116,7 +102,7 @@ class TestSettings(TestCase):
             'new_password': '654321',
             'password_again': '654321',
         }
-        response = self.client.post(endpoint, data=data)
+        response = self.client.post('/settings/password', data=data)
         assert "help-block error" not in response.data
         self.assert200(response)
         self.assertTemplateUsed("settings/password.html")
@@ -137,9 +123,6 @@ class TestError(TestCase):
 class TestAdmin(TestCase):
 
     def test_index(self):
-        self.client.get('/admin/', follow_redirects=True)
-        self.assertTemplateUsed('frontend/login.html')
-
         response = self.login('admin', '123456')
         self.assert200(response)
 
