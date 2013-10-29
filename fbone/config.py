@@ -70,7 +70,7 @@ class DefaultConfig(BaseConfig):
 
 class TestConfig(BaseConfig):
     TESTING = True
-    CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = False
 
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = 'sqlite://'

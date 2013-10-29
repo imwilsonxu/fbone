@@ -75,6 +75,7 @@ class TestCase(Base):
             'password': password,
         }
         response = self.client.post('/login', data=data, follow_redirects=True)
+        assert "Hello" in response.data
         return response
 
     def _logout(self):

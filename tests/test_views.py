@@ -17,17 +17,15 @@ class TestFrontend(TestCase):
         self._test_get_request('/signup', 'frontend/signup.html')
 
         data = {
-            'name': 'new_user',
             'email': 'new_user@example.com',
             'password': '123456',
-            'password_again': '123456',
+            'name': 'new_user',
             'agree': True,
         }
-        response = self.client.post('/signup', data=data)
-        assert "help-block error" not in response.data
+        response = self.client.post('/signup', data=data, follow_redirects=True)
+        assert "Hello" in response.data
         new_user = User.query.filter_by(name=data['name']).first()
         assert new_user is not None
-        self.assertRedirects(response, location='/user/')
 
     def test_login(self):
         self._test_get_request('/login', 'frontend/login.html')
@@ -46,12 +44,7 @@ class TestFrontend(TestCase):
         user = User.query.filter_by(email=data.get('email')).first()
         assert user is not None
         assert user.activation_key is None
-
-        response = self.client.post('/reset_password', data=data)
-        assert "help-block error" not in response.data
-        self.assert_200(response)
-        user = User.query.filter_by(email=data.get('email')).first()
-        assert user.activation_key is not None
+        # TODO: how to test sending email?
 
     def test_footers(self):
         self._test_get_request('/help', 'frontend/footers/help.html')
