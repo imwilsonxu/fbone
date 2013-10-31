@@ -30,7 +30,7 @@ You can use it for
 ### Others
 
 - Well designed structure for **large project**.
-- Quickly Deploy via [mod\_wsgi](flask.pocoo.org/docs/deploying/mod_wsgi/) and [fabric](flask.pocoo.org/docs/patterns/fabric/).
+- Quickly Deploy via [mod\_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) and [fabric](http://flask.pocoo.org/docs/patterns/fabric/).
 - Admin interface.
 - Home-bake logger.
 
