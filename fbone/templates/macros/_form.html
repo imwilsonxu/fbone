@@ -95,8 +95,9 @@
 </div>
 {% endmacro %}
 
-{% macro render_form(url, form, horizontal=False, legend=None, confirm_msg=None) %}
-<form class="{% if horizontal %}form-horizontal{% endif %}" method="POST" action="{{ url }}"
+{% macro render_form(url, form, horizontal=False, legend=None, confirm_msg=None, formid=None) %}
+{% set idattr = "id=" + formid if formid else "" %}
+<form {{idattr}} class="{% if horizontal %}form-horizontal{% endif %}" method="POST" action="{{ url }}"
     {% if confirm_msg %}onsubmit='return confirm("{{ confirm_msg }}");' {% endif %} 
     {% if form.multipart %}enctype="multipart/form-data"{% endif %} >
     {{ form.hidden_tag() }}
