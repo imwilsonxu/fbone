@@ -142,3 +142,7 @@ virtualenv.
 ## ACKNOWLEDGEMENTS
 
 Thanks to Python, Flask, its [extensions](http://flask.pocoo.org/extensions/), and other goodies.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/imwilsonxu/fbone/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
