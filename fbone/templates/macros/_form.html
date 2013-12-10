@@ -76,7 +76,13 @@
         {{ field.label }}
     </label>
     <div class="controls">
-        {{ field }}
+        {% set attrs = {} %}
+        {# if not field.description is string #}
+        {% if field.description | is_classname('FieldDescription')  %}
+            {% do attrs.update({'placeholder': field.description.placeholder }) if field.description.placeholder %}
+            {% do attrs.update({'title': field.description.title }) %}
+        {% endif %}
+        {{ field(**attrs) }}
         <span class="help-inline">{{ field.description }}</span>
         {% if field.errors -%}
             {% for error in field.errors -%}

@@ -102,6 +102,8 @@ def configure_blueprints(app, blueprints):
 
 
 def configure_template_filters(app):
+    # add jinja extensions
+    app.jinja_env.add_extension("jinja2.ext.do")
 
     @app.template_filter()
     def pretty_date(value):
@@ -111,6 +113,9 @@ def configure_template_filters(app):
     def format_date(value, format='%Y-%m-%d'):
         return value.strftime(format)
 
+    @app.template_filter()
+    def is_classname(value, clsstr):
+        return (value.__class__.__name__ == clsstr)
 
 def configure_logging(app):
     """Configure file(info) and email(error) logging."""
