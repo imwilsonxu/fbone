@@ -4,6 +4,7 @@ import os
 
 from flask import Flask, request, render_template
 from flask.ext.babel import Babel
+from flask.ext.debugtoolbar import DebugToolbarExtension
 
 from .config import DefaultConfig
 from .user import User, user
@@ -43,6 +44,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     configure_logging(app)
     configure_template_filters(app)
     configure_error_handlers(app)
+    configure_debugtoolbar(app)
 
     return app
 
@@ -173,3 +175,7 @@ def configure_error_handlers(app):
     @app.errorhandler(500)
     def server_error_page(error):
         return render_template("errors/server_error.html"), 500
+
+
+def configure_debugtoolbar(app):
+    DebugToolbarExtension(app)
