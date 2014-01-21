@@ -17,7 +17,7 @@
         <tr>
             <td>{{ user.name }}</td>
             <td>{{ user.status }}</td>
-            <td>{{ user.role }}</td>
+            <td>{{ ",".join(user.get_role_names()) }}</td>
             <td>{{ user.created_time|format_date }}</td>
             <td><a href="{{ url_for('admin.user', user_id=user.id) }}">Edit</a></td>
         </tr>
