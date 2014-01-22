@@ -29,6 +29,11 @@ setup(
         'Flask-Social',
         'nose',
         'mysql-python',
+        'facebook',
+        'python-twitter',
+        'foursquare',
+        'oauth2client',
+        'google-api-python-client',
     ],
     test_suite='tests',
     classifiers=[
