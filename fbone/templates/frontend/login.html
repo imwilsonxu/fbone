@@ -5,6 +5,6 @@
 {% extends "layouts/base.html" %}
 
 {% block body %}
-<h2>Sign in <small>Or with <a href="{{ url_for('frontend.login_openid') }}">OpenID</a>. Don't have an account? <a href="{{ url_for('frontend.signup') }}">Sign up</a>, please.</small></h2>
+<h2>Sign in <small>Or with <a href="{{ url_for('frontend.login_openid') }}">OpenID</a>. Don't have an account? <a href="{{ url_for('security.register') }}">Sign up</a>, please.</small></h2>
 {{ render_form(url_for('frontend.login'), form)}}
 {% endblock %}

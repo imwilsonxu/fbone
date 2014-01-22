@@ -8,7 +8,7 @@ from ..decorators import admin_required
 
 from ..user import User, Role
 from .forms import UserForm, RoleForm
-
+from datetime import datetime
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -37,13 +37,17 @@ def user(user_id):
     user = User.query.filter_by(id=user_id).first_or_404()
     form = UserForm(obj=user, next=request.args.get('next'))
     form.role_code_select.choices = [(r.name, r.description) for r in Role.query.order_by('name')]
-
     if form.validate_on_submit():
         form.populate_obj(user)
 
         user.empty_roles()
         for rolename in form.role_code_select.data:
             user.add_role(rolename)
+
+        if form.confirmed.data == True:
+            user.confirmed_at = datetime.utcnow()
+        else:
+            user.confirmed_at = None
  
         db.session.add(user)
         db.session.commit()
@@ -51,6 +55,8 @@ def user(user_id):
         flash('User updated.', 'success')
     else:
         form.role_code_select.data = [r.name for r in user.roles]
+        if user.confirmed_at:
+            form.confirmed.data = True
 
     return render_template('admin/user.html', user=user, form=form)
 

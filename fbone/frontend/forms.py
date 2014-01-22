@@ -24,17 +24,11 @@ class RecoverPasswordForm(forms.ForgotPasswordForm):
 class ChangePasswordForm(forms.ChangePasswordForm):
     pass
 
-class SignupForm(Form):
-    next = HiddenField()
-    email = EmailField(u'Email', [Required(), Email()],
-            description=u"What's your email address?")
-    password = PasswordField(u'Password', [Required(), Length(PASSWORD_LEN_MIN, PASSWORD_LEN_MAX)],
-            description=u'%s characters or more! Be tricky.' % PASSWORD_LEN_MIN)
+class SignupForm(forms.RegisterForm):
     name = TextField(u'Choose your username', [Required(), Length(USERNAME_LEN_MIN, USERNAME_LEN_MAX)],
             description=u"Don't worry. you can change it later.")
     agree = BooleanField(u'Agree to the ' +
         Markup('<a target="blank" href="/terms">Terms of Service</a>'), [Required()])
-    submit = SubmitField('Sign up')
 
     def validate_name(self, field):
         if User.query.filter_by(name=field.data).first() is not None:

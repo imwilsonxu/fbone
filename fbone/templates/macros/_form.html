@@ -113,13 +113,11 @@
         {% endif %}
         {% set focus = True %}
         {% for field in form %}
-            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" %}
+            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" and field.type != "SubmitField" %}
                 {% if field.type == "RadioField" %}
                     {{ render_radio(field) }}
                 {% elif field.type == "BooleanField" %}
                     {{ render_checkbox(field) }}
-                {% elif field.type == "SubmitField" %}
-                    {{ render_action(field) }}
                 {% elif field.type == "TextAreaField" %}
                     {{ render_textarea(field) }}
                 {% elif field.type == "DateField" %}
@@ -136,6 +134,14 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
+        {% for field in form %}
+            {% if field.type == "SubmitField"  %}
+                {% if field.type == "SubmitField" %}
+                    {{ render_action(field) }}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+ 
     </fieldset>
 </form>
 {% endmacro %}

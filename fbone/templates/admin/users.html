@@ -10,6 +10,7 @@
                 <th>Status</th>
                 <th>Role</th>
                 <th>Created Time</th>
+                <th>Confirmed Time</th>
                 <th></th>
             </tr>
         </thead>
@@ -19,6 +20,11 @@
             <td>{{ user.status }}</td>
             <td>{{ ",".join(user.get_role_names()) }}</td>
             <td>{{ user.created_time|format_date }}</td>
+            {% if user.confirmed_at %}
+                <td>{{ user.confirmed_at|format_date }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
             <td><a href="{{ url_for('admin.user', user_id=user.id) }}">Edit</a></td>
         </tr>
         {% endfor %}

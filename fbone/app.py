@@ -103,6 +103,9 @@ def configure_extensions(app):
     app.security = Security(app, security_ds,
         login_form=forms.LoginForm,
         register_form=forms.SignupForm,
+        confirm_register_form=forms.SignupForm,
+#       reset_password_form=ResetPasswordForm,
+#       send_confirmation_form=SendConfirmationForm,
         forgot_password_form=forms.RecoverPasswordForm,
         change_password_form=forms.ChangePasswordForm,
     )

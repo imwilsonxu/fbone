@@ -135,7 +135,7 @@ def logout():
     return redirect(url_for('frontend.index'))
 
 
-@frontend.route('/signup', methods=['GET', 'POST'])
+#@frontend.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated():
         return redirect(url_for('user.index'))

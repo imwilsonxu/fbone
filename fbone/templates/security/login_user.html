@@ -1,6 +1,6 @@
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 {% from "macros/_form.html" import render_form %}
-{% include "security/_messages.html" %}
+{% from "macros/_social.html" import social_login %}
 
 {% set page_title = "Sign in" %}
 
@@ -9,5 +9,14 @@
 
 <h2>Login</h2>
 {{ render_form(url_for_security('login'), login_user_form)}}
+
+{{ social_login('facebook', 'Facebook') }}
+{{ social_login('twitter', 'Twitter') }}
+{{ social_login('google', 'Google') }}
+{{ social_login('foursquare', 'foursquare') }}
+
+{% if security.recoverable %}
+  <li><a href="{{ url_for_security('forgot_password') }}">Forgot password</a><br/></li>
+{% endif %}
+ 
 {% endblock %}
-{% include "security/_menu.html" %}

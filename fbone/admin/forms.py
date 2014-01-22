@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.wtf import Form
-from wtforms import HiddenField, SubmitField, RadioField, DateField, SelectMultipleField, TextField
+from wtforms import HiddenField, SubmitField, RadioField, DateField, SelectMultipleField, TextField, BooleanField
 from wtforms.validators import AnyOf, Required
 
 from ..user import USER_STATUS
@@ -14,6 +14,7 @@ class UserForm(Form):
             choices=[(str(val), label) for val, label in USER_STATUS.items()])
     # A demo of datepicker.
     created_time = DateField(u'Created time')
+    confirmed = BooleanField(u'Confirmed')
     submit = SubmitField(u'Save')
 
 class RoleForm(Form):
