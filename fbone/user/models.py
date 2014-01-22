@@ -2,9 +2,9 @@
 
 from sqlalchemy import Column, types
 from sqlalchemy.ext.mutable import Mutable
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug import generate_password_hash
 from flask.ext.security import ( UserMixin, RoleMixin, login_required )
-from flask.ext.security.utils import ( encrypt_password )
+from flask.ext.security.utils import ( encrypt_password, verify_and_update_password )
 from flask.ext.principal import ( RoleNeed  )
 from flask import current_app
 
@@ -104,6 +104,7 @@ class User(db.Model, UserMixin):
     created_time = Column(db.DateTime, default=get_current_time)
 
     active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
     current_login_at = db.Column(db.DateTime())
     last_login_at = db.Column(db.DateTime())
     current_login_ip = db.Column(db.String(STRING_LEN))
@@ -123,7 +124,8 @@ class User(db.Model, UserMixin):
         return self._password
 
     def _set_password(self, password):
-        self._password = generate_password_hash(password)
+        self._password = encrypt_password(password)
+
     # Hide password encryption by exposing password field only.
     password = db.synonym('_password',
                           descriptor=property(_get_password,
@@ -132,7 +134,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         if self.password is None:
             return False
-        return check_password_hash(self.password, password)
+        return verify_and_update_password(password, self)
 
     # ================================================================
     def is_admin(self):

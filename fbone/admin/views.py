@@ -7,7 +7,7 @@ from ..extensions import db
 from ..decorators import admin_required
 
 from ..user import User, Role
-from .forms import UserForm
+from .forms import UserForm, RoleForm
 
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -18,7 +18,9 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_required
 def index():
     users = User.query.all()
-    return render_template('admin/index.html', users=users, active='index')
+    roles = Role.query.all()
+    return render_template('admin/index.html', users=users, roles=roles,
+                           active='index')
 
 
 @admin.route('/users')
@@ -27,7 +29,6 @@ def index():
 def users():
     users = User.query.all()
     return render_template('admin/users.html', users=users, active='users')
-
 
 @admin.route('/user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -52,3 +53,27 @@ def user(user_id):
         form.role_code_select.data = [r.name for r in user.roles]
 
     return render_template('admin/user.html', user=user, form=form)
+
+@admin.route('/roles')
+@login_required
+@admin_required
+def roles():
+    roles = Role.query.all()
+    return render_template('admin/roles.html', roles=roles, active='roles')
+
+@admin.route('/role/<int:role_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def role(role_id):
+    role = Role.query.filter_by(id=role_id).first_or_404()
+    form = RoleForm(obj=role, next=request.args.get('next'))
+    if form.validate_on_submit():
+        form.populate_obj(role)
+
+        db.session.add(role)
+        db.session.commit()
+
+        flash('Role updated.', 'success')
+
+    return render_template('admin/role.html', role=role, form=form)
+

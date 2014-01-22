@@ -8,7 +8,7 @@ from flask.ext.babel import Babel
 from .config import DefaultConfig
 from .user import User, Role, SocialConnection, user
 from .settings import settings
-from .frontend import frontend
+from .frontend import frontend, forms
 from .api import api
 from .admin import admin
 from .extensions import db, mail, cache, login_manager, oid
@@ -100,7 +100,12 @@ def configure_extensions(app):
 
     security_ds = SQLAlchemyUserDatastore(db, User, Role)
     social_ds = SQLAlchemyConnectionDatastore(db, SocialConnection )
-    app.security = Security(app, security_ds )
+    app.security = Security(app, security_ds,
+        login_form=forms.LoginForm,
+        register_form=forms.SignupForm,
+        forgot_password_form=forms.RecoverPasswordForm,
+        change_password_form=forms.ChangePasswordForm,
+    )
     app.social = Social(app, social_ds)
 
     app.principal = Principal(app)

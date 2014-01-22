@@ -6,7 +6,7 @@ from fbone import create_app
 from fbone.extensions import db
 from fbone.user import User, UserDetail, Role, ACTIVE
 from fbone.utils import MALE
-
+from datetime import datetime
 
 app = create_app()
 manager = Manager(app)
@@ -50,6 +50,7 @@ def initdb():
 	    password=u'123456',
 	    roles=['admin', 'user'],
 	    status_code=ACTIVE,
+	    confirmed_at=datetime.utcnow(),
 	    user_detail=UserDetail(
                 sex_code=MALE,
                 age=10,

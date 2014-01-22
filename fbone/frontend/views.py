@@ -16,7 +16,7 @@ from .forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, Chang
 frontend = Blueprint('frontend', __name__)
 
 
-@frontend.route('/login/openid', methods=['GET', 'POST'])
+#@frontend.route('/login/openid', methods=['GET', 'POST'])
 @oid.loginhandler
 def login_openid():
     if current_user.is_authenticated():
@@ -86,7 +86,7 @@ def search():
     return render_template('frontend/search.html', pagination=pagination, keywords=keywords)
 
 
-@frontend.route('/login', methods=['GET', 'POST'])
+#@frontend.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated():
         return redirect(url_for('user.index'))
@@ -109,7 +109,7 @@ def login():
     return render_template('frontend/login.html', form=form)
 
 
-@frontend.route('/reauth', methods=['GET', 'POST'])
+#@frontend.route('/reauth', methods=['GET', 'POST'])
 @login_required
 def reauth():
     form = ReauthForm(next=request.args.get('next'))
@@ -127,7 +127,7 @@ def reauth():
     return render_template('frontend/reauth.html', form=form)
 
 
-@frontend.route('/logout')
+#@frontend.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -156,7 +156,7 @@ def signup():
     return render_template('frontend/signup.html', form=form)
 
 
-@frontend.route('/change_password', methods=['GET', 'POST'])
+#@frontend.route('/change_password', methods=['GET', 'POST'])
 def change_password():
     user = None
     if current_user.is_authenticated():
@@ -187,7 +187,7 @@ def change_password():
     return render_template("frontend/change_password.html", form=form)
 
 
-@frontend.route('/reset_password', methods=['GET', 'POST'])
+#@frontend.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     form = RecoverPasswordForm()
 

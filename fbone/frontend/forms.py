@@ -12,14 +12,17 @@ from ..user import User
 from ..utils import (PASSWORD_LEN_MIN, PASSWORD_LEN_MAX,
         USERNAME_LEN_MIN, USERNAME_LEN_MAX)
 
+from flask_security import forms
 
-class LoginForm(Form):
-    next = HiddenField()
-    login = TextField(u'Username or email', [Required()])
-    password = PasswordField('Password', [Required(), Length(PASSWORD_LEN_MIN, PASSWORD_LEN_MAX)])
-    remember = BooleanField('Remember me')
-    submit = SubmitField('Sign in')
+class LoginForm(forms.LoginForm):
+    pass
 
+
+class RecoverPasswordForm(forms.ForgotPasswordForm):
+    pass
+
+class ChangePasswordForm(forms.ChangePasswordForm):
+    pass
 
 class SignupForm(Form):
     next = HiddenField()
@@ -40,19 +43,6 @@ class SignupForm(Form):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first() is not None:
             raise ValidationError(u'This email is taken')
-
-
-class RecoverPasswordForm(Form):
-    email = EmailField(u'Your email', [Email()])
-    submit = SubmitField('Send instructions')
-
-
-class ChangePasswordForm(Form):
-    activation_key = HiddenField()
-    password = PasswordField(u'Password', [Required()])
-    password_again = PasswordField(u'Password again', [EqualTo('password', message="Passwords don't match")])
-    submit = SubmitField('Save')
-
 
 class ReauthForm(Form):
     next = HiddenField()

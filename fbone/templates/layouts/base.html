@@ -49,14 +49,14 @@
                             <li><a href="{{ url_for('user.index') }}">{{ current_user.name }}</a></li>
                             {% endif %}
                             <li><a href="{{ url_for('settings.profile') }}">Settings</a></li>
-                            <li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
+                            <li><a href="{{ url_for('security.logout') }}">Log out</a></li>
                         </ul>
                     </div>
                     {% else %}
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
                             <li><span><a class="btn btn-success" href="{{ url_for('frontend.signup') }}"><strong>Sign up</strong></a></span></li>
-                            <li><a href="{{ url_for('frontend.login') }}">Sign in</a></li>
+                            <li><a href="{{ url_for('security.login') }}">Sign in</a></li>
                         </ul>
                     </div>
                     {% endif %}

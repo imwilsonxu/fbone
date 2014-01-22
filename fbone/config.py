@@ -67,6 +67,11 @@ class DefaultConfig(BaseConfig):
     OPENID_FS_STORE_PATH = os.path.join(INSTANCE_FOLDER_PATH, 'openid')
     make_dir(OPENID_FS_STORE_PATH)
 
+    # Flask-Security options
+    SECURITY_CONFIRMABLE = True
+    SECURITY_TRACKABLE = True
+#    SECURITY_PASSWORD_HASH = 'bcrypt'
+#    SECURITY_PASSWORD_SALT = 'add your salt here'
 
 class TestConfig(BaseConfig):
     TESTING = True
