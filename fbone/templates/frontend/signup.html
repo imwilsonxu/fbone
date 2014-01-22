@@ -5,6 +5,6 @@
 {% extends "layouts/base.html" %}
 
 {% block body %}
-<h2>Sign up <small>Already have an account? <a href="{{ url_for('frontend.login') }}">Sign in</a>, please.</small></h2>
-{{ render_form(url_for('frontend.signup'), form) }}
+<h2>Sign up <small>Already have an account? <a href="{{ url_for('security.login') }}">Sign in</a>, please.</small></h2>
+{{ render_form(url_for('security.register'), form) }}
 {% endblock %}

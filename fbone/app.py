@@ -6,13 +6,18 @@ from flask import Flask, request, render_template
 from flask.ext.babel import Babel
 
 from .config import DefaultConfig
-from .user import User, user
+from .user import User, Role, SocialConnection, user
 from .settings import settings
-from .frontend import frontend
+from .frontend import frontend, forms
 from .api import api
 from .admin import admin
 from .extensions import db, mail, cache, login_manager, oid
 from .utils import INSTANCE_FOLDER_PATH
+
+from flask.ext.security import ( Security, SQLAlchemyUserDatastore )
+from flask.ext.social import ( Social )
+from flask.ext.social.datastore import ( SQLAlchemyConnectionDatastore )
+from flask.ext.principal import ( Principal )
 
 
 # For import *
@@ -93,6 +98,21 @@ def configure_extensions(app):
     # flask-openid
     oid.init_app(app)
 
+    security_ds = SQLAlchemyUserDatastore(db, User, Role)
+    social_ds = SQLAlchemyConnectionDatastore(db, SocialConnection )
+    app.security = Security(app, security_ds,
+        login_form=forms.LoginForm,
+        register_form=forms.SignupForm,
+        confirm_register_form=forms.SignupForm,
+#       reset_password_form=ResetPasswordForm,
+#       send_confirmation_form=SendConfirmationForm,
+        forgot_password_form=forms.RecoverPasswordForm,
+        change_password_form=forms.ChangePasswordForm,
+    )
+    app.social = Social(app, social_ds)
+
+    app.principal = Principal(app)
+
 
 def configure_blueprints(app, blueprints):
     """Configure blueprints in views."""
@@ -102,6 +122,8 @@ def configure_blueprints(app, blueprints):
 
 
 def configure_template_filters(app):
+    # add jinja extensions
+    app.jinja_env.add_extension("jinja2.ext.do")
 
     @app.template_filter()
     def pretty_date(value):
@@ -111,6 +133,9 @@ def configure_template_filters(app):
     def format_date(value, format='%Y-%m-%d'):
         return value.strftime(format)
 
+    @app.template_filter()
+    def is_classname(value, clsstr):
+        return (value.__class__.__name__ == clsstr)
 
 def configure_logging(app):
     """Configure file(info) and email(error) logging."""

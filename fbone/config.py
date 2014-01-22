@@ -67,6 +67,39 @@ class DefaultConfig(BaseConfig):
     OPENID_FS_STORE_PATH = os.path.join(INSTANCE_FOLDER_PATH, 'openid')
     make_dir(OPENID_FS_STORE_PATH)
 
+    # Flask-Security options
+    SECURITY_CONFIRMABLE = True
+    SECURITY_REGISTERABLE = True
+    SECURITY_RECOVERABLE = True
+    SECURITY_TRACKABLE = True
+    SECURITY_CHANGEABLE = True
+#    SECURITY_PASSWORD_HASH = 'bcrypt'
+#    SECURITY_PASSWORD_SALT = 'add your salt here'
+
+
+    SOCIAL_TWITTER = {
+        'consumer_key': 'twitter consumer key',
+        'consumer_secret': 'twitter consumer secret'
+    }
+
+    SOCIAL_FACEBOOK = {
+        #'consumer_key': 'facebook app id',
+        'consumer_key': '212817878843088',
+        #'consumer_secret': 'faceboo app secret',
+        'consumer_secret': '43f451ab755274ac8f6efb3be82be7ba',
+    }
+
+    SOCIAL_FOURSQUARE = {
+        'consumer_key': 'client id',
+        'consumer_secret': 'client secret'
+    }
+
+    SOCIAL_GOOGLE = {
+        'consumer_key': 'xxxx',
+        'consumer_secret': 'xxxx'
+    }
+
+
 
 class TestConfig(BaseConfig):
     TESTING = True

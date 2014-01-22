@@ -2,12 +2,16 @@
 
 from sqlalchemy import Column, types
 from sqlalchemy.ext.mutable import Mutable
-from werkzeug import generate_password_hash, check_password_hash
-from flask.ext.login import UserMixin
+from werkzeug import generate_password_hash
+from flask.ext.security import ( UserMixin, RoleMixin, login_required )
+from flask.ext.security.utils import ( encrypt_password, verify_and_update_password )
+from flask.ext.principal import ( RoleNeed  )
+from flask import current_app
 
 from ..extensions import db
 from ..utils import get_current_time, SEX_TYPE, STRING_LEN
-from .constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS
+from ..models import IdTimestampMixin
+from .constants import INACTIVE, USER_STATUS
 
 
 class DenormalizedText(Mutable, types.TypeDecorator):
@@ -44,6 +48,27 @@ class DenormalizedText(Mutable, types.TypeDecorator):
     def copy_value(self, value):
         return set(value)
 
+class SocialConnection(IdTimestampMixin, db.Model):
+    __tablename__ = 'social_connections'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    provider_id = db.Column(db.String(255))
+    provider_user_id = db.Column(db.String(255))
+    access_token = db.Column(db.String(255))
+    secret = db.Column(db.String(255))
+    display_name = db.Column(db.String(255))
+    profile_url = db.Column(db.String(512))
+    image_url = db.Column(db.String(512))
+    rank = db.Column(db.Integer)
+
+# Define models
+roles_users = db.Table('roles_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('roles.id')))
+
+class Role(IdTimestampMixin, db.Model, RoleMixin):
+    __tablename__ = 'roles'
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(STRING_LEN))
 
 class UserDetail(db.Model):
 
@@ -78,6 +103,19 @@ class User(db.Model, UserMixin):
     activation_key = Column(db.String(STRING_LEN))
     created_time = Column(db.DateTime, default=get_current_time)
 
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    current_login_at = db.Column(db.DateTime())
+    last_login_at = db.Column(db.DateTime())
+    current_login_ip = db.Column(db.String(STRING_LEN))
+    last_login_ip = db.Column(db.String(STRING_LEN))
+    login_count = db.Column(db.Integer())
+
+    roles = db.relationship(
+        'Role',
+        secondary=roles_users,
+        backref=db.backref('users', lazy='dynamic')
+    )
     avatar = Column(db.String(STRING_LEN))
 
     _password = Column('password', db.String(STRING_LEN), nullable=False)
@@ -86,7 +124,8 @@ class User(db.Model, UserMixin):
         return self._password
 
     def _set_password(self, password):
-        self._password = generate_password_hash(password)
+        self._password = encrypt_password(password)
+
     # Hide password encryption by exposing password field only.
     password = db.synonym('_password',
                           descriptor=property(_get_password,
@@ -95,17 +134,38 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         if self.password is None:
             return False
-        return check_password_hash(self.password, password)
+        return verify_and_update_password(password, self)
 
     # ================================================================
-    role_code = Column(db.SmallInteger, default=USER, nullable=False)
-
-    @property
-    def role(self):
-        return USER_ROLE[self.role_code]
-
     def is_admin(self):
-        return self.role_code == ADMIN
+        return self.has_role(u'admin')
+
+    def is_staff(self):
+        return self.has_role(u'staff')
+
+    def get_role_names(self):
+        return [ r.name for r in self.roles ]
+
+    def has_role(self, role_name):
+        return ( current_app.security.datastore.find_role(role_name) \
+                 in self.roles )
+
+    def add_role(self, role_name):
+        current_app.security.datastore.add_role_to_user(self, role_name)
+
+    def remove_role(self, role_name):
+        role_names = self.get_role_names()
+        if role_name in role_names:
+            current_app.security.datastore.remove_role_from_user(
+                self, role_name)
+
+    def empty_roles(self):
+        role_names = self.get_role_names()
+        for role_name in role_names:
+            current_app.security.datastore.remove_role_from_user(
+                self, role_name)
+
+
 
     # ================================================================
     # One-to-many relationship between users and user_statuses.

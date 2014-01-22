@@ -13,17 +13,17 @@ from ..user import User
 from ..utils import PASSWORD_LEN_MIN, PASSWORD_LEN_MAX, AGE_MIN, AGE_MAX, DEPOSIT_MIN, DEPOSIT_MAX
 from ..utils import allowed_file, ALLOWED_AVATAR_EXTENSIONS
 from ..utils import SEX_TYPE
-
+from ..forms import FieldDescription
 
 class ProfileForm(Form):
     multipart = True
     next = HiddenField()
-    email = EmailField(u'Email', [Required(), Email()])
+    email = EmailField(u'Email', [Required(), Email()], description=u"Your email address")
     # Don't use the same name as model because we are going to use populate_obj().
     avatar_file = FileField(u"Avatar", [Optional()])
     sex_code = RadioField(u"Sex", [AnyOf([str(val) for val in SEX_TYPE.keys()])], choices=[(str(val), label) for val, label in SEX_TYPE.items()])
     age = IntegerField(u'Age', [Optional(), NumberRange(AGE_MIN, AGE_MAX)])
-    phone = TelField(u'Phone', [Length(max=64)])
+    phone = TelField(u'Phone', [Length(max=64)], description=FieldDescription(u"Required for account verification", placeholder=u"+1 (AREA) XXX-XXXX", title=u"Phone must be SMS capable"))
     url = URLField(u'URL', [Optional(), URL()])
     deposit = DecimalField(u'Deposit', [Optional(), NumberRange(DEPOSIT_MIN, DEPOSIT_MAX)])
     location = TextField(u'Location', [Length(max=64)])

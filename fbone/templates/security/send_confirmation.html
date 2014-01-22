@@ -1,0 +1,12 @@
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% from "macros/_form.html" import render_form %}
+
+{% set page_title = "Resend confirmation" %}
+
+{% extends "layouts/base.html" %}
+{% block body %}
+
+<h2>Resend confirmation instructions</h2>
+{{ render_form(url_for_security('send_confirmation'), send_confirmation_form)}}
+
+{% endblock %}

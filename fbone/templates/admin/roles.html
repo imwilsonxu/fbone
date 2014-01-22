@@ -1,0 +1,23 @@
+{% extends "admin/layout.html" %}
+
+{% block body %}
+<div class="container">
+    <h2>Roles</h2>
+    <table class='table table-bordered table-hover'>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        {% for role in roles %}
+        <tr>
+            <td>{{ role.name }}</td>
+            <td>{{ role.description }}</td>
+            <td><a href="{{ url_for('admin.role', role_id=role.id) }}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
