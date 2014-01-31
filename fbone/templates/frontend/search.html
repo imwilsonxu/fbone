@@ -1,4 +1,4 @@
-{% from 'macros/_misc.html' import render_pagination, render_user_table %}
+{% from 'macros/_misc.html' import render_pagination_search, render_user_table %}
 
 {% extends 'layouts/base.html' %}
 
@@ -12,7 +12,7 @@
     {% if pagination and pagination.pages > 0 %}
         <p>{% trans total=pagination.total, keywords=keywords %}<strong>{{ total }}</strong> found for your search "<strong>{{ keywords }}</strong>".{% endtrans %}</p>
         {{ render_user_table(pagination.items, 'zebra-striped') }}
-        {{ render_pagination(pagination, 'frontend.search') }}
+        {{ render_pagination_search(pagination, 'frontend.search', keywords=keywords) }}
     {% else %}
         <p>{% trans keywords=keywords %}Sorry, Nothing found for your search "<strong>{{ keywords }}</strong>".{% endtrans %}</p>
     {% trans %}

@@ -2,7 +2,6 @@
 <table class='{{ class }}'>
     <thead>
         <tr>
-            <td>#</td>
             <td>Username</td>
             <td>Email</td>
         </tr>
@@ -10,8 +9,7 @@
     <tbody>
         {% for user in users %}
         <tr>
-            <td>{{ loop.index }}</td>
-            <td><a href="{{ url_for('user.profile', name=user.name) }}">{{ user.name }}</a></td>
+            <td><a href="{{ url_for('user.profile', user_id=user.id) }}">{{ user.name }}</a></td>
             <td>{{ user.email }}</td>
         </tr>
         {% endfor %}
@@ -21,6 +19,7 @@
 
 {% macro render_pagination(pagination, endpoint) %}
     {% if pagination.pages > 1 %}
+        
         <div class='pagination'>
             <ul>
                 <li class="prev {% if not pagination.has_prev %}disabled{% endif %}"><a href="{{ url_for(endpoint, page=pagination.page-1) }}">&larr; Previous</a></li>
@@ -36,6 +35,30 @@
                     {% endif %}
                 {% endfor %}
                 <li class="next {% if not pagination.has_next %}disabled{% endif %}"><a href="{{ url_for(endpoint, page=pagination.page+1) }}">Next &rarr;</a></li>
+            </ul>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro render_pagination_search(pagination, endpoint) %}
+    {% if pagination.pages > 1 %}
+        
+        <div class='pagination'>
+            <ul>
+                <li class="prev {% if not pagination.has_prev %}disabled{% endif %}"><a href="{{ url_for(endpoint, keywords=kwargs.keywords, page=pagination.page-1) }}">&larr; Previous</a></li>
+                {% for page in pagination.iter_pages() %}
+                    {% if page %}
+                        <li class='{% if page == pagination.page %}active{% endif %}'>
+                            <a href='{{ url_for(endpoint, keywords=kwargs.keywords, page=page) }}'>{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href='#'>...</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <li class="next {% if not pagination.has_next %}disabled{% endif %}"><a href="{{ url_for(endpoint, keywords=kwargs.keywords ,page=pagination.page+1) }}">Next &rarr;</a></li>
             </ul>
         </div>
     {% endif %}
