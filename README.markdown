@@ -52,11 +52,12 @@ Clone.
 
 virtualenv.
 
-    fab setup
+    cd fbone
+    [sudo] fab setup
 
 Debug.
 
-    fab d
+    [sudo] fab d
 
 Open `http://127.0.0.1:5000`, done!
 
