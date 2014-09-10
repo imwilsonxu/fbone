@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import multiprocessing
 from setuptools import setup
 
 project = "fbone"
