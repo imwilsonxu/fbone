@@ -7,7 +7,7 @@ You can use it for
 - learning Flask.
 - kicking off your new project faster.
 
-![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
+![Flask bone homepage screenshot](screenshots/flask-bone-homepage-screenshot.png)
 
 ## FEATURES
 
