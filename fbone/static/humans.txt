@@ -1,16 +1,16 @@
-/* the humans responsible & colophon */
-/* humanstxt.org */
+# humanstxt.org/
+# The humans responsible & technology colophon
 
+# TEAM
 
-/* TEAM */
-  Programmer: Wilson Xu
-  Site: http://imwilsonxu.net
-  Twitter: @imwilsonxu
+    Wilson -- Dev -- @imwilsonxu
 
-/* THANKS */
-  Names (& URL):
+# THANKS
 
-/* SITE */
-  Standards: HTML5, CSS3
-  Components: Flask, jQuery
-  Software:
+    <name>
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    Normalize.css, jQuery, Modernizr
+    Python, Flask

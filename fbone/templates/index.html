@@ -2,44 +2,13 @@
 
 {% set page_title = 'Home' %}
 
-{% block container %}
-<div class="container">
-    <div class="hero-unit">
-        <h1>Flask Bone</h1>
-        <p>Fbone (Flask bone) is a Flask template/bootstrap/boilerplate application.</p>
-        <p><a href="{{ url_for('frontend.signup')}}" class="btn btn-success btn-large"><strong>Sign up »</strong></a></p>
-    </div>
-    <div class="row">
-        <div class="span4">
-            <h2>Front End</h2>
-            <ul>
-                <li>jQuery</li>
-                <li>Bootstrap</li>
-                <li>HTML5 Boilerplate</li>
-            </ul>
-        </div>
-        <div class="span4">
-            <h2>Flask</h2>
-            <ul>
-                <li>Flask</li>
-                <li>Flask-SQLAlchemy</li>
-                <li>Flask-WTF</li>
-                <li>Flask-Script</li>
-                <li>Flask-Babel</li>
-                <li>Flask-Testing</li>
-                <li>Flask-Mail</li>
-                <li>Flask-Cache</li>
-                <li>Flask-Login</li>
-                <li>aFlask-OpenID</li>
-            </ul>
-        </div>
-        <div class="span4">
-            <h2>Others</h2>
-            <ul>
-                <li>nose</li>
-                <li>MySQL / SQLite</li>
-            </ul>
-        </div>
-    </div>
+{% block top %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+    <h1>Flask Bone</h1>
+    <p>Fbone (Flask bone) is a Flask template/bootstrap/boilerplate application.</p>
+    <p><a role="button" href="{{ url_for('frontend.signup')}}" class="btn btn-lg btn-primary"><strong>Sign up »</strong></a></p>
 </div>
 {% endblock %}
