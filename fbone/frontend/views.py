@@ -80,7 +80,7 @@ def search():
     pagination = None
     if keywords:
         page = int(request.args.get('page', 1))
-        pagination = User.search(keywords).paginate(page, 1)
+        pagination = User.search(keywords).paginate(page, 20)
     else:
         flash(_('Please input keyword(s)'), 'error')
     return render_template('frontend/search.html', pagination=pagination, keywords=keywords)
