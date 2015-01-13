@@ -52,7 +52,7 @@ Clone.
 
 virtualenv.
 
-    fab setup
+    pip install -r requirements.txt fab setup
 
 Debug.
 
