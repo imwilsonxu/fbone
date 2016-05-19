@@ -54,7 +54,7 @@
                         <li><a href='http://imwilsonxu.com'>Blog</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                    {% if current_user.is_authenticated() %}
+                    {% if current_user.is_authenticated %}
                         {% if current_user.is_admin() %}
                         <li><a href="{{ url_for('admin.index') }}">{{ current_user.name }}</a></li>
                         {% else %}

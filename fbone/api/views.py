@@ -11,7 +11,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 
 @api.route('/login', methods=['POST'])
 def login():
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return jsonify(flag='success')
 
     username = request.form.get('username')
@@ -28,6 +28,6 @@ def login():
 
 @api.route('/logout')
 def logout():
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         logout_user()
     return jsonify(flag='success', msg='Logouted.')
