@@ -3,8 +3,7 @@
 {% extends 'settings/layout.html' %}
 
 {% block body %}
-<div class="settings_wrapper">
-    <h3>Public Profile</h3>
+<div style="width:300px;margin-top:40px;">
     {{ render_form(url_for('settings.profile'), form) }}
 </div>
 {% endblock %}

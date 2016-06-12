@@ -15,7 +15,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'Flask',
+        'Flask>=0.10.1',
         'Flask-SQLAlchemy',
         'Flask-WTF',
         'Flask-Script',
@@ -34,6 +34,7 @@ setup(
         'foursquare',
         'oauth2client',
         'google-api-python-client',
+        'fabric',
     ],
     test_suite='tests',
     classifiers=[

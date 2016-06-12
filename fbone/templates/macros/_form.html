@@ -1,76 +1,82 @@
 {% macro render_checkbox(field) %}
-<div class="control-group{% if field.errors %} error{% endif %}">
-    <div class="controls">
-        <label for="{{ field.id }}" class="checkbox inline">
-            {{ field }}{{ field.label.text }}
-        </label>
-        <span class="help-inline">{{ field.description }}</span>
-        {% if field.errors -%}
-            {% for error in field.errors -%}
-            <span class="help-block error">{{ error|e }}</span>
-            {%- endfor %}
-        {%- endif %}
-    </div>
+<div class="checkbox{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id }}">
+        {{ field }}{{ field.label.text }}
+    </label>
+    <span class="help-inline">{{ field.description }}</span>
+    {% if field.errors -%}
+    <ul class="help-block">
+        {% for error in field.errors -%}
+        <li>{{ error|e }}</li>
+        {%- endfor %}
+    </ul>
+    {%- endif %}
 </div>
 {% endmacro%}
 
 {% macro render_radio(field) %}
-<div class="control-group{% if field.errors %} error{% endif %}">
+<div class="form-group{% if field.errors %} has-error{% endif %}">
     {{ field.label(class_="control-label") }}
-    <div class="controls">
+    <div class="">
         {% for subfield in field -%}
-        <label for="{{ subfield.id }}" class="radio inline">
+        <label for="{{ subfield.id }}" class="radio-inline">
             {{ subfield }} {{ subfield.label.text }}
         </label>
         {%- endfor %}
         <span class="help-inline">{{ field.description }}</span>
         {% if field.errors -%}
+        <ul class="help-block">
             {% for error in field.errors -%}
-            <span class="help-block error">{{ error }}</span>
+            <li>{{ error }}</li>
             {%- endfor %}
+        </ul>
         {%- endif %}
     </div>
 </div>
 {% endmacro %}
 
 {% macro render_datepicker(field) %}
-<div class="control-group{% if field.errors %} error{% endif %}">
+<div class="form-group{% if field.errors %} has-error{% endif %}">
     <label class="control-label" 
         for="{{ field.id }}">
         {{ field.label }}
     </label>
-    <div class="controls">
+    <div class="">
         {{ field() }}
         <span class="help-inline">{{ field.description }}</span>
         {% if field.errors -%}
+        <ul class="help-block">
             {% for error in field.errors -%}
-            <span class="help-block error">{{ error }}</span>
+            <li>{{ error }}</li>
             {%- endfor %}
+        </ul>
         {%- endif %}
     </div>
 </div>
 {% endmacro %}
 
 {% macro render_textarea(field) %}
-<div class="control-group{% if field.errors %} error{% endif %}">
+<div class="form-group{% if field.errors %} has-error{% endif %}">
     <label class="control-label" 
         for="{{ field.id }}">
         {{ field.label }}
     </label>
-    <div class="controls">
-        {{ field(class="span6", rows="5") }}
+    <div class="">
+        {{ field(class_="form-control", rows="4") }}
         <span class="help-inline">{{ field.description }}</span>
         {% if field.errors -%}
+        <ul class="help-block">
             {% for error in field.errors -%}
-            <span class="help-block error">{{ error }}</span>
+            <li>{{ error }}</li>
             {%- endfor %}
+        </ul>
         {%- endif %}
     </div>
 </div>
 {% endmacro %}
 
-{% macro render_input(field) %}
-<div class="control-group{% if field.errors %} error{% endif %}">
+{% macro render_file(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
     <label class="control-label" 
         for="{{ field.id }}">
         {{ field.label }}
@@ -85,16 +91,38 @@
         {{ field(**attrs) }}
         <span class="help-inline">{{ field.description }}</span>
         {% if field.errors -%}
+        <ul class="help-block">
+            {% for error in field.errors -%}
+            <li>{{ error }}</li>
+            {%- endfor %}
+        </ul>
+        {%- endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_input(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    <label class="control-label" 
+        for="{{ field.id }}">
+        {{ field.label }}
+    </label>
+    <div class="">
+        {{ field(class_="form-control") }}
+        <span class="help-inline">{{ field.description }}</span>
+        {% if field.errors -%}
+        <ul class="help-block">
             {% for error in field.errors -%}
             <span class="help-block error">{{ error }}</span>
             {%- endfor %}
+        </ul>
         {%- endif %}
     </div>
 </div>
 {% endmacro %}
 
 {% macro render_action(field) %}
-<div class="control-group">
+<div class="form-group">
     <div class="form-actions">
         {{ field(class_="btn btn-primary") }}
     </div>
@@ -107,7 +135,6 @@
     {% if confirm_msg %}onsubmit='return confirm("{{ confirm_msg }}");' {% endif %} 
     {% if form.multipart %}enctype="multipart/form-data"{% endif %} >
     {{ form.hidden_tag() }}
-    <fieldset>
         {% if legend %}
         <legend>{{ legend|safe }}</legend>
         {% endif %}
@@ -122,6 +149,8 @@
                     {{ render_textarea(field) }}
                 {% elif field.type == "DateField" %}
                     {{ render_datepicker(field) }}
+                {% elif field.type == "FileField" %}
+                    {{ render_file(field) }}
                 {% elif field.type == "TextField" %}
                     {% if focus %}
                         {{ render_input(field) }}
@@ -134,6 +163,7 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
+<<<<<<< HEAD
         {% for field in form %}
             {% if field.type == "SubmitField"  %}
                 {% if field.type == "SubmitField" %}
@@ -143,5 +173,7 @@
         {% endfor %}
  
     </fieldset>
+=======
+>>>>>>> upstream/master
 </form>
 {% endmacro %}

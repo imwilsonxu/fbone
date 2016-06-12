@@ -5,7 +5,7 @@ Fbone (Flask bone) is a [Flask](http://flask.pocoo.org) (Python microframework) 
 You can use it for
 
 - learning Flask.
-- kicking off your new project faster.
+- kicking off your new project.
 
 ![Flask bone homepage screenshot](http://github.com/imwilsonxu/fbone/raw/master/screenshots/flask-bone-homepage-screenshot.png)
 
@@ -15,7 +15,7 @@ You can use it for
 
 - [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate).
 - [jQuery](http://jquery.com/). 
-- [bootstrap](https://github.com/twitter/bootstrap).
+- [Twitter Bootstrap](https://github.com/twitter/bootstrap).
 
 ### Flask Extensions
 
