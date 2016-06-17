@@ -1,12 +1,29 @@
 {% from "macros/_form.html" import render_form %}
+{% from "macros/_misc.html" import render_signup_nav with context %}
 
-{% set page_title = "Sign in" %}
+{% set page_title = 'Sign in' %}
 
 {% extends "layouts/base.html" %}
 
+{% block topbar %}
+{% endblock %}
+
 {% block body %}
-<h2>Sign in <small>Or with <a href="{{ url_for('frontend.login_openid') }}">OpenID</a>. Don't have an account? <a href="{{ url_for('frontend.signup') }}">Sign up</a>, please.</small></h2>
-<div style="width:300px;margin-top:40px;">
-    {{ render_form(url_for('frontend.login'), form)}}
+<div class='row vertical-center'>
+	<div class="col-md-4 col-md-offset-4">
+
+        {{ render_signup_nav() }}
+
+        <div class="panel panel-default panel-borderless">
+            <div class="panel-body">
+                {{ render_form(url_for('frontend.login'), form) }}
+
+                <p class="text-muted">
+                    Don't have an account? <a href="{{ url_for('frontend.signup') }}">Sign up</a>, please.
+                </p>
+            </div>
+        </div>
+        
+    </div>
 </div>
 {% endblock %}

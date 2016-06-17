@@ -1,7 +1,30 @@
-{% set page_title = user.name %}
+{% from "macros/_form.html" import render_input, render_textarea,
+    render_file, render_select, render_datepicker, render_action %}
 
-{% extends "layouts/base.html" %}
+{% extends 'layouts/user.html' %}
 
-{% block body %}
-<h2>Profile<small> / {{ user.name }}</small></h2>
+{% set page_title = 'Profile' %}
+
+{% block panel_right %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Profile</b>
+    </div>
+    <div class="panel-body row">
+        <div class="col-md-6">
+            <form class="form" action="{{ url_for('user.profile') }}" method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ render_input(form.email) }}
+                {{ render_input(form.phone) }}
+                {{ render_input(form.url) }}
+                {{ render_input(form.location) }}
+                {{ render_textarea(form.bio) }}
+                {{ render_action(form.submit) }}
+            </form>
+        </div>
+    </div>
+    <div class="panel-footer">
+        Created at {{ user.create_at }} Update at {{ user.update_at }}
+    </div>
+</div>
 {% endblock %}

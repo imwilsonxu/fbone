@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, types
+from sqlalchemy import Column, types, desc, func
+from sqlalchemy.orm import backref
 from sqlalchemy.ext.mutable import Mutable
 from werkzeug import generate_password_hash, check_password_hash
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 
 from ..extensions import db
-from ..utils import get_current_time, SEX_TYPE, STRING_LEN
-from .constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS
+from ..utils import get_current_time
+from ..constants import (USER, USER_ROLE, ADMIN, INACTIVE,
+                        USER_STATUS, SEX_TYPES, STRING_LEN)
 
 
 class DenormalizedText(Mutable, types.TypeDecorator):
@@ -45,28 +47,6 @@ class DenormalizedText(Mutable, types.TypeDecorator):
         return set(value)
 
 
-class UserDetail(db.Model):
-
-    __tablename__ = 'user_details'
-
-    id = Column(db.Integer, primary_key=True)
-
-    age = Column(db.Integer)
-    phone = Column(db.String(STRING_LEN))
-    url = Column(db.String(STRING_LEN))
-    deposit = Column(db.Numeric)
-    location = Column(db.String(STRING_LEN))
-    bio = Column(db.String(STRING_LEN))
-
-    sex_code = db.Column(db.Integer)
-
-    @property
-    def sex(self):
-        return SEX_TYPE.get(self.sex_code)
-
-    created_time = Column(db.DateTime, default=get_current_time)
-
-
 class User(db.Model, UserMixin):
 
     __tablename__ = 'users'
@@ -74,13 +54,22 @@ class User(db.Model, UserMixin):
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String(STRING_LEN), nullable=False, unique=True)
     email = Column(db.String(STRING_LEN), nullable=False, unique=True)
-    openid = Column(db.String(STRING_LEN), unique=True)
+    phone = Column(db.String(STRING_LEN), nullable=False, default="")
+    sex_code = db.Column(db.Integer, nullable=False, default=1)
+    @property
+    def sex(self):
+        return SEX_TYPES.get(self.sex_code)
+    url = Column(db.String(STRING_LEN), nullable=False, default="")
+    deposit = Column(db.Numeric, nullable=False, default=0.0)
+    location = Column(db.String(STRING_LEN), nullable=False, default="")
+    bio = Column(db.Text, default="")
     activation_key = Column(db.String(STRING_LEN))
-    created_time = Column(db.DateTime, default=get_current_time)
+    create_at = Column(db.DateTime, nullable=False, default=get_current_time)
+    update_at = Column(db.DateTime)
 
     avatar = Column(db.String(STRING_LEN))
 
-    _password = Column('password', db.String(STRING_LEN), nullable=False)
+    _password = Column('password', db.String(200), nullable=False)
 
     def _get_password(self):
         return self._password
@@ -109,7 +98,7 @@ class User(db.Model, UserMixin):
 
     # ================================================================
     # One-to-many relationship between users and user_statuses.
-    status_code = Column(db.SmallInteger, default=INACTIVE)
+    status_code = Column(db.SmallInteger, nullable=False, default=INACTIVE)
 
     @property
     def status(self):
@@ -117,8 +106,8 @@ class User(db.Model, UserMixin):
 
     # ================================================================
     # One-to-one (uselist=False) relationship between users and user_details.
-    user_detail_id = Column(db.Integer, db.ForeignKey("user_details.id"))
-    user_detail = db.relationship("UserDetail", uselist=False, backref="user")
+    # user_detail_id = Column(db.Integer, db.ForeignKey("user_details.id"))
+    # user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
     # ================================================================
     # Follow / Following
@@ -184,3 +173,20 @@ class User(db.Model, UserMixin):
 
     def check_name(self, name):
         return User.query.filter(db.and_(User.name == name, User.email != self.id)).count() == 0
+
+
+class Work(db.Model):
+
+    __tablename__ = 'works'
+
+    id = Column(db.Integer, primary_key=True)
+
+    from_when = Column(db.DateTime, nullable=False)
+    to_when = Column(db.DateTime, nullable=False, default=get_current_time)
+    company = Column(db.String(50), nullable=False, default="")
+    job_type = Column(db.SmallInteger, nullable=False, default=0)
+    job_title = Column(db.SmallInteger, nullable=False, default=0)
+    description = Column(db.String(1000), nullable=False, default="")
+
+    user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', foreign_keys=[user_id], backref=backref('works', order_by=desc('works.from_when')))

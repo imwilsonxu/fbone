@@ -1,17 +1,28 @@
 # CHANGELOG
 
-Here you can see the full list of changes between each release.
+History is a mirror.
 
 ## Version 0.0.12.25 (Merry X'mas!)
 
-Re-organize blueprints,  models and Templates.
-Remove Flask-admin, implement a simple admin interface.
-Clean codes according to pep8.
+* Re-organize blueprints,  models and Templates.
+* Remove Flask-admin, implement a simple admin interface.
+* Clean codes according to pep8.
 
 ## Version 0.1
 
-First public preview release.
+* First public preview release.
 
 ## Version 0.1.1
 
 Support Flask v0.10.1, HTML5 Boilerplate v4.3.0, Twitter Bootstrap v3.3.1, jQuery v1.11.1.
+
+## Version 0.2
+
+* Upgrade to [Flask v0.11](https://www.palletsprojects.com/blog/flask-011-released/).
+* Upgrade to Bootstrap3.3.6, jQuery 2.2.4, etc.
+* Rewrite unittests.
+* Use [Cloudfare CDN](https://cdnjs.cloudflare.com).
+* Use [Flask-Restful](http://flask-restful-cn.readthedocs.io) to build APIs.
+* Deprecate setup.py, use requirments.txt instead.
+* Deprecate Flask-Script, use Flask cli instead.
+* Deprecate Flask-Babel.

@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import os
+import os, click
 
-from flask import Flask, request, render_template
-from flask.ext.babel import Babel
+from flask import Flask, render_template
 
 from .config import DefaultConfig
 from .user import User, user
-from .settings import settings
 from .frontend import frontend
 from .api import api
-from .admin import admin
-from .extensions import db, mail, cache, login_manager, oid
+from .extensions import db, login_manager
+from .filters import format_date, pretty_date
 from .utils import INSTANCE_FOLDER_PATH
 
 
@@ -21,11 +19,8 @@ __all__ = ['create_app']
 DEFAULT_BLUEPRINTS = (
     frontend,
     user,
-    settings,
     api,
-    admin,
 )
-
 
 def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
@@ -43,6 +38,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     configure_logging(app)
     configure_template_filters(app)
     configure_error_handlers(app)
+    configure_cli(app)
 
     return app
 
@@ -67,20 +63,6 @@ def configure_extensions(app):
     # flask-sqlalchemy
     db.init_app(app)
 
-    # flask-mail
-    mail.init_app(app)
-
-    # flask-cache
-    cache.init_app(app)
-
-    # flask-babel
-    babel = Babel(app)
-
-    @babel.localeselector
-    def get_locale():
-        accept_languages = app.config.get('ACCEPT_LANGUAGES')
-        return request.accept_languages.best_match(accept_languages)
-
     # flask-login
     login_manager.login_view = 'frontend.login'
     login_manager.refresh_view = 'frontend.reauth'
@@ -89,9 +71,6 @@ def configure_extensions(app):
     def load_user(id):
         return User.query.get(id)
     login_manager.setup_app(app)
-
-    # flask-openid
-    oid.init_app(app)
 
 
 def configure_blueprints(app, blueprints):
@@ -102,14 +81,8 @@ def configure_blueprints(app, blueprints):
 
 
 def configure_template_filters(app):
-
-    @app.template_filter()
-    def pretty_date(value):
-        return pretty_date(value)
-
-    @app.template_filter()
-    def format_date(value, format='%Y-%m-%d'):
-        return value.strftime(format)
+    app.jinja_env.filters["pretty_date"] = pretty_date
+    app.jinja_env.filters["format_date"] = format_date
 
 
 def configure_logging(app):
@@ -155,21 +128,23 @@ def configure_logging(app):
 
 
 def configure_hook(app):
+
     @app.before_request
     def before_request():
         pass
 
 
+# http://flask.pocoo.org/docs/latest/errorhandling/
 def configure_error_handlers(app):
-
-    @app.errorhandler(403)
-    def forbidden_page(error):
-        return render_template("errors/forbidden_page.html"), 403
 
     @app.errorhandler(404)
     def page_not_found(error):
-        return render_template("errors/page_not_found.html"), 404
+        return render_template("errors/404.html"), 404
 
-    @app.errorhandler(500)
-    def server_error_page(error):
-        return render_template("errors/server_error.html"), 500
+
+def configure_cli(app):
+
+    @app.cli.command()
+    def initdb():
+        db.drop_all()
+        db.create_all()

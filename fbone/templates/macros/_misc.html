@@ -40,3 +40,14 @@
         </div>
     {% endif %}
 {% endmacro %}
+
+{% macro render_signup_nav() %}
+<ul class="nav nav-tabs">
+    <li role="presentation" class="{% if request.endpoint == 'frontend.login' %}active{% endif %}">
+        <a href="{{ url_for('frontend.login') }}">Log in</a>
+    </li>
+    <li role="presentation" class="{% if request.endpoint == 'frontend.signup' %}active{% endif %}">
+        <a href="{{ url_for('frontend.signup') }}">Sign up</a>
+    </li>
+</ul>
+{% endmacro %}
