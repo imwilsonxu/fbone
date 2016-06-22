@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .views import api
+from views import api

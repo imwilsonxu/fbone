@@ -2,13 +2,15 @@
 
 from uuid import uuid4
 
-from flask import (Blueprint, render_template, current_app, request,
-                   flash, url_for, redirect, session, abort)
-from flask_login import login_required, login_user, current_user, logout_user, confirm_login, login_fresh
+from flask import Blueprint, render_template, current_app, request, flash, \
+    url_for, redirect, session, abort
+from flask_login import login_required, login_user, current_user, logout_user, \
+    confirm_login, login_fresh
 
-from ..user import User
-from ..extensions import db, login_manager
-from .forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, ChangePasswordForm
+from fbone.user import User
+from fbone.extensions import db, login_manager
+from forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, \
+    ChangePasswordForm
 
 
 frontend = Blueprint('frontend', __name__)
@@ -18,10 +20,7 @@ frontend = Blueprint('frontend', __name__)
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
-
-    page = int(request.args.get('page', 1))
-    pagination = User.query.paginate(page=page, per_page=10)
-    return render_template('index.html', pagination=pagination)
+    return render_template('index.html')
 
 
 @frontend.route('/login', methods=['GET', 'POST'])
@@ -57,10 +56,10 @@ def reauth():
                                     form.password.data)
         if user and authenticated:
             confirm_login()
-            flash(_('Reauthenticated.'), 'success')
+            flash('Reauthenticated.', 'success')
             return redirect('/change_password')
 
-        flash(_('Password is wrong.'), 'danger')
+        flash('Password is wrong.', 'danger')
     return render_template('frontend/reauth.html', form=form)
 
 
@@ -117,8 +116,7 @@ def change_password():
         db.session.add(user)
         db.session.commit()
 
-        flash(_("Your password has been changed, please log in again"),
-              "success")
+        flash("Your password has been changed, please log in again", "success")
         return redirect(url_for("frontend.login"))
 
     return render_template("frontend/change_password.html", form=form)

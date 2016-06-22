@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, types, desc, func
+from sqlalchemy import Column, desc
 from sqlalchemy.orm import backref
-from sqlalchemy.ext.mutable import Mutable
-from werkzeug import generate_password_hash, check_password_hash
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from flask_login import UserMixin
 
-from ..extensions import db
-from ..utils import get_current_time
-from ..constants import (USER, USER_ROLE, ADMIN, INACTIVE,
-                        USER_STATUS, SEX_TYPES, STRING_LEN)
+from fbone.extensions import db
+from fbone.utils import get_current_time
+from fbone.constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS, \
+    SEX_TYPES, STRING_LEN
 
 
 class User(db.Model, UserMixin):
@@ -20,10 +21,6 @@ class User(db.Model, UserMixin):
     name = Column(db.String(STRING_LEN), nullable=False, unique=True)
     email = Column(db.String(STRING_LEN), nullable=False, unique=True)
     phone = Column(db.String(STRING_LEN), nullable=False, default="")
-    sex_code = db.Column(db.Integer, nullable=False, default=1)
-    @property
-    def sex(self):
-        return SEX_TYPES.get(self.sex_code)
     url = Column(db.String(STRING_LEN), nullable=False, default="")
     deposit = Column(db.Numeric, nullable=False, default=0.0)
     location = Column(db.String(STRING_LEN), nullable=False, default="")
@@ -41,6 +38,7 @@ class User(db.Model, UserMixin):
 
     def _set_password(self, password):
         self._password = generate_password_hash(password)
+
     # Hide password encryption by exposing password field only.
     password = db.synonym('_password',
                           descriptor=property(_get_password,
@@ -50,6 +48,16 @@ class User(db.Model, UserMixin):
         if self.password is None:
             return False
         return check_password_hash(self.password, password)
+
+    _sex = Column('sex', db.Integer, nullable=False, default=1)
+
+    def _get_sex(self):
+        return SEX_TYPES.get(self.sex)
+
+    def _set_sex(self, sex):
+        self._sex = sex
+
+    sex = db.synonym('_sex', descriptor=property(_get_sex, _set_sex))
 
     # ================================================================
     role_code = Column(db.SmallInteger, default=USER, nullable=False)
@@ -74,7 +82,8 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def authenticate(cls, login, password):
-        user = cls.query.filter(db.or_(User.name == login, User.email == login)).first()
+        user = cls.query.filter(db.or_(
+            User.name == login, User.email == login)).first()
 
         if user:
             authenticated = user.check_password(password)
@@ -100,21 +109,5 @@ class User(db.Model, UserMixin):
         return cls.query.filter_by(id=user_id).first_or_404()
 
     def check_name(self, name):
-        return User.query.filter(db.and_(User.name == name, User.email != self.id)).count() == 0
-
-
-class Work(db.Model):
-
-    __tablename__ = 'works'
-
-    id = Column(db.Integer, primary_key=True)
-
-    from_when = Column(db.DateTime, nullable=False)
-    to_when = Column(db.DateTime, nullable=False, default=get_current_time)
-    company = Column(db.String(50), nullable=False, default="")
-    job_type = Column(db.SmallInteger, nullable=False, default=0)
-    job_title = Column(db.SmallInteger, nullable=False, default=0)
-    description = Column(db.String(1000), nullable=False, default="")
-
-    user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', foreign_keys=[user_id], backref=backref('works', order_by=desc('works.from_when')))
+        return User.query.filter(db.and_(
+            User.name == name, User.email != self.id)).count() == 0

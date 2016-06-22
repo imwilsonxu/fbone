@@ -36,6 +36,12 @@ class DefaultConfig(BaseConfig):
 
     SENTRY_DSN = ""
 
+    MAIL_HOST = ""
+    FROM_ADDR = ""
+    TO_ADDRS = [""]
+    MAIL_USERNAME = ""
+    MAIL_PASSWORD = ""
+
     # Flask-Sqlalchemy: http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = False
     # QLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be
@@ -49,6 +55,7 @@ class DefaultConfig(BaseConfig):
 
 class TestConfig(BaseConfig):
     TESTING = True
+    CSRF_ENABLED = False
     WTF_CSRF_ENABLED = False
 
     SQLALCHEMY_ECHO = False

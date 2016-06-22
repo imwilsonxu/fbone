@@ -2,6 +2,7 @@
 
 import os
 from collections import OrderedDict
+from flask import Markup
 
 ADMIN = 0
 STAFF = 1
@@ -32,36 +33,28 @@ SEX_TYPES = {
 }
 SEX_TYPES = OrderedDict(sorted(SEX_TYPES.items()))
 
-JOB_TITLES = {
-    1: "CEO",
-    2: "CTO",
-    3: "COO",
-    99: "Other",
-}
-JOB_TITLES = OrderedDict(sorted(JOB_TITLES.items()))
-
-JOB_TYPES = {
-    1: "Full-time",
-    2: "Part-time",
-    3: "Internship",
-    99: "Other",
-}
-JOB_TYPES = OrderedDict(sorted(JOB_TYPES.items()))
-
 INSTANCE_FOLDER_PATH = os.path.join('/tmp', 'instance')
 
 ALLOWED_AVATAR_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 USERNAME_LEN_MIN = 4
 USERNAME_LEN_MAX = 25
+USERNAME_TIP = "Don't worry. you can change it later."
 
 REALNAME_LEN_MIN = 4
 REALNAME_LEN_MAX = 25
 
 PASSWORD_LEN_MIN = 6
 PASSWORD_LEN_MAX = 16
+PASSWORD_TIP = '%s characters or more! Be tricky.' % PASSWORD_LEN_MIN
 
-AGE_MIN = 1
-AGE_MAX = 300
+AGREE_TIP = Markup(
+    'Agree to the <a target="blank" href="/terms">Terms of Service</a>')
 
-STRING_LEN = 200
+EMAIL_LEN_MIN = 2
+EMAIL_LEN_MAX = 50
+EMAIL_TIP = "What's your email address?"
+
+BIO_TIP = "Tell us about yourself"
+
+STRING_LEN = 225

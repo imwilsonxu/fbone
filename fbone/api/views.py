@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, current_app, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_login import login_user, current_user, logout_user
-from flask_restful import Api, Resource, url_for
+from flask_restful import Api, Resource
 
 from ..user import User
 

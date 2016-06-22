@@ -12,22 +12,15 @@ from fbone.extensions import db
 class BaseTestCase(TestCase):
 
     def create_app(self):
-
         app = create_app(TestConfig)
         return app
 
     def init_data(self):
-
         demo = User(
                 name=u'demo',
                 email=u'demo@example.com',
                 password=u'123456')
         db.session.add(demo)
-        admin = User(
-                name=u'admin',
-                email=u'admin@example.com',
-                password=u'123456')
-        db.session.add(admin)
         db.session.commit()
 
     def setUp(self):
@@ -80,13 +73,18 @@ class TestFrontend(BaseTestCase):
         response = self.client.post('/signup', data=data, follow_redirects=True)
         assert "Signed up" in response.data
         new_user = User.query.filter_by(email=data['email']).first()
-        assert new_user is not None
+        assert new_user.name == "new_user"
 
     def test_login(self):
         self._test_get_request('/login', 'frontend/login.html')
 
+        response = self.client.post('/login', data={
+            'login': "demo@example.com",
+            'password': "123456"}, follow_redirects=True)
+        assert "Logged in" in response.data
+
     def test_logout(self):
-        self.login('demo', '123456')
+        self.login("demo@example.com", "123456")
         self._logout()
 
 
