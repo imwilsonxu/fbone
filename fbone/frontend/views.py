@@ -8,7 +8,7 @@ from flask_login import login_required, login_user, current_user, logout_user, c
 
 from ..user import User
 from ..extensions import db, login_manager
-from .forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, ChangePasswordForm, CreateProfileForm
+from .forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, ChangePasswordForm
 
 
 frontend = Blueprint('frontend', __name__)
@@ -16,8 +16,6 @@ frontend = Blueprint('frontend', __name__)
 
 @frontend.route('/')
 def index():
-    current_app.logger.debug('debug')
-
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
 
@@ -59,7 +57,6 @@ def reauth():
                                     form.password.data)
         if user and authenticated:
             confirm_login()
-            current_app.logger.debug('reauth: %s' % session['_fresh'])
             flash(_('Reauthenticated.'), 'success')
             return redirect('/change_password')
 

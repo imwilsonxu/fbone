@@ -63,6 +63,10 @@ def configure_extensions(app):
     # flask-sqlalchemy
     db.init_app(app)
 
+    # Sentry
+    if app.config['SENTRY_DSN']:
+        sentry.init(app, dsn=app.config['SENTRY_DSN'])
+
     # flask-login
     login_manager.login_view = 'frontend.login'
     login_manager.refresh_view = 'frontend.reauth'

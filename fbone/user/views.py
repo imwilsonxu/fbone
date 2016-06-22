@@ -36,8 +36,6 @@ def profile():
         db.session.commit()
 
         flash('Public profile updated.', 'success')
-    else:
-        current_app.logger.debug(form.errors)
 
     return render_template('user/profile.html', user=user,
             active="profile", form=form)

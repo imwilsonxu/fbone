@@ -31,7 +31,6 @@ def login():
             if login_user(user, remember='y'):
                 return jsonify(flag='success')
 
-    current_app.logger.debug('login(api) failed, username: %s.' % username)
     return jsonify(flag='fail', msg='Sorry, try again.')
 
 

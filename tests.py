@@ -79,7 +79,7 @@ class TestFrontend(BaseTestCase):
         }
         response = self.client.post('/signup', data=data, follow_redirects=True)
         assert "Signed up" in response.data
-        new_user = User.query.filter_by(name=data['name']).first()
+        new_user = User.query.filter_by(email=data['email']).first()
         assert new_user is not None
 
     def test_login(self):

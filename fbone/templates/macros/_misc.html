@@ -1,24 +1,3 @@
-{% macro render_user_table(users, class='') %}
-<table class='{{ class }}'>
-    <thead>
-        <tr>
-            <td>#</td>
-            <td>Username</td>
-            <td>Email</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td><a href="{{ url_for('user.profile', name=user.name) }}">{{ user.name }}</a></td>
-            <td>{{ user.email }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endmacro %}
-
 {% macro render_pagination(pagination, endpoint) %}
     {% if pagination.pages > 1 %}
         <div class='pagination'>

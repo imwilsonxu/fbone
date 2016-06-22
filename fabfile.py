@@ -82,7 +82,7 @@ def debug():
         local("flask run")
 
 
-@task
+@task(alias='t')
 def test():
     """Run unittest in local"""
 

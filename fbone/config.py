@@ -34,6 +34,8 @@ class DefaultConfig(BaseConfig):
 
     DEBUG = True
 
+    SENTRY_DSN = ""
+
     # Flask-Sqlalchemy: http://packages.python.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_ECHO = False
     # QLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be

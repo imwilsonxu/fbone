@@ -27,6 +27,7 @@ You can use it for
 ### Others
 
 - Modular Applications with Blueprints.
+- Use [Sentry](https://getsentry.com) for real-time crash reporting.
 - Automated managament via [fabric](http://flask.pocoo.org/docs/patterns/fabric/)
 
 ## USAGE
