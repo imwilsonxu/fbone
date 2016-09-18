@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, desc
-from sqlalchemy.orm import backref
+from sqlalchemy import Column
 
 from werkzeug.security import generate_password_hash, check_password_hash
 

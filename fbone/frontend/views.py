@@ -2,8 +2,8 @@
 
 from uuid import uuid4
 
-from flask import Blueprint, render_template, current_app, request, flash, \
-    url_for, redirect, session, abort
+from flask import Blueprint, render_template, request, flash, \
+    url_for, redirect, abort
 from flask_login import login_required, login_user, current_user, logout_user, \
     confirm_login, login_fresh
 

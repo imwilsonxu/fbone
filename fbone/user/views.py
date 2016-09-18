@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Blueprint, render_template, send_from_directory, request, \
+from flask import Blueprint, render_template, send_from_directory, \
     current_app, flash
 from flask_login import login_required, current_user
 
