@@ -29,6 +29,7 @@ pycrypto==2.6.1
 pylint==1.5.5
 python-dateutil==2.5.3
 pytz==2016.4
+raven==5.27.0
 requests==2.10.0
 six==1.10.0
 speaklater==1.3
