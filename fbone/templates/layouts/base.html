@@ -1,100 +1,100 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>{% block title %}{{ page_title }}{% endblock %} - Flask Bone</title>
-		<meta name="description" content="Flask Bone">
-		<meta name="author" content="Wilson">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>{% block title %}{{ page_title }}{% endblock %} - Flask Bone</title>
+        <meta name="description" content="Flask Bone">
+        <meta name="author" content="Wilson">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<link href="" rel="icon" type="image/png">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
-		{% block css %}{% endblock %}
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link href="" rel="icon" type="image/png">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
+        {% block css %}{% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.15/autosize.min.js"></script>
-		{% block js %}{% endblock %}
-		<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-	</head>
-	<body>
-		<!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.15/autosize.min.js"></script>
+        {% block js %}{% endblock %}
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    </head>
+    <body>
+    <!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-	    {% block topbar %}
-	    <div class="container">
-	        <nav class="navbar navbar-default">
-	            <div class="container-fluid">
-	                <div class="navbar-header">
-	                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-	                        <span class="sr-only">Toggle navigation</span>
-	                        <span class="icon-bar"></span>
-	                        <span class="icon-bar"></span>
-	                        <span class="icon-bar"></span>
-	                    </button>
-	                    <a class="navbar-brand" href="{{ url_for('frontend.index') }}">Flask Bone</a>
-	                </div>
-	                <div id="navbar" class="navbar-collapse collapse">
-	                    <ul class="nav navbar-nav navbar-right">
-	                    {% if current_user.is_authenticated %}
-							<li class="dropdown">
-								<a href="#"
-									class="dropdown-toggle notification-indicator" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-										{{ current_user.name }} <span class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li><a href="{{ url_for('user.profile') }}">Profile</a></li>
-									<li><a href="{{ url_for('user.password') }}">Password</a></li>
-									<li role="separator" class="divider"></li>
-									<li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
-								</ul>
-							</li>
-		                    {% else %}
-		                        <li><a href="{{ url_for('frontend.login') }}">Log in</a></li>
-		                    {% endif %}
-	                    </ul>
-	                </div>
-	            </div>
-	        </nav>
-	    </div>
-	    {% endblock %}
+        {% block topbar %}
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ url_for('frontend.index') }}">Flask Bone</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                        {% if current_user.is_authenticated %}
+                            <li class="dropdown">
+                                <a href="#"
+                                    class="dropdown-toggle notification-indicator" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {{ current_user.name }} <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
+                                    <li><a href="{{ url_for('user.password') }}">Password</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{ url_for('frontend.logout') }}">Log out</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{{ url_for('frontend.login') }}">Log in</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        {% endblock %}
 
-	    {% block container %}
-	    <div class="container">
-	        {% block flash_message %}
-	            {% with messages = get_flashed_messages(with_categories=True) %}
-	                {% if messages %}
-	                    {% for category, msg in messages %}
-	                        <div class="alert alert-{{ category }}">
-	                            {{ msg|safe }}
-	                        </div>
-	                    {% endfor %}
-	                {% endif %}
-	            {% endwith %}
-	        {% endblock %}
+        {% block container %}
+        <div class="container">
+            {% block flash_message %}
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, msg in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ msg|safe }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            {% endblock %}
 
-	        {% block body %}{% endblock %}
-	    </div>
-	    {% endblock %}
+            {% block body %}{% endblock %}
+        </div>
+        {% endblock %}
 
-	    <footer>
-	    </footer>
+        <footer>
+        </footer>
 
-		{% if not config.debug and config.GA_TRACKING_ID -%}
-		<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-		<script>
-		    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
-		    ga('create','{{ config.GA_TRACKING_ID}}','auto');ga('send','pageview')
-		</script>
-		<script src="https://www.google-analytics.com/analytics.js" async defer></script>
-		{%- endif %}
-	</body>
+        {% if not config.debug and config.GA_TRACKING_ID -%}
+        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        <script>
+            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+            ga('create','{{ config.GA_TRACKING_ID}}','auto');ga('send','pageview')
+        </script>
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+        {%- endif %}
+    </body>
 </html>
