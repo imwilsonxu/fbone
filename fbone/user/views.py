@@ -29,8 +29,8 @@ def profile():
     form = ProfileForm(obj=current_user)
 
     if form.validate_on_submit():
-        form.populate_obj(user)
-        user.update_at = get_current_time()
+        form.populate_obj(current_user)
+        current_user.update_at = get_current_time()
 
         db.session.commit()
 
