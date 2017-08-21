@@ -4,7 +4,7 @@ from flask_wtf import Form
 from wtforms import ValidationError, HiddenField, BooleanField, StringField, \
                 PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
-from flask_wtf.html5 import EmailField
+from wtforms.fields.html5 import EmailField
 
 from fbone.user import User
 from fbone.constants import USERNAME_LEN_MIN, USERNAME_LEN_MAX, USERNAME_TIP, \
