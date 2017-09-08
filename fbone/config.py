@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from builtins import object
 import os
 
-from utils import make_dir, INSTANCE_FOLDER_PATH
+from .utils import make_dir, INSTANCE_FOLDER_PATH
 
 
 class BaseConfig(object):

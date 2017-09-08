@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 import os
 
 from flask import Blueprint, render_template, send_from_directory, request, \
     current_app, flash
 from flask_login import login_required, current_user
 
-from forms import ProfileForm, PasswordForm
+from .forms import ProfileForm, PasswordForm
 
 from fbone.extensions import db
 from fbone.utils import get_current_time

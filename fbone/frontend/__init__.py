@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from views import frontend
+from __future__ import absolute_import
+from .views import frontend

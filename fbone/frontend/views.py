@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from builtins import str
 from uuid import uuid4
 
 from flask import Blueprint, render_template, current_app, request, flash, \
@@ -9,7 +11,7 @@ from flask_login import login_required, login_user, current_user, logout_user, \
 
 from fbone.user import User
 from fbone.extensions import db, login_manager
-from forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, \
+from .forms import SignupForm, LoginForm, RecoverPasswordForm, ReauthForm, \
     ChangePasswordForm
 
 

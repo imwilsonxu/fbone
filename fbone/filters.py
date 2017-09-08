@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from past.utils import old_div
 import re
 from datetime import datetime
 from jinja2 import Markup, escape
@@ -18,12 +20,12 @@ def pretty_date(value, default="just now"):
     diff = now - value
 
     periods = (
-        (diff.days / 365, 'year', 'years'),
-        (diff.days / 30, 'month', 'months'),
-        (diff.days / 7, 'week', 'weeks'),
+        (old_div(diff.days, 365), 'year', 'years'),
+        (old_div(diff.days, 30), 'month', 'months'),
+        (old_div(diff.days, 7), 'week', 'weeks'),
         (diff.days, 'day', 'days'),
-        (diff.seconds / 3600, 'hour', 'hours'),
-        (diff.seconds / 60, 'minute', 'minutes'),
+        (old_div(diff.seconds, 3600), 'hour', 'hours'),
+        (old_div(diff.seconds, 60), 'minute', 'minutes'),
         (diff.seconds, 'second', 'seconds'),
     )
 

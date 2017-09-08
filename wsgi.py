@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from past.builtins import execfile
 import sys, os, pwd
 
 project = "fbone"

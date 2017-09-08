@@ -3,6 +3,7 @@
     Utils has nothing to do with models and views.
 """
 
+from builtins import range
 import string
 import random
 import os
@@ -35,5 +36,5 @@ def make_dir(dir_path):
     try:
         if not os.path.exists(dir_path):
             os.mkdir(dir_path)
-    except Exception, e:
+    except Exception as e:
         raise e
