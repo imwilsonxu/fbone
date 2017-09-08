@@ -1,4 +1,5 @@
-Fabric
+Fabric; python_version < '3.0'
+Fabric3; python_version >= '3.0'
 Flask
 Flask-Login
 Flask-RESTful
@@ -7,7 +8,8 @@ Flask-Testing
 Flask-WTF
 Jinja2
 MarkupSafe
-MySQL-python
+MySQL-python; python_version < '3.0'
+mysqlclient; python_version >= '3.0'
 SQLAlchemy
 WTForms
 Werkzeug
@@ -31,6 +33,10 @@ python-dateutil
 pytz
 requests
 six
-speaklater
+speaklater; python_version < '3.0'
+speaklater3; python_version >= '3.0'
 wrapt
-wsgiref
+wsgiref; python_version < '3.0'
+future
+six
+

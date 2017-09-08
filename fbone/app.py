@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from flask import Flask, render_template
 
-from config import DefaultConfig
-from user import User
+from .config import DefaultConfig
+from .user import User
 
-from extensions import db, login_manager
-from filters import format_date, pretty_date, nl2br
-from utils import INSTANCE_FOLDER_PATH
+from .extensions import db, login_manager
+from .filters import format_date, pretty_date, nl2br
+from .utils import INSTANCE_FOLDER_PATH
 
 
 # For import *
@@ -70,9 +71,9 @@ def configure_extensions(app):
 def configure_blueprints(app):
     """Configure blueprints in views."""
 
-    from user import user
-    from frontend import frontend
-    from api import api
+    from .user import user
+    from .frontend import frontend
+    from .api import api
 
     for bp in [user, frontend, api]:
         app.register_blueprint(bp)

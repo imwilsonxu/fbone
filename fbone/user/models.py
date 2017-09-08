@@ -11,6 +11,7 @@ from fbone.extensions import db
 from fbone.utils import get_current_time
 from fbone.constants import USER, USER_ROLE, ADMIN, INACTIVE, USER_STATUS, \
     SEX_TYPES, STRING_LEN
+from functools import reduce
 
 
 class User(db.Model, UserMixin):
