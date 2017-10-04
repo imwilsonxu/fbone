@@ -35,5 +35,5 @@ def make_dir(dir_path):
     try:
         if not os.path.exists(dir_path):
             os.mkdir(dir_path)
-    except Exception, e:
+    except getopt.GetoptError as e: # in python3 the raise syntax no longer accepts comma-separated arguments
         raise e
