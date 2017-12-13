@@ -1,0 +1,54 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+fabric = "*"
+flask = "*"
+flask-login = "*"
+flask-restful = "*"
+flask-sqlalchemy = "*"
+flask-testing = "*"
+flask-wtf = "*"
+"jinja2" = "*"
+markupsafe = "*"
+mysql-python = "*"
+sqlalchemy = "*"
+wtforms = "*"
+werkzeug = "*"
+"aniso8601" = "*"
+astroid = "*"
+bcrypt = "*"
+blinker = "*"
+cffi = "*"
+click = "*"
+colorama = "*"
+ecdsa = "*"
+gunicorn = "*"
+itsdangerous = "*"
+lazy-object-proxy = "*"
+paramiko = "*"
+passlib = "*"
+pycparser = "*"
+pycrypto = "*"
+pylint = "*"
+python-dateutil = "*"
+pytz = "*"
+requests = "*"
+speaklater = "*"
+wrapt = "*"
+wsgiref = "*"
+raven = "*"
+
+
+[dev-packages]
+
+
+
+[requires]
+
+python_version = "2.7"
