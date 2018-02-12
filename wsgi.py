@@ -11,7 +11,7 @@ project = "fbone"
 #os.environ['HOME'] = pwd.getpwuid(os.getuid()).pw_dir
 
 # activate virtualenv
-activate_this = os.path.join(os.environ["HOME"], ".virtualenvs", project, "bin/activate_this.py")
+activate_this = os.path.join("bin/activate_this.py")
 execfile(activate_this, dict(__file__=activate_this))
 
 BASE_DIR = os.path.join(os.path.dirname(__file__))
