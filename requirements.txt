@@ -29,6 +29,7 @@ pycrypto
 pylint
 python-dateutil
 pytz
+raven[flask]
 requests
 six
 speaklater
