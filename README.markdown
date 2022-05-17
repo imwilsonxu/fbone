@@ -38,14 +38,14 @@ Pre-required Setup:
 - git
 - Python / pip / Fabric
 - sqlite / MySQL
-- Apache + mod\_wsgi
+- Apache + mod_wsgi
 
-    git clone https://github.com/imwilsonxu/fbone.git fbone
+  git clone https://github.com/imwilsonxu/fbone.git fbone
 
-    fab setup_python_macos
-    fab bootstrap
-    fab test
-    fab debug
+  fab setup_python_macos
+  fab bootstrap
+  fab test
+  fab debug
 
 ## STRUCTURE
 
@@ -92,7 +92,7 @@ Pre-required Setup:
 ## TODO
 
 - Upgrade to [Python3k](https://www.python.org/download/releases/3.0/).
-- User [Celery](http://celeryprojet.org), distributed task queue.
+- User [Celery](http://celeryproject.org), distributed task queue.
 - User [Elastic Search](https://github.com/elastic/elasticsearch), Open Source, Distributed, RESTful Search Engine.
 - Use [PostgreSQL](https://www.postgresql.org).
 - Use [GeeTest](http://www.geetest.com), a popular CAPTCHA service in China.
@@ -104,6 +104,5 @@ Pre-required Setup:
 ## ACKNOWLEDGEMENTS
 
 Many thanks to Python, Flask and other good stacks.
-
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/imwilsonxu/fbone/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
